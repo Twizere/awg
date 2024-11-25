@@ -319,16 +319,30 @@ def exec_cmd(cmd, input = None, shell = True, check = True, timeout = None):
     return rc, out
 
 def get_main_iface():
-    rc, out = exec_cmd('ip link show')
-    if rc:
-        raise RuntimeError(f'ERROR: Cannot get net interfaces')
-    
-    for line in out.split('\n'):
-        if '<BROADCAST' in line and 'state UP' in line:
-            xv = line.split(':')
-            return xv[1].strip()
-    
+    import sys
+    if sys.platform.startswith("freebsd"):
+        # Use ifconfig for FreeBSD
+        rc, out = exec_cmd('ifconfig')
+        if rc:
+            raise RuntimeError('ERROR: Cannot get net interfaces')
+        
+        # Parse the output to find an interface that is UP and BROADCAST
+        for line in out.split('\n'):
+            if 'UP' in line and 'BROADCAST' in line:
+                # Extract the interface name
+                iface = line.split(':')[0].strip()
+                return iface
+    else:
+        # Original logic for Linux
+        rc, out = exec_cmd('ip link show')
+        if rc:
+            raise RuntimeError('ERROR: Cannot get net interfaces')
+        for line in out.split('\n'):
+            if '<BROADCAST' in line and 'state UP' in line:
+                xv = line.split(':')
+                return xv[1].strip()
     return None
+
 
 def get_ext_ipaddr():
     rc, out = exec_cmd('curl -4 -s icanhazip.com')
