@@ -371,7 +371,9 @@ def gen_pair_keys(cfg_type = None):
         raise
         
     wgtool = cfg_type.lower()
-    rc, out = exec_cmd(f'{wgtool} genkey')
+
+    # rc, out = exec_cmd(f'{wgtool} genkey')
+    rc, out = exec_cmd(f'/usr/local/bin/awg genkey')
     if rc:
         raise RuntimeError(f'ERROR: Cannot generate private key')
 
