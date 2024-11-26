@@ -1,0 +1,24 @@
+pkg/aawireguard.xml
+pkg/awireguard/classes/wgconfig.class.php
+pkg/awireguard/includes/wg.inc
+pkg/awireguard/includes/wg_api.inc
+pkg/awireguard/includes/wg_foot.inc
+pkg/awireguard/includes/wg_globals.inc
+pkg/awireguard/includes/wg_guiconfig.inc
+pkg/awireguard/includes/wg_install.inc
+pkg/awireguard/includes/wg_service.inc
+pkg/awireguard/includes/wg_validate.inc
+www/shortcuts/pkg_wireguard.inc
+www/widgets/include/wireguard.inc
+www/widgets/widgets/wireguard.widget.php
+www/awg/js/WireGuardHelpers.js
+www/awg/status_wireguard.php
+www/awg/vpn_wg_peers.php
+www/awg/vpn_wg_peers_edit.php
+www/awg/vpn_wg_settings.php
+www/awg/vpn_wg_tunnels.php
+www/awg/vpn_wg_tunnels_edit.php
+/etc/inc/priv/wireguard.priv.inc
+%%DATADIR%%/info.xml
+@dir /etc/inc/priv
+@dir /etc/inc
