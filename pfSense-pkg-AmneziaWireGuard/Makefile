@@ -1,4 +1,4 @@
-PORTNAME=	pfSense-pkg-WireGuard
+PORTNAME=	pfSense-pkg-AmneziaWireGuard
 PORTVERSION=	0.2.9
 CATEGORIES=	net
 MASTER_SITES=	# empty
