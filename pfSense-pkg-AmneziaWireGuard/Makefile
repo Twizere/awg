@@ -64,6 +64,6 @@ do-install:
 
 	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
 		${STAGEDIR}${DATADIR}/info.xml \
-		${STAGEDIR}${PREFIX}/pkg/aawireguard.xml
+		${STAGEDIR}${PREFIX}/pkg/awireguard.xml
 
-.include <bsd.port.mk>
+# .include <bsd.port.mk>
