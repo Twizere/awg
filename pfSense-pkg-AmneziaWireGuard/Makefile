@@ -30,6 +30,7 @@ install:
 	@echo "Installing Amnezia-WireGuard package..."
 	@mkdir -p ${PREFIX}/pkg/amneziawireguard
 	@mkdir -p ${PREFIX}/www/widgets
+	@mkdir -p ${PREFIX}/www/awg/js
 	@mkdir -p ${PREFIX}/xml
 	@cp -R ${FILESDIR}${PREFIX}/pkg/* ${PREFIX}/pkg/amneziawireguard/
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/* ${PREFIX}/www/awg/js/
