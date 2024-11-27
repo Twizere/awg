@@ -33,7 +33,7 @@ install:
 	@install -d /etc/inc/priv
 	@install -d ${PREFIX}/pkg/amneziawireguard/classes
 	@install -d ${PREFIX}/pkg/amneziawireguard/includes
-	@install -d ${PREFIX}/share
+	@install -d ${PREFIX}/share/pfSense-pkg-AmneziaWireGuard
 	@install -d ${PREFIX}/www/awg/js
 	@install -d ${PREFIX}/www/widgets
 	@install -d ${PREFIX}/www/shortcuts
@@ -42,8 +42,12 @@ install:
 	# Copy necessary files
 	@echo " - Copying files..."
 	@cp -R ${FILESDIR}/etc/inc/priv/*.priv.inc /etc/inc/priv/
+
 	@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
 	#@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/* ${PREFIX}/pkg/amneziawireguard/
+
+	@cp -R ${FILESDIR}${PREFIX}/share/pfSense-pkg-AmneziaWireGuard/*.xml ${PREFIX}/share/pfSense-pkg-AmneziaWireGuard
+
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
 	@echo "   Files copied ✅"
