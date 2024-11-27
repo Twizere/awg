@@ -19,7 +19,7 @@ SUB_FILES=	pkg-install pkg-deinstall
 SUB_LIST=	PORTNAME=${PACKAGE}
 
 
-.include <bsd.port.mk>
+# .include <bsd.port.mk>
 
 
 do-extract:
