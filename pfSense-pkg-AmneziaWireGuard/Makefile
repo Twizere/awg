@@ -26,7 +26,7 @@ do-extract:
 	${MKDIR} ${WRKSRC}
 
 # Post-install commands
-post-install:
+install:
 	@echo "Installing Amnezia-WireGuard package..."
 	@mkdir -p ${PREFIX}/pkg/amneziawireguard
 	@mkdir -p ${PREFIX}/www/widgets
