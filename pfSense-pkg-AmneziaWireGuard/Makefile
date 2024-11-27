@@ -41,9 +41,11 @@ install:
 
 	# Copy necessary files
 	@echo " - Copying files..."
-	@cp -R ${FILESDIR}${PREFIX}/pkg/* ${PREFIX}/pkg/amneziawireguard/
-	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
+	@cp -R ${FILESDIR}/etc/inc/priv/*.priv.inc /etc/inc/priv/
 	@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
+	#@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/* ${PREFIX}/pkg/amneziawireguard/
+	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
+	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
 	@echo "   Files copied ✅"
 
 	# Ensure proper file permissions
