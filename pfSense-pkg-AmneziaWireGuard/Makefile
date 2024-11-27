@@ -32,6 +32,6 @@ install:
 	@mkdir -p ${PREFIX}/www/widgets
 	@mkdir -p ${PREFIX}/xml
 	@cp -R ${FILESDIR}${PREFIX}/pkg/* ${PREFIX}/pkg/amneziawireguard/
-	@cp -R ${FILESDIR}${PREFIX}/www/* ${PREFIX}/www/
+	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/* ${PREFIX}/www/awg/js/
 	@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
 	@echo "Installation complete."
