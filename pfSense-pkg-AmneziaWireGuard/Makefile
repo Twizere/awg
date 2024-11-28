@@ -33,7 +33,7 @@ install:
 	@install -d /etc/inc/priv
 	@install -d ${PREFIX}/pkg/amneziawireguard/classes
 	@install -d ${PREFIX}/pkg/amneziawireguard/includes
-	@install -d ${PREFIX}/share/pfSense-pkg-AmneziaWireGuard
+	@install -d ${PREFIX}/share/pfSense-pkg-amneziawireguard
 	@install -d ${PREFIX}/www/awg/js
 	@install -d ${PREFIX}/www/widgets
 	@install -d ${PREFIX}/www/shortcuts
