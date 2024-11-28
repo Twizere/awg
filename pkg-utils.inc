@@ -581,7 +581,7 @@ function register_all_installed_packages() {
  * and rc.d files.  This function may also print output to the terminal
  * indicating progress.
  */
-function ($show_message = false) {
+function resync_all_package_configs($show_message = false) {
 	log_error(gettext("Resyncing configuration for all packages."));
 
 	if ($show_message == true) {
@@ -797,11 +797,9 @@ function install_package_xml($package_name) {
 	$pkgid = get_package_id($pkg_info['name']);
 	echo "\n Getting ID ..." ;
 	var_dump($pkgid);
-	echo "\n Getting Packages ..." ;
 	update_status(gettext("Saving updated package information...") . "\n");
 	init_config_arr(array('installedpackages', 'package'));
 	$pkgs = config_get_path('installedpackages/package', []);
-	var_dump($pkgs);
 	if ($pkgid == -1) {
 		$pkgs[] = $pkg_info;
 		$changedesc = sprintf(gettext("Installed %s package."),
