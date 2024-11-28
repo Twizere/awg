@@ -43,7 +43,7 @@ if (!function_exists("pkg_debug")) {
 		}
 
 		if (!$fd_log) {
-			update_status(gettext("Warning, could not open log " .
+			print_r(gettext("Warning, could not open log " .
 			    "for writing.") . "\n");
 			return;
 		}
@@ -162,7 +162,7 @@ function pkg_call($params, $mute = false, $extra_env = array()) {
 				}
 				if ($pipe === $pipes[1]) {
 					if (!$mute) {
-						update_status($content);
+						print_r($content);
 					}
 					flush();
 				} else if ($pipe === $pipes[2]) {
@@ -188,7 +188,7 @@ function pkg_call($params, $mute = false, $extra_env = array()) {
 
 	pkg_debug("pkg_call(): error_log\n{$error_log}\n");
 	if (!$mute) {
-		update_status("\n\n" . sprintf(gettext("ERROR!!! An error " .
+		print_r("\n\n" . sprintf(gettext("ERROR!!! An error " .
 		    "occurred on pkg execution (rc = %d) with parameters " .
 		    "'%s':"), $rc, $params) . "\n" . $error_log . "\n");
 	}
@@ -432,10 +432,10 @@ function get_pkg_info($pkgs = 'all', $remote_repo_usage_disabled = false,
 	}
 
 	if ($search_rc != 0 && $info_rc != 0) {
-		update_status("\n" . gettext(
+		print_r("\n" . gettext(
 		    "ERROR: Error trying to get packages list. Aborting...")
 		    . "\n");
-		update_status($search_err . "\n" . $info_err);
+		print_r($search_err . "\n" . $info_err);
 		$input_errors[] = gettext(
 		    "ERROR: Error trying to get packages list. Aborting...") .
 		    "\n";
@@ -496,10 +496,10 @@ function get_pkg_info($pkgs = 'all', $remote_repo_usage_disabled = false,
 			    $err);
 
 			if ($rc != 0) {
-				update_status("\n" . gettext("ERROR: Error " .
+				print_r("\n" . gettext("ERROR: Error " .
 				    "trying to get package version. " .
 				    "Aborting...") . "\n");
-				update_status($err);
+				print_r($err);
 				$input_errors[] = gettext("ERROR: Error " .
 				    "trying to get package version. " .
 				    "Aborting...") . "\n";
@@ -569,7 +569,7 @@ function register_all_installed_packages() {
 			continue;
 		}
 
-		update_status(sprintf(gettext(
+		print_r(sprintf(gettext(
 		    "Running last steps of %s installation.") . "\n",
 		    $pkg['name']));
 		install_package_xml($pkg['name']);
@@ -599,7 +599,7 @@ function resync_all_package_configs($show_message = false) {
 			stop_service(get_package_internal_name($package));
 		}
 		sync_package($package['name']);
-		update_status(gettext("Syncing packages...") . "\n");
+		print_r(gettext("Syncing packages...") . "\n");
 	}
 
 	if ($show_message == true) {
@@ -620,13 +620,13 @@ function uninstall_package($package_name) {
 	$pkg_name = g_get('pkg_prefix') . $internal_name;
 
 	if (is_pkg_installed($pkg_name)) {
-		update_status(gettext("Removing package...") . "\n");
+		print_r(gettext("Removing package...") . "\n");
 		pkg_delete($pkg_name);
 	} else {
 		delete_package_xml($package_name);
 	}
 
-	update_status(gettext("done.") . "\n");
+	print_r(gettext("done.") . "\n");
 }
 
 function reinstall_package($package_name) {
@@ -797,7 +797,7 @@ function install_package_xml($package_name) {
 	$pkgid = get_package_id($pkg_info['name']);
 	echo "\n Getting ID ..." ;
 	var_dump($pkgid);
-	update_status(gettext("Saving updated package information...") . "\n");
+	print_r(gettext("Saving updated package information...") . "\n");
 	echo "\n Saving updated package information ..." ;
 	init_config_arr(array('installedpackages', 'package'));
 	echo "\n Getting all packages .... " ;
@@ -825,11 +825,11 @@ function install_package_xml($package_name) {
 	echo "\n Writting  configurations ... " ;
 	write_config(sprintf(gettext("Intermediate config write during " .
 	    "package install for %s."), $pkg_info['name']));
-	update_status($to_output);
+	print_r($to_output);
 	echo "\n Writting  Done!! " ;
 
 	if (($pkgid = get_package_id($package_name)) == -1) {
-		update_status(sprintf(gettext('The %1$s package is not ' .
+		print_r(sprintf(gettext('The %1$s package is not ' .
 		    'installed.%2$sInstallation aborted.'), $package_name,
 		    "\n\n"));
 		echo "\nThe package is not  installed was aborted." ;
@@ -837,7 +837,7 @@ function install_package_xml($package_name) {
 		write_config($changedesc);
 		log_error(sprintf(gettext("Failed to install package: %s."),
 		    $pkg_info['name']));
-		update_status(gettext("Failed to install package.") . "\n");
+		print_r(gettext("Failed to install package.") . "\n");
 		echo "\n Failed to install package" ;
 		return false;
 	}
@@ -853,16 +853,17 @@ function install_package_xml($package_name) {
 		write_config($changedesc);
 		log_error(sprintf(gettext("Failed to install package: %s."),
 		    $pkg_info['name']));
-		update_status(gettext("Failed to install package.") . "\n");
+		print_r(gettext("Failed to install package.") . "\n");
 		return false;
 	}
 
 	print_r(gettext("Loading package configuration... "));
 	$pkg_config = parse_xml_config_pkg("/usr/local/pkg/" .
 	    $pkg_info['configurationfile'], "packagegui");
-	update_status(gettext("done.") . "\n");
-	update_status(gettext("Configuring package components...") .
+		print_r(gettext("done.") . "\n");
+		print_r(gettext("Configuring package components...") .
 	    "\n");
+	var_dump($pkg_config);
 	if (!empty($pkg_config['filter_rules_needed'])) {
 		config_set_path("installedpackages/package/{$pkgid}/filter_rule_function",
 						$pkg_config['filter_rules_needed']);
@@ -875,7 +876,7 @@ function install_package_xml($package_name) {
 	 */
 	$missing_include = false;
 	if ($pkg_config['include_file'] <> "") {
-		update_status(gettext("Loading package instructions...") .
+		print_r(gettext("Loading package instructions...") .
 		    "\n");
 		if (file_exists($pkg_config['include_file'])) {
 			pkg_debug("require_once('" .
@@ -885,7 +886,7 @@ function install_package_xml($package_name) {
 			pkg_debug("Missing include " .
 			    "{$pkg_config['include_file']}\n");
 			$missing_include = true;
-			update_status(sprintf(gettext("Include %s is missing!"),
+			print_r(sprintf(gettext("Include %s is missing!"),
 			    basename($pkg_config['include_file'])) . "\n");
 
 			uninstall_package($package_name);
@@ -893,40 +894,40 @@ function install_package_xml($package_name) {
 			log_error(sprintf(gettext(
 			    "Failed to install package: %s."),
 			    $pkg_info['name']));
-			update_status(gettext("Failed to install package.") .
+			print_r(gettext("Failed to install package.") .
 			    "\n");
 			return false;
 		}
 	}
 
 	/* custom commands */
-	update_status(gettext("Custom commands...") . "\n");
+	print_r(gettext("Custom commands...") . "\n");
 	if ($missing_include == false) {
 		if ($pkg_config['custom_php_global_functions'] <> "") {
-			update_status(gettext(
+			print_r(gettext(
 			    "Executing custom_php_global_functions()..."));
 			eval_once($pkg_config['custom_php_global_functions']);
-			update_status(gettext("done.") . "\n");
+			print_r(gettext("done.") . "\n");
 		}
 		if ($pkg_config['custom_php_install_command']) {
-			update_status(gettext(
+			print_r(gettext(
 			    "Executing custom_php_install_command()..."));
 			eval_once($pkg_config['custom_php_install_command']);
-			update_status(gettext("done.") . "\n");
+			print_r(gettext("done.") . "\n");
 		}
 		if ($pkg_config['custom_php_resync_config_command'] <> "") {
-			update_status(gettext(
+			print_r(gettext(
 			    "Executing custom_php_resync_config_command()..."));
 			eval_once(
 			    $pkg_config['custom_php_resync_config_command']);
-			update_status(gettext("done.") . "\n");
+			print_r(gettext("done.") . "\n");
 		}
 	}
 	/* sidebar items */
 	if (is_array($pkg_config['menu'])) {
 		init_config_arr(array('installedpackages', 'menu'));
 		$menus = config_get_path('installedpackages/menu', []);
-		update_status(gettext("Menu items... "));
+		print_r(gettext("Menu items... "));
 		foreach ($pkg_config['menu'] as $menu) {
 			foreach ($menus as $amenu) {
 				if ($amenu['name'] == $menu['name']) {
@@ -936,12 +937,12 @@ function install_package_xml($package_name) {
 			$menus[] = $menu;
 		}
 		config_set_path('installedpackages/menu', $menus);
-		update_status(gettext("done.") . "\n");
+		print_r(gettext("done.") . "\n");
 	}
 	/* services */
 	init_config_arr(array('installedpackages', 'service'));
 	if (is_array($pkg_config['service'])) {
-		update_status(gettext("Services... "));
+		print_r(gettext("Services... "));
 		$services = config_get_path('installedpackages/service', []);
 		foreach ($pkg_config['service'] as $service) {
 			if (empty($service)) {
@@ -958,7 +959,7 @@ function install_package_xml($package_name) {
 			$services[] = $service;
 		}
 		config_set_path('installedpackages/service', $services);
-		update_status(gettext("done.") . "\n");
+		print_r(gettext("done.") . "\n");
 	}
 	if (is_array($pkg_config['tabs'])) {
 		init_config_arr(array('installedpackages', 'package', $pkgid, 'tabs'));
@@ -973,13 +974,13 @@ function install_package_xml($package_name) {
 		config_set_path("installedpackages/package/{$pkgid}/plugins", $pkg_config['plugins']);
 	}
 
-	update_status(gettext("Writing configuration... "));
+	print_r(gettext("Writing configuration... "));
 	write_config($changedesc);
 	log_error(sprintf(gettext("Successfully installed package: %s."),
 	    $pkg_info['name']));
-	update_status(gettext("done.") . "\n");
+	print_r(gettext("done.") . "\n");
 	if ($pkg_info['after_install_info']) {
-		update_status($pkg_info['after_install_info']);
+		print_r($pkg_info['after_install_info']);
 	}
 
 	/* set up package logging streams */
@@ -996,14 +997,14 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 
 	$pkgid = get_package_id($package_name);
 	if ($pkgid == -1) {
-		update_status(sprintf(gettext('The %1$s package is not ' .
+		print_r(sprintf(gettext('The %1$s package is not ' .
 		    'installed.%2$sDeletion aborted.'), $package_name, "\n\n"));
 		ob_flush();
 		sleep(1);
 		return;
 	}
 	pkg_debug(sprintf(gettext("Removing %s package... "), $package_name));
-	update_status(sprintf(gettext("Removing %s components..."),
+	print_r(sprintf(gettext("Removing %s components..."),
 	    $package_name) . "\n");
 	/* parse package configuration */
 	init_config_arr(array('installedpackages', 'package', $pkgid));
@@ -1017,7 +1018,7 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 		    $pkg_info['configurationfile'], "packagegui");
 		/* remove menu items */
 		if (is_array($pkg_config['menu']) && is_array($menus)) {
-			update_status(gettext("Menu items... "));
+			print_r(gettext("Menu items... "));
 			foreach ($pkg_config['menu'] as $menu) {
 				foreach ($menus as $key => $instmenu) {
 					if (empty($instmenu) || ($instmenu['name'] ==
@@ -1027,11 +1028,11 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 					}
 				}
 			}
-			update_status(gettext("done.") . "\n");
+			print_r(gettext("done.") . "\n");
 		}
 		/* remove services */
 		if (is_array($pkg_config['service']) && is_array($services)) {
-			update_status(gettext("Services... "));
+			print_r(gettext("Services... "));
 			foreach ($pkg_config['service'] as $service) {
 				if (empty($service)) {
 					continue;
@@ -1058,7 +1059,7 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 					config_del_path("installedpackages/service/{$key}");
 				}
 			}
-			update_status(gettext("done.") . "\n");
+			print_r(gettext("done.") . "\n");
 		}
 		/*
 		 * XXX: Otherwise inclusion of config.inc again invalidates
@@ -1075,7 +1076,7 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 		 */
 		$missing_include = false;
 		if ($pkg_config['include_file'] <> "") {
-			update_status(gettext("Loading package instructions...")
+			print_r(gettext("Loading package instructions...")
 			    . "\n");
 			if (file_exists($pkg_config['include_file'])) {
 				pkg_debug("require_once(\"" .
@@ -1085,7 +1086,7 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 				pkg_debug("Missing include " .
 				    $pkg_config['include_file'] . "\n");
 				$missing_include = true;
-				update_status(sprintf(gettext("Include file " .
+				print_r(sprintf(gettext("Include file " .
 				    "%s could not be found for inclusion."),
 				    basename($pkg_config['include_file'])) .
 				    "\n");
@@ -1111,12 +1112,12 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 		/* deinstall commands */
 		if ($when == "deinstall" &&
 		    $pkg_config['custom_php_deinstall_command'] <> "") {
-			update_status(gettext("Deinstall commands... "));
+			print_r(gettext("Deinstall commands... "));
 			if ($missing_include == false) {
 				eval_once($pkg_config['custom_php_deinstall_command']);
-				update_status(gettext("done.") . "\n");
+				print_r(gettext("done.") . "\n");
 			} else {
-				update_status("\n". gettext("Not executing " .
+				print_r("\n". gettext("Not executing " .
 				    "custom deinstall hook because an " .
 				    "include is missing.") . "\n");
 			}
@@ -1125,19 +1126,19 @@ function delete_package_xml($package_name, $when = "post-deinstall") {
 	/* syslog */
 	$need_syslog_restart = false;
 	if (is_array($pkg_info['logging']) && !empty($pkg_info['logging']['logfilename'])) {
-		update_status(gettext("Syslog entries... "));
+		print_r(gettext("Syslog entries... "));
 		/* remove package-related syslog configuration but retain log data,
 		 * see https://redmine.pfsense.org/issues/11846 */
 		@unlink_if_exists("{$g['varetc_path']}/syslog.d/" . basename($pkg_info['logging']['logfilename']) . ".conf");
-		update_status("done.\n");
+		print_r("done.\n");
 		$need_syslog_restart = true;
 	}
 
 	if ($when == "post-deinstall") {
 		/* remove config.xml entries */
-		update_status(gettext("Configuration... "));
+		print_r(gettext("Configuration... "));
 		config_del_path("installedpackages/package/{$pkgid}");
-		update_status(gettext("done.") . "\n");
+		print_r(gettext("done.") . "\n");
 		write_config(sprintf(gettext("Removed %s package."),
 		    $package_name));
 		/*
