@@ -46,7 +46,7 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
 	#@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/* ${PREFIX}/pkg/amneziawireguard/
 
-	@cp -R ${FILESDIR}${PREFIX}/share/pfSense-pkg-AmneziaWireGuard/*.xml ${PREFIX}/share/pfSense-pkg-AmneziaWireGuard
+	@cp -R ${FILESDIR}${PREFIX}/share/pfSense-pkg-amneziawireguard/*.xml ${PREFIX}/share/pfSense-pkg-amneziawireguard/
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
