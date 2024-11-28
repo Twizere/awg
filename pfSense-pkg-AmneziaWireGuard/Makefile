@@ -52,6 +52,11 @@ install:
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
 	@echo "   Files copied ✅"
 
+	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
+
+	#shortcuts
+	@cp -R ${FILESDIR}${PREFIX}/www/shortcuts/* ${PREFIX}/www/shortcuts/
+
 	# Ensure proper file permissions
 	@echo " - Setting permissions..."
 	@chmod -R 755 ${PREFIX}/pkg/amneziawireguard
