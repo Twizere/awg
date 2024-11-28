@@ -798,18 +798,25 @@ function install_package_xml($package_name) {
 	echo "\n Getting ID ..." ;
 	var_dump($pkgid);
 	update_status(gettext("Saving updated package information...") . "\n");
+	echo "\n Saving updated package information ..." ;
 	init_config_arr(array('installedpackages', 'package'));
+	echo "\n Getting all packages .... " ;
 	$pkgs = config_get_path('installedpackages/package', []);
+	var_dump($pkgs);
 	if ($pkgid == -1) {
+		echo "\n Unpacking  the  packages .... " ;
 		$pkgs[] = $pkg_info;
 		$changedesc = sprintf(gettext("Installed %s package."),
 		    $pkg_info['name']);
 		$to_output = gettext("done.") . "\n";
+		echo "\n done .... " ;
 	} else {
+		echo "\n Overwriting .... " ;
 		$pkgs[$pkgid] = $pkg_info;
 		$changedesc = sprintf(gettext("Overwrote previous " .
 		    "installation of %s."), $pkg_info['name']);
 		$to_output = gettext("overwrite!") . "\n";
+		echo "\n Overwriten !! " ;
 	}
 	config_set_path('installedpackages/package', $pkgs);
 	write_config(sprintf(gettext("Intermediate config write during " .
