@@ -818,10 +818,8 @@ function install_package_xml($package_name) {
 		$to_output = gettext("overwrite!") . "\n";
 		echo "\n Overwriten !! " ;
 	}
-	var_dump($pkgs);
+
 	echo "\n Setting configuration path ,,, " ;
-	$path_configs = config_set_path('installedpackages/package', $pkgs);
-	var_dump($path_configs);
 	echo "\n Writting  configurations ... " ;
 	write_config(sprintf(gettext("Intermediate config write during " .
 	    "package install for %s."), $pkg_info['name']));
@@ -863,7 +861,6 @@ function install_package_xml($package_name) {
 		print_r(gettext("done.") . "\n");
 		print_r(gettext("Configuring package components...") .
 	    "\n");
-	var_dump($pkg_config);
 	if (!empty($pkg_config['filter_rules_needed'])) {
 		config_set_path("installedpackages/package/{$pkgid}/filter_rule_function",
 						$pkg_config['filter_rules_needed']);
@@ -1278,9 +1275,9 @@ function stop_packages() {
 	foreach (config_get_path('installedpackages/package', []) as $package) {
 		$internal_name = get_package_internal_name($package);
 		if (is_service_running($internal_name)) {
-			echo " Stopping package {$package['name']}...";
+			
 			stop_service($internal_name);
-			echo "done.\n";
+			
 			unset($rcfiles[RCFILEPREFIX . strtolower($internal_name) . ".sh"]);
 		}
 	}
