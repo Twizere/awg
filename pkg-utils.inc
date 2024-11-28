@@ -719,16 +719,15 @@ function read_package_config($package_name) {
 
 	$pkg_info_xml = '/usr/local/share/' . g_get('pkg_prefix') . $package_name .
 	    '/info.xml';
-	echo "Getting XML FIle " . $pkg_info_xml ;
+	echo "\n Getting XML FIle " . $pkg_info_xml ;
 	if (!file_exists($pkg_info_xml)) {
 		return false;
 	}
-	echo "Parsing XML " . $pkg_info_xml ;
+	echo "\n Parsing XML " . $pkg_info_xml ;
 	$pkg_info = parse_xml_config_pkg($pkg_info_xml, 'pfsensepkgs');
-	var_dump($pkg_info);
 
 	if (empty($pkg_info)) {
-		echo " ERROR: Empty package info  " ;
+		echo "\n ERROR: Empty package info  " ;
 		return false;
 	}
 
@@ -788,16 +787,21 @@ function install_package_xml($package_name) {
 	if (($pkg_info = read_package_config($package_name)) == false) {
 		return false;
 	}
-	echo "Begginding to install ";
+	echo "\n Beggining to install ..." ;
+	echo $pkg_info['name'];
 	pkg_debug(gettext("Beginning package installation.") . "\n");
 	log_error(sprintf(gettext('Beginning package installation for %s .'),
 	    $pkg_info['name']));
 
 	/* add package information to config.xml */
 	$pkgid = get_package_id($pkg_info['name']);
+	echo "\n Getting ID ..." ;
+	var_dump($pkid);
+	echo "\n Getting Packages ..." ;
 	update_status(gettext("Saving updated package information...") . "\n");
 	init_config_arr(array('installedpackages', 'package'));
 	$pkgs = config_get_path('installedpackages/package', []);
+	var_dump($pkgs);
 	if ($pkgid == -1) {
 		$pkgs[] = $pkg_info;
 		$changedesc = sprintf(gettext("Installed %s package."),
