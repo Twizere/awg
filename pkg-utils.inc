@@ -832,20 +832,21 @@ function install_package_xml($package_name) {
 		update_status(sprintf(gettext('The %1$s package is not ' .
 		    'installed.%2$sInstallation aborted.'), $package_name,
 		    "\n\n"));
-
+		echo "\nThe package is not  installed was aborted." ;
 		uninstall_package($package_name);
 		write_config($changedesc);
 		log_error(sprintf(gettext("Failed to install package: %s."),
 		    $pkg_info['name']));
 		update_status(gettext("Failed to install package.") . "\n");
+		echo "\n Failed to install package" ;
 		return false;
 	}
 
 	if (!file_exists("/usr/local/pkg/" . $pkg_info['configurationfile'])) {
 		pkg_debug("Unable to find config file\n");
-		update_status(gettext("Loading package configuration... " .
+		print_r(gettext("Loading package configuration... " .
 		    "failed!") .  "\n\n" . gettext("Installation aborted."));
-		pkg_debug(gettext("Unable to load package configuration. " .
+		print_r(gettext("Unable to load package configuration. " .
 		    "Installation aborted.") ."\n");
 
 		uninstall_package($package_name);
@@ -856,7 +857,7 @@ function install_package_xml($package_name) {
 		return false;
 	}
 
-	update_status(gettext("Loading package configuration... "));
+	print_r(gettext("Loading package configuration... "));
 	$pkg_config = parse_xml_config_pkg("/usr/local/pkg/" .
 	    $pkg_info['configurationfile'], "packagegui");
 	update_status(gettext("done.") . "\n");
