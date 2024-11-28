@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <pfsensepkgs>
 	<package>
-		<name>WireGuard</name>
+		<name>amneziawireguard</name>
 		<descr><![CDATA[Amnezia WireGuard is an extremely simple yet fast and modern VPN&lt;br /&gt;
 				that utilizes state-of-the-art cryptography. It aims to be&lt;br /&gt;
 				faster, simpler, leaner, and more useful than IPSec, while&lt;br /&gt;
