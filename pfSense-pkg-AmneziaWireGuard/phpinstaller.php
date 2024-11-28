@@ -13,8 +13,10 @@ echo "Package Prefix :" .g_get('pkg_prefix')."\n";
 // Check if the package file exists
 if (file_exists($package)) {
     // Install the package using the XML descriptor
-    install_package_xml($package);
+   
     echo "Package installation initiated for: {$package}\n";
+    $installation_status =install_package_xml($package);
+    print_r($installation_status);
 } else {
     echo "Package XML file not found: {$package}\n";
 }

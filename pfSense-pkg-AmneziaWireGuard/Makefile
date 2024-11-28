@@ -1,4 +1,4 @@
-PACKAGE=pfSense-pkg-AmneziaWireGuard
+PACKAGE=pfSense-pkg-amneziawireguard
 VERSION=1.0.0
 CATEGORIES=net
 MASTER_SITES=	# empty
@@ -33,7 +33,7 @@ install:
 	@install -d /etc/inc/priv
 	@install -d ${PREFIX}/pkg/amneziawireguard/classes
 	@install -d ${PREFIX}/pkg/amneziawireguard/includes
-	@install -d ${PREFIX}/share/pfSense-pkg-amneziawireguard
+	@install -d ${PREFIX}/share/${PACKAGE}
 	@install -d ${PREFIX}/www/awg/js
 	@install -d ${PREFIX}/www/widgets
 	@install -d ${PREFIX}/www/shortcuts
@@ -46,7 +46,7 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
 	#@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/* ${PREFIX}/pkg/amneziawireguard/
 
-	@cp -R ${FILESDIR}${PREFIX}/share/pfSense-pkg-AmneziaWireGuard/*.xml ${PREFIX}/share/pfSense-pkg-AmneziaWireGuard/
+	@cp -R ${FILESDIR}${PREFIX}/share/${PACKAGE}/*.xml ${PREFIX}/share/${PACKAGE}/
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
