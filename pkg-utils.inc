@@ -719,14 +719,16 @@ function read_package_config($package_name) {
 
 	$pkg_info_xml = '/usr/local/share/' . g_get('pkg_prefix') . $package_name .
 	    '/info.xml';
-
+	echo "Getting XML FIle " . $pkg_info_xml ;
 	if (!file_exists($pkg_info_xml)) {
 		return false;
 	}
-
+	echo "Parsing XML " . $pkg_info_xml ;
 	$pkg_info = parse_xml_config_pkg($pkg_info_xml, 'pfsensepkgs');
+	var_dump($pkg_info);
 
 	if (empty($pkg_info)) {
+		echo " ERROR: Empty package info  " ;
 		return false;
 	}
 
@@ -782,10 +784,11 @@ function eval_once($toeval) {
 }
 
 function install_package_xml($package_name) {
+	echo "Loading XML";
 	if (($pkg_info = read_package_config($package_name)) == false) {
 		return false;
 	}
-
+	echo "Begginding to install ";
 	pkg_debug(gettext("Beginning package installation.") . "\n");
 	log_error(sprintf(gettext('Beginning package installation for %s .'),
 	    $pkg_info['name']));
