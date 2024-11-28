@@ -802,7 +802,7 @@ function install_package_xml($package_name) {
 	init_config_arr(array('installedpackages', 'package'));
 	echo "\n Getting all packages .... " ;
 	$pkgs = config_get_path('installedpackages/package', []);
-	var_dump($pkgs);
+	
 	if ($pkgid == -1) {
 		echo "\n Unpacking  the  packages .... " ;
 		$pkgs[] = $pkg_info;
@@ -818,10 +818,15 @@ function install_package_xml($package_name) {
 		$to_output = gettext("overwrite!") . "\n";
 		echo "\n Overwriten !! " ;
 	}
-	config_set_path('installedpackages/package', $pkgs);
+	var_dump($pkgs);
+	echo "\n Setting configuration path ,,, " ;
+	$path_configs = config_set_path('installedpackages/package', $pkgs);
+	var_dump($path_configs);
+	echo "\n Writting  configurations ... " ;
 	write_config(sprintf(gettext("Intermediate config write during " .
 	    "package install for %s."), $pkg_info['name']));
 	update_status($to_output);
+	echo "\n Writting  Done!! " ;
 
 	if (($pkgid = get_package_id($package_name)) == -1) {
 		update_status(sprintf(gettext('The %1$s package is not ' .
