@@ -1,15 +1,3 @@
-<?xml version="1.0"?>
-<pfsensepkgs>
-	<package>
-		<name>amneziawireguard</name>
-		<descr><![CDATA[Amnezia WireGuard is an extremely simple yet fast and modern VPN&lt;br /&gt;
-				that utilizes state-of-the-art cryptography.  ]]></descr>
-		<pkginfolink>https://github.com/Twizere</pkginfolink>
-		<version>%%PKGVERSION%%</version>
-		<configurationfile>amneziawireguard.xml</configurationfile>
-	</package>
-</pfsensepkgs>
-
 <?xml version="1.0" encoding="utf-8" ?>
 <packagegui>
         <menu>
