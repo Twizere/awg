@@ -27,32 +27,24 @@ $section->addInput(new Form_Input(
     'listen',
     '*Server Listening Address',
     'text',
-    $currentConfig['listen']
+    ''
 ))->setHelp('IP address the server will listen on (default is 0.0.0.0).');
 
 $section->addInput(new Form_Input(
     'port',
     '*Listening Port',
     'text',
-    $currentConfig['port']
+    ''
 ))->setHelp('Port number for the Xray server to listen on.');
 
-
-// Decryption Method
-$section->addInput(new Form_Select(
-    'decryption',
-    '*Decryption Method',
-    $currentConfig['decryption'],
-    ['none' => 'None']
-))->setHelp('Select the decryption method.');
-
+ 
 // Stream Settings
 $streamSection = new Form_Section('Security Settings');
 
 $streamSection->addInput(new Form_Select(
     'network',
     '*Stream Network',
-    $currentConfig['network'],
+    'text',
     ['tcp' => 'TCP', 'kcp' => 'KCP', 'ws' => 'WebSocket', 'http' => 'HTTP']
 ))->setHelp('Select the network protocol.');
 
