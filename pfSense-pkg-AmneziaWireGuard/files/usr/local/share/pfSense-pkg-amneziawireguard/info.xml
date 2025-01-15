@@ -3,6 +3,6 @@
         <menu>
                 <name>Amnezia WG</name>
                 <section>VPN</section>
-                <url>/xray/index.php</url>
+                <url>/awg/index.php</url>
         </menu>
 </packagegui>
