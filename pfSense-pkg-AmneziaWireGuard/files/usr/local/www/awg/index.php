@@ -36,24 +36,10 @@ $section->addInput(new Form_Input(
     'text',
     ''
 ))->setHelp('Port number for the Xray server to listen on.');
-
  
-// Stream Settings
-$streamSection = new Form_Section('Security Settings');
-
-$streamSection->addInput(new Form_Select(
-    'network',
-    '*Stream Network',
-    'text',
-    ['tcp' => 'TCP', 'kcp' => 'KCP', 'ws' => 'WebSocket', 'http' => 'HTTP']
-))->setHelp('Select the network protocol.');
-
 
 // Add sections to the form
 $form->add($section);
-$form->add($clientsSection);
-$form->add($streamSection);
-$form->add($tlsSection);
 print($form);
 
 include("foot.inc");
