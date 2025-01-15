@@ -37,23 +37,6 @@ $section->addInput(new Form_Input(
     $currentConfig['port']
 ))->setHelp('Port number for the Xray server to listen on.');
 
-// Protocol
-$section->addInput(new Form_Select(
-    'protocol',
-    '*Protocol',
-    $currentConfig['protocol'],
-    ['vless' => 'VLESS', 'vmess' => 'VMess', 'trojan' => 'Trojan']
-))->setHelp('Select the protocol for inbound connections.');
-
-
-
-// Clients - Dynamically Generated
-$clientsSection = new Form_Section('Clients');
-$clientsSection->addInput(new Form_Textarea(
-    'clients',
-    'Clients (JSON)',
-    $currentConfig['clients']
-))->setHelp('Provide a JSON array of clients including ID, level, and email. You can add multiple clients here.');
 
 // Decryption Method
 $section->addInput(new Form_Select(
@@ -72,45 +55,6 @@ $streamSection->addInput(new Form_Select(
     $currentConfig['network'],
     ['tcp' => 'TCP', 'kcp' => 'KCP', 'ws' => 'WebSocket', 'http' => 'HTTP']
 ))->setHelp('Select the network protocol.');
-
-$streamSection->addInput(new Form_Select(
-    'security',
-    '*Stream Security',
-    $currentConfig['security'],
-    ['tls' => 'TLS', 'none' => 'None']
-))->setHelp('Select the security method for the stream.');
-
-// TLS Settings
-$tlsSection = new Form_Section('TLS Settings');
-
-$tlsSection->addInput(new Form_Input(
-    'tls_server_name',
-    '*Server Name',
-    'text',
-    $currentConfig['tls_server_name']
-))->setHelp('Specify the server name for TLS.');
-
-$tlsSection->addInput(new Form_Textarea(
-    'tls_alpn',
-    'ALPN',
-    $currentConfig['tls_alpn']
-))->setHelp('Enter Application-Layer Protocol Negotiation (ALPN) values, separated by commas.');
-
-// Server Certificate Selection
-$tlsSection->addInput(new Form_Select(
-	'server_cert',
-	'*Server Certificate',
-	$pconfig['server_cert'],
-	$client_certificates
-))->setHelp('Select a certificate which will be used by the Xray server.');
-
-// CA Certificate Selection
-$tlsSection->addInput(new Form_Select(
-    'ca_cert',
-    '*Peer Certificate Authority',
-    $pconfig['ca_cert'],
-    $ca_certificates
-))->setHelp('Select a certificate authority to validate the peer certificate.');
 
 
 // Add sections to the form
