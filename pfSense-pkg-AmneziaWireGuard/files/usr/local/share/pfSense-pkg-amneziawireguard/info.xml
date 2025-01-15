@@ -9,3 +9,12 @@
 		<configurationfile>amneziawireguard.xml</configurationfile>
 	</package>
 </pfsensepkgs>
+
+<?xml version="1.0" encoding="utf-8" ?>
+<packagegui>
+        <menu>
+                <name>Amnezia WG</name>
+                <section>VPN</section>
+                <url>/xray/index.php</url>
+        </menu>
+</packagegui>
