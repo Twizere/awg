@@ -31,6 +31,7 @@ install:
 	# Prepare directory tree
 	@echo " - Creating necessary directories..."
 	@install -d /etc/inc/priv
+	@install -d ${PREFIX}/bin
 	@install -d ${PREFIX}/pkg/amneziawireguard/classes
 	@install -d ${PREFIX}/pkg/amneziawireguard/includes
 	@install -d ${PREFIX}/share/${PACKAGE}
@@ -51,6 +52,11 @@ install:
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
+
+	//copying the executable
+	@cp -R ${FILESDIR}${PREFIX}/bin/* ${PREFIX}/bin/
+	@chmod +x ${PREFIX}/bin/*
+	
 	@echo "   Files copied ✅"
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
