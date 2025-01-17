@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Author: remittor <remittor@gmail.com>
+# Author: Pacifique <twizerepaci@gmail.com>
 # Created: 2024
 
 import os
@@ -25,10 +25,15 @@ parser.add_option("-u", "--update", dest="update", default = "")
 parser.add_option("-d", "--delete", dest="delete", default = "")
 parser.add_option("-i", "--ipaddr", dest="ipaddr", default = "")
 parser.add_option("-p", "--port", dest="port", default = None, type = 'int')
-parser.add_option("", "--make", dest="makecfg", default = "")
+parser.add_option("-m", "--make", dest="makecfg", default = "")
 parser.add_option("", "--tun", dest="tun", default = "")
 parser.add_option("", "--create", dest="create", action="store_true", default = False)
 (opt, args) = parser.parse_args()
+
+#### Removed all these IP tables because in Pf sense, it is not needed
+# PostUp = iptables -A INPUT -p udp --dport <SERVER_PORT> -m conntrack --ctstate NEW -j ACCEPT --wait 10 --wait-interval 50; iptables -A FORWARD -i <SERVER_IFACE> -o <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -A FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -t nat -A POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50; ip6tables -A FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; ip6tables -t nat -A POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50
+
+# PostDown = iptables -D INPUT -p udp --dport <SERVER_PORT> -m conntrack --ctstate NEW -j ACCEPT --wait 10 --wait-interval 50; iptables -D FORWARD -i <SERVER_IFACE> -o <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -D FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -t nat -D POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50; ip6tables -D FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; ip6tables -t nat -D POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50
 
 
 g_defserver_config = """
@@ -48,10 +53,12 @@ H2 = <H2>
 H3 = <H3>
 H4 = <H4>
 
-PostUp = iptables -A INPUT -p udp --dport <SERVER_PORT> -m conntrack --ctstate NEW -j ACCEPT --wait 10 --wait-interval 50; iptables -A FORWARD -i <SERVER_IFACE> -o <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -A FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -t nat -A POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50; ip6tables -A FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; ip6tables -t nat -A POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50
-
-PostDown = iptables -D INPUT -p udp --dport <SERVER_PORT> -m conntrack --ctstate NEW -j ACCEPT --wait 10 --wait-interval 50; iptables -D FORWARD -i <SERVER_IFACE> -o <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -D FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; iptables -t nat -D POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50; ip6tables -D FORWARD -i <SERVER_TUN> -j ACCEPT --wait 10 --wait-interval 50; ip6tables -t nat -D POSTROUTING -o <SERVER_IFACE> -j MASQUERADE --wait 10 --wait-interval 50
 """
+
+
+## Renoved the ip address from the client config
+## AllowedIPs = 0.0.0.0/5, 8.0.0.0/7, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 8.8.8.8/32
+
 
 g_defclient_config = """
 [Interface]
@@ -70,12 +77,12 @@ H3 = <H3>
 H4 = <H4>
 
 [Peer]
-AllowedIPs = 0.0.0.0/5, 8.0.0.0/7, 11.0.0.0/8, 12.0.0.0/6, 16.0.0.0/4, 32.0.0.0/3, 64.0.0.0/2, 128.0.0.0/3, 160.0.0.0/5, 168.0.0.0/6, 172.0.0.0/12, 172.32.0.0/11, 172.64.0.0/10, 172.128.0.0/9, 173.0.0.0/8, 174.0.0.0/7, 176.0.0.0/4, 192.0.0.0/9, 192.128.0.0/11, 192.160.0.0/13, 192.169.0.0/16, 192.170.0.0/15, 192.172.0.0/14, 192.176.0.0/12, 192.192.0.0/10, 193.0.0.0/8, 194.0.0.0/7, 196.0.0.0/6, 200.0.0.0/5, 208.0.0.0/4, 8.8.8.8/32
 Endpoint = <SERVER_ADDR>:<SERVER_PORT>
 PersistentKeepalive = 60
 PublicKey = <SERVER_PUBLIC_KEY>
 """
 
+## Function to check the IP address, if it is valid or not
 class IPAddr():
     def __init__(self, ipaddr = None):
         self.ip = [ 0, 0, 0, 0 ]
@@ -108,6 +115,8 @@ class IPAddr():
             out += '/' + str(self.mask)
         return out
 
+
+# Function to read the config file
 class WGConfig():
     def __init__(self, filename = None):
         self.lines = [ ]
@@ -319,14 +328,14 @@ def exec_cmd(cmd, input = None, shell = True, check = True, timeout = None):
     return rc, out
 
 def get_main_iface():
-    if sys.platform.startswith("freebsd"):
+    if sys.platform.startswith("freebsd") or sys.platform.startswith("darwin"):
         # Use ifconfig for FreeBSD
         rc, out = exec_cmd('ifconfig')
         if rc != 0:
             raise RuntimeError('ERROR: Cannot get network interfaces using ifconfig')
 
         # Debugging: print raw output
-        print("Debug: ifconfig output:\n", out)
+        #print("Debug: ifconfig output:\n", out)
         
         # Parse ifconfig output for an interface that is UP and has BROADCAST
         iface = None
