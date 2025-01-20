@@ -22,11 +22,13 @@ done
 if [ -f "$AWG_CONFIG_FILE" ]; then
     if [ "$FORCE_OVERWRITE" = true ]; then
         echo "Overwriting existing AWG config file: $AWG_CONFIG_FILE"
+        rm -f "$AWG_CONFIG_FILE"
     else
         read -p "File $AWG_CONFIG_FILE exists. Overwrite? (y/n): " response
         case "$response" in
             [yY][eE][sS]|[yY]) 
-                echo "Overwriting existing AWG config file: $AWG_CONFIG_FILE" 
+                echo "Overwriting existing AWG config file: $AWG_CONFIG_FILE"
+                rm -f "$AWG_CONFIG_FILE"
                 ;;
             *)
                 echo "Aborting operation. Existing config file will not be overwritten."
