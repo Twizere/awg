@@ -3,6 +3,7 @@
 # Default variables
 AWG_CONFIG_DIR="/etc/amnezia/amneziawg"
 AWG_CONFIG_FILE="$AWG_CONFIG_DIR/awg0.conf"
+MAIN_CONFIG_FILE="./.main.config"
 IP="10.9.9.1/24"        # Your network IP range
 PORT="46999"            # Default port
 CLIENT_NAME="my_phone"  # Default client name
@@ -22,13 +23,13 @@ done
 if [ -f "$AWG_CONFIG_FILE" ]; then
     if [ "$FORCE_OVERWRITE" = true ]; then
         echo "Overwriting existing AWG config file: $AWG_CONFIG_FILE"
-        rm -f "$AWG_CONFIG_FILE"
+        rm -f "$AWG_CONFIG_FILE" "$MAIN_CONFIG_FILE"
     else
         read -p "File $AWG_CONFIG_FILE exists. Overwrite? (y/n): " response
         case "$response" in
             [yY][eE][sS]|[yY]) 
                 echo "Overwriting existing AWG config file: $AWG_CONFIG_FILE"
-                rm -f "$AWG_CONFIG_FILE"
+                rm -f "$AWG_CONFIG_FILE" "$MAIN_CONFIG_FILE"
                 ;;
             *)
                 echo "Aborting operation. Existing config file will not be overwritten."
