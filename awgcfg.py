@@ -77,6 +77,7 @@ H3 = <H3>
 H4 = <H4>
 
 [Peer]
+AllowedIPs = 0.0.0.0/0, ::/0
 Endpoint = <SERVER_ADDR>:<SERVER_PORT>
 PersistentKeepalive = 60
 PublicKey = <SERVER_PUBLIC_KEY>
