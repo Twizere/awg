@@ -66,7 +66,7 @@ fi
 
 # Step 4: Generate client configs and QR codes
 echo "Generating client configs and QR codes..."
-./awgcfg -c -q
+./awgcfg -c 
 if [ $? -ne 0 ]; then
     echo "Error: Failed to generate client configs and QR codes."
     exit 1
