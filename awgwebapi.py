@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-AWGCFG_EXECUTABLE = './awgcfg'
+AWGCFG_EXECUTABLE = './dist/awgcfg'
 
 if not os.path.isfile(AWGCFG_EXECUTABLE):
     raise FileNotFoundError(f"{AWGCFG_EXECUTABLE} not found. Please ensure the file exists and is executable.")
