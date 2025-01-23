@@ -9,6 +9,7 @@ import subprocess
 import optparse
 import random
 import datetime
+import json
 
 g_main_config_src = '.main.config'
 g_main_config_fn = None
@@ -28,6 +29,7 @@ parser.add_option("-p", "--port", dest="port", default = None, type = 'int')
 parser.add_option("-m", "--make", dest="makecfg", default = "")
 parser.add_option("", "--tun", dest="tun", default = "")
 parser.add_option("", "--create", dest="create", action="store_true", default = False)
+parser.add_option("-j", "--json", dest="json_output", action="store_true", default = False, help="Output results in JSON format")
 (opt, args) = parser.parse_args()
 
 #### Removed all these IP tables because in Pf sense, it is not needed
@@ -161,7 +163,7 @@ class WGConfig():
                 section_name = line[1:-1]
                 if not section_name:
                     raise RuntimeError(f'ERROR_CFG: Incorrect section name: "{section_name}" (#{n+1})')
-                #print(secname)
+                #output_result(secname)
                 secdata_item = { "_section_name": section_name.lower() }
                 secline_item = { "_section_name": n }
                 if section_name.lower() == 'interface':
@@ -191,7 +193,7 @@ class WGConfig():
             
             vname = line[:xv].strip()
             value = line[xv+3:].strip()
-            #print(f'  "{vname}" = "{value}"')
+            #output_result(f'  "{vname}" = "{value}"')
             if not secdata_item:
                 raise RuntimeError(f'ERROR_CFG: Parameter "{vname}" have unknown section! (#{n+1})')
             
@@ -335,15 +337,15 @@ def get_main_iface():
         if rc != 0:
             raise RuntimeError('ERROR: Cannot get network interfaces using ifconfig')
 
-        # Debugging: print raw output
-        #print("Debug: ifconfig output:\n", out)
+        # Debugging: output_result raw output
+        #output_result("Debug: ifconfig output:\n", out)
         
         # Parse ifconfig output for an interface that is UP and has BROADCAST
         iface = None
         for line in out.split('\n'):
             if 'UP' in line and 'BROADCAST' in line:
                 iface = line.split(':')[0].strip()
-                print(f"Debug: Found interface {iface}")  # Debugging: show detected interface
+                output_result(f"Debug: Found interface {iface}")  # Debugging: show detected interface
                 return iface
         
         # If no interface is found
@@ -421,6 +423,12 @@ def get_main_config_path(check = True):
         
     return g_main_config_fn
 
+def output_result(result, is_json = False):
+    if(opt.json_output):
+        if is_json:
+            print(json.dumps(result, indent=4))
+    else:
+        print(result)
 # -------------------------------------------------------------------------------------    
 
 if opt.makecfg:
@@ -432,12 +440,12 @@ if opt.makecfg:
     if os.path.basename(g_main_config_fn).startswith('a'):
         m_cfg_type = 'AWG'
 
-    print(f'Make {m_cfg_type} server config: "{g_main_config_fn}"...')
+    output_result(f'Make {m_cfg_type} server config: "{g_main_config_fn}"...')
     main_iface = get_main_iface()
     if not main_iface:
         raise RuntimeError(f'ERROR: Cannot get main network interface!')
 
-    print(f'Main network iface: "{main_iface}"')
+    output_result(f'Main network iface: "{main_iface}"')
 
     if opt.port <= 1000 or opt.port > 65530:
         raise RuntimeError(f'ERROR: Incorrect argument port = {opt.port}')
@@ -455,7 +463,7 @@ if opt.makecfg:
         cfg_name = os.path.basename(g_main_config_fn)
         tun_name = os.path.splitext(cfg_name)[0].strip()
 
-    print(f'Tunnel iface: "{tun_name}"')
+    output_result(f'Tunnel iface: "{tun_name}"')
 
     priv_key, pub_key = gen_pair_keys(m_cfg_type)
 
@@ -497,7 +505,7 @@ if opt.makecfg:
     with open(g_main_config_fn, 'w', newline = '\n') as file:
         file.write(out)
 
-    print(f'{m_cfg_type} server config file "{g_main_config_fn}" created!')
+    output_result(f'{m_cfg_type} server config file "{g_main_config_fn}" created!')
     
     with open(g_main_config_src, 'w', newline = '\n') as file:
         file.write(g_main_config_fn)
@@ -512,20 +520,20 @@ if opt.create:
     if os.path.exists(opt.tmpcfg):
         raise RuntimeError(f'ERROR: file "{opt.tmpcfg}" already exists!')
 
-    print(f'Create template for client configs: "{opt.tmpcfg}"...')
+    output_result(f'Create template for client configs: "{opt.tmpcfg}"...')
     os.remove(opt.tmpcfg) if os.path.exists(opt.tmpcfg) else None
     if opt.ipaddr:
         ipaddr = opt.ipaddr
     else:
         ext_ipaddr = get_ext_ipaddr()
-        print(f'External IP-Addr: "{ext_ipaddr}"')
+        output_result(f'External IP-Addr: "{ext_ipaddr}"')
         ipaddr = ext_ipaddr
 
     ipaddr = IPAddr(ipaddr)
     if ipaddr.mask:
         raise RuntimeError(f'ERROR: Incorrect argument ipaddr = "{opt.ipaddr}"')
     
-    print(f'Server IP-Addr: "{ipaddr}"')
+    output_result(f'Server IP-Addr: "{ipaddr}"')
     
     out = g_defclient_config
     out = out.replace('<SERVER_ADDR>', str(ipaddr))
@@ -543,7 +551,7 @@ if opt.create:
     with open(opt.tmpcfg, 'w', newline = '\n') as file:
         file.write(out)
 
-    print(f'Template client config file "{opt.tmpcfg}" created!')
+    output_result(f'Template client config file "{opt.tmpcfg}" created!')
     sys.exit(0)
 
 # -------------------------------------------------------------------------------------    
@@ -557,7 +565,7 @@ if opt.addcl:
     cfg = WGConfig(g_main_config_fn)
     srv = cfg.iface
     c_name = opt.addcl
-    print(f'Add new client config "{c_name}"...')
+    output_result(f'Add new client config "{c_name}"...')
     max_addr = None
     for peer_name, peer in cfg.peer.items():
         if peer_name.lower() == c_name.lower():
@@ -608,12 +616,12 @@ if opt.addcl:
     with open(g_main_config_fn, 'w', newline = '\n') as file:
         file.write(srvcfg)
     
-    print(f'New client "{c_name}" added! IP-Addr: "{ipaddr}"')
+    output_result(f'New client "{c_name}" added! IP-Addr: "{ipaddr}"')
 
 if opt.update:
     cfg = WGConfig(g_main_config_fn)
     p_name = opt.update
-    print(f'Update keys for client "{p_name}"...')
+    output_result(f'Update keys for client "{p_name}"...')
     priv_key, pub_key = gen_pair_keys()
     cfg.set_param(p_name, '_PrivateKey', priv_key, force = True, offset = 2)
     cfg.set_param(p_name, 'PublicKey', pub_key)
@@ -621,20 +629,20 @@ if opt.update:
     cfg.set_param(p_name, '_GenKeyTime', gentime, force = True, offset = 2)
     ipaddr = cfg.peer[p_name]['AllowedIPs']
     cfg.save()
-    print(f'Keys for client "{p_name}" updated! IP-Addr: "{ipaddr}"')
+    output_result(f'Keys for client "{p_name}" updated! IP-Addr: "{ipaddr}"')
 
 if opt.delete:
     cfg = WGConfig(g_main_config_fn)
     p_name = opt.delete
-    print(f'Delete client "{p_name}"...')
+    output_result(f'Delete client "{p_name}"...')
     ipaddr = cfg.del_client(p_name)
     cfg.save()
-    print(f'Client "{p_name}" deleted! IP-Addr: "{ipaddr}"')
+    output_result(f'Client "{p_name}" deleted! IP-Addr: "{ipaddr}"')
 
 if opt.confgen:        
     cfg = WGConfig(g_main_config_fn)
     srv = cfg.iface
-    print('Generate client configs...')
+    output_result('Generate client configs...')
     
     if not os.path.exists(opt.tmpcfg):
         raise RuntimeError(f'ERROR: file "{opt.tmpcfg}" not found!')
@@ -658,7 +666,7 @@ if opt.confgen:
     
     for peer_name, peer in cfg.peer.items():
         if 'Name' not in peer or 'PrivateKey' not in peer:
-            print(f'Skip peer with pubkey "{peer["PublicKey"]}"')
+            output_result(f'Skip peer with pubkey "{peer["PublicKey"]}"')
             continue
         jc = random.randint(3, 127)
         jmin = random.randint(3, 700)
@@ -683,7 +691,7 @@ if opt.confgen:
             file.write(out)
 
 if opt.qrcode:
-    print('Generate QR codes...')
+    output_result('Generate QR codes...')
     flst = glob.glob("*.png")
     for fn in flst:
         if os.path.exists(fn):
@@ -704,5 +712,5 @@ if opt.qrcode:
         img = qrcode.make(conf)
         img.save(f'{name}.png')
 
-print('===== OK =====')
+output_result('===== OK =====')
 
