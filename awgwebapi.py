@@ -99,4 +99,4 @@ def tun():
     return run_awgcfg_command(['--tun', tun_name, '--json'])
 
 if __name__ == '__main__':
-    app.run(debug=True, port=PORT)
+    app.run(host="0.0.0.0",debug=True, port=PORT)
