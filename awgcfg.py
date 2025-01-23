@@ -510,6 +510,12 @@ if opt.makecfg:
     with open(g_main_config_src, 'w', newline = '\n') as file:
         file.write(g_main_config_fn)
     
+    result = {
+        "action": "makecfg",
+        "status": "success",
+        "message": f'{m_cfg_type} server config file "{g_main_config_fn}" created!'
+    }
+    output_result(result, is_json=True)
     sys.exit(0)
 
 # -------------------------------------------------------------------------------------    
@@ -552,6 +558,12 @@ if opt.create:
         file.write(out)
 
     output_result(f'Template client config file "{opt.tmpcfg}" created!')
+    result = {
+        "action": "create",
+        "status": "success",
+        "message": f'Template client config file "{opt.tmpcfg}" created!'
+    }
+    output_result(result, is_json=True)
     sys.exit(0)
 
 # -------------------------------------------------------------------------------------    
@@ -624,7 +636,7 @@ if opt.addcl:
         "status": "success",
         "message": message
     }
-    output_result(result, opt.json_output)
+    output_result(result, is_json=True)
 
 if opt.update:
     cfg = WGConfig(g_main_config_fn)
@@ -644,7 +656,7 @@ if opt.update:
         "status": "success",
         "message": message
     }
-    output_result(result, opt.json_output)
+    output_result(result, is_json=True)
 
 
 if opt.delete:
@@ -660,7 +672,7 @@ if opt.delete:
         "status": "success",
         "message": message
     }
-    output_result(result, opt.json_output)
+    output_result(result, is_json=True)
 
 if opt.confgen:        
     cfg = WGConfig(g_main_config_fn)
