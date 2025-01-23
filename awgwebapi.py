@@ -2,10 +2,22 @@ from flask import Flask, request, jsonify
 import subprocess
 import json
 import os
+import argparse
 
 app = Flask(__name__)
 
-AWGCFG_EXECUTABLE = './dist/awgcfg'
+# Default values
+DEFAULT_PORT = 5000
+DEFAULT_AWGCFG_EXECUTABLE = './awgcfg'
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='Run the AWG Web API service.')
+parser.add_argument('--port', type=int, default=DEFAULT_PORT, help='Port to run the web service on')
+parser.add_argument('--awgcfg', type=str, default=DEFAULT_AWGCFG_EXECUTABLE, help='Path to the awgcfg executable')
+args = parser.parse_args()
+
+PORT = args.port
+AWGCFG_EXECUTABLE = args.awgcfg
 
 if not os.path.isfile(AWGCFG_EXECUTABLE):
     raise FileNotFoundError(f"{AWGCFG_EXECUTABLE} not found. Please ensure the file exists and is executable.")
@@ -87,4 +99,4 @@ def tun():
     return run_awgcfg_command(['--tun', tun_name, '--json'])
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000,debug=True)
+    app.run(debug=True, port=PORT)
