@@ -616,7 +616,15 @@ if opt.addcl:
     with open(g_main_config_fn, 'w', newline = '\n') as file:
         file.write(srvcfg)
     
-    output_result(f'New client "{c_name}" added! IP-Addr: "{ipaddr}"')
+    message = f'New client "{c_name}" added! IP-Addr: "{ipaddr}"'
+    output_result(message)
+    ## OUTPUT JSON
+    result = {
+        "action": "add",
+        "status": "success",
+        "message": message
+    }
+    output_result(result, opt.json_output)
 
 if opt.update:
     cfg = WGConfig(g_main_config_fn)
@@ -630,6 +638,14 @@ if opt.update:
     ipaddr = cfg.peer[p_name]['AllowedIPs']
     cfg.save()
     output_result(f'Keys for client "{p_name}" updated! IP-Addr: "{ipaddr}"')
+    message = f'Keys for client "{p_name}" updated! IP-Addr: "{ipaddr}"'
+    result = {
+        "action": "update",
+        "status": "success",
+        "message": message
+    }
+    output_result(result, opt.json_output)
+
 
 if opt.delete:
     cfg = WGConfig(g_main_config_fn)
@@ -638,6 +654,13 @@ if opt.delete:
     ipaddr = cfg.del_client(p_name)
     cfg.save()
     output_result(f'Client "{p_name}" deleted! IP-Addr: "{ipaddr}"')
+    message = f'Client "{p_name}" deleted! IP-Addr: "{ipaddr}"'
+    result = {
+        "action": "delete",
+        "status": "success",
+        "message": message
+    }
+    output_result(result, opt.json_output)
 
 if opt.confgen:        
     cfg = WGConfig(g_main_config_fn)
@@ -689,6 +712,18 @@ if opt.confgen:
         fn = f'{peer_name}.conf'
         with open(fn, 'w', newline = '\n') as file:
             file.write(out)
+        output_result(f'Client config file "{fn}" created!')
+        if opt.json_output:
+            with open(fn, 'r') as file:
+                client_config = file.read()
+                result = {
+                "action": "confgen",
+                "status": "success",
+                "message": f'Client config file "{fn}" created!',
+                "client_config": client_config
+            }
+            output_result(result, is_json=True)
+
 
 if opt.qrcode:
     output_result('Generate QR codes...')
@@ -711,6 +746,17 @@ if opt.qrcode:
         name = os.path.splitext(fn)[0]
         img = qrcode.make(conf)
         img.save(f'{name}.png')
-
+    
+    output_result('QR codes created!')
+    if opt.json_output:
+        qr_codes = [f'{os.path.splitext(fn)[0]}.png' for fn in flst if not fn.endswith('awg0.conf')]
+        result = {
+            "action": "qrcode",
+            "status": "success",
+            "message": "QR codes created!",
+            "qr_codes": qr_codes
+        }
+        output_result(result, is_json=True)
+        
 output_result('===== OK =====')
 
