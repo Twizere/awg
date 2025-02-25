@@ -1,4 +1,4 @@
-PACKAGE=pfSense-pkg-amneziawireguard
+PACKAGE=pfSense-pkg-Amneziawireguard
 VERSION=1.0.0
 CATEGORIES=net
 MASTER_SITES=	# empty
