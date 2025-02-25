@@ -43,7 +43,7 @@ install:
 	# Copy necessary files
 	@echo " - Copying files..."
 	#@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
-	#@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/* ${PREFIX}/pkg/amneziawireguard/
+	@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/includes/* ${PREFIX}/pkg/amneziawireguard/includes/
 
 	@cp -R ${FILESDIR}${PREFIX}/share/${PACKAGE}/*.xml ${PREFIX}/share/${PACKAGE}/
 	@install  ${FILESDIR}${PREFIX}/share/${PACKAGE}/info.xml ${PREFIX}/share/${PACKAGE}/menu/info.xml
