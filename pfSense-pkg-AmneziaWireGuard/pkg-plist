@@ -1,4 +1,3 @@
-etc/inc/priv/amneziawireguard.priv.inc
 bin/amnezia-go
 bin/awg
 bin/awg-api

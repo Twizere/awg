@@ -30,7 +30,6 @@ install:
 	
 	# Prepare directory tree
 	@echo " - Creating necessary directories..."
-	@install -d /etc/inc/priv
 	@install -d ${PREFIX}/bin
 	@install -d ${PREFIX}/pkg/amneziawireguard/classes
 	@install -d ${PREFIX}/pkg/amneziawireguard/includes
@@ -43,8 +42,6 @@ install:
 
 	# Copy necessary files
 	@echo " - Copying files..."
-	@cp -R ${FILESDIR}/etc/inc/priv/*.priv.inc /etc/inc/priv/
-
 	#@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
 	#@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/* ${PREFIX}/pkg/amneziawireguard/
 
