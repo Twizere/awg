@@ -12,7 +12,6 @@
   "deps": {},
   "categories": ["security", "net"],
   "files": {
-    "/etc/inc/priv/amneziawireguard.priv.inc": "644",
     "/usr/local/bin/amnezia-go": "755",
     "/usr/local/bin/awg": "755",
     "/usr/local/bin/awg-api": "755",
