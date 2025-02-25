@@ -35,6 +35,7 @@ install:
 	@install -d ${PREFIX}/pkg/amneziawireguard/classes
 	@install -d ${PREFIX}/pkg/amneziawireguard/includes
 	@install -d ${PREFIX}/share/${PACKAGE}
+	@install -d ${PREFIX}/share/${PACKAGE}/menu
 	@install -d ${PREFIX}/www/awg/js
 	@install -d ${PREFIX}/www/widgets
 	@install -d ${PREFIX}/www/shortcuts
