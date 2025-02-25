@@ -54,7 +54,7 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
 
-	//copying the executable
+	#copying the executable
 	@cp -R ${FILESDIR}${PREFIX}/bin/* ${PREFIX}/bin/
 	@chmod +x ${PREFIX}/bin/*
 	
