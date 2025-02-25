@@ -1,0 +1,12 @@
+Amnezia WireGuard - A pfSense package for WireGuard VPN management
+
+Amnezia WireGuard provides an easy-to-use interface for managing Amnezia WireGuard VPN connections on pfSense. It allows administrators to configure and monitor WireGuard peers, keys, and connections directly from the pfSense dashboard. This package integrates seamlessly with pfSense's existing management tools, making it easier to set up and manage secure site-to-site and remote access VPN connections.
+
+Features:
+- Simple integration with pfSense
+- Full AWireGuard configuration management
+- Quick setup for site-to-site or remote access VPNs
+- Web-based monitoring and management
+- Automatic WireGuard peer management
+
+WWW: https://www.qtglobal.rw/
