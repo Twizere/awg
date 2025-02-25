@@ -4,7 +4,7 @@ bin/awg-api
 bin/awg-quick
 pkg/amneziawireguard/includes/wg.inc
 pkg/amneziawireguard.inc
-share/pfSense-pkg-AmneziaWireGuard/info.xml
+share/pfSense-pkg-Amneziawireguard/info.xml
 www/awg/js/AmneziaWireguardHelper.js
 www/awg/awg_process.php
 www/awg/index.php
