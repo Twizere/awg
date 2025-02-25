@@ -39,4 +39,3 @@ do-install:
 
 	@echo "Installation complete."
 
-.PHONY: do-install
