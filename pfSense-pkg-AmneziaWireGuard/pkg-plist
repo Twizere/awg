@@ -10,4 +10,5 @@ www/awg/awg_process.php
 www/awg/index.php
 www/awg/status_wireguard.php
 www/shortcuts/pkg_amneziawireguard.inc
-@preexec pkg install -y bash
+@postexec pkg install -y bash
+
