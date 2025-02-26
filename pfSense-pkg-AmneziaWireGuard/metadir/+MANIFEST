@@ -26,6 +26,5 @@
     "/usr/local/www/awg/index.php": "644",
     "/usr/local/www/awg/status_wireguard.php": "644",
     "/usr/local/www/shortcuts/pkg_amneziawireguard.inc": "644"
-  },
-  "postexec": "pkg install -y bash"
+  }
 }

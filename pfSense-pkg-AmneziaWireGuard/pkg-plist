@@ -1,3 +1,4 @@
+@postexec pkg install -y bash
 bin/amnezia-go
 bin/awg
 bin/awg-api
