@@ -12,5 +12,5 @@ if ! pkg info -e bash > /dev/null 2>&1; then
   # pkg install -y bash >> /var/log/messages 2>&1
   exit 1
 else
-  echo "bash is already installed."
+  
 fi
