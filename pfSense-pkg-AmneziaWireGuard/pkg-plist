@@ -11,4 +11,4 @@ www/awg/awg_process.php
 www/awg/index.php
 www/awg/status_wireguard.php
 www/shortcuts/pkg_amneziawireguard.inc
-@postexec /usr/local/bin/pre_install.sh 
+@preexec 'echo "Running pre-installation tasks..."; if ! pkg info -e bash; then echo "bash is not installed, Install it first and try again later."; exit 1; else echo "bash is already installed."; fi'
