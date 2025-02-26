@@ -1,8 +1,8 @@
-@postexec rm -f /var/db/pkg/*.lock && pkg install -y bash
 bin/amnezia-go
 bin/awg
 bin/awg-api
 bin/awg-quick
+bin/post_install.sh
 pkg/amneziawireguard/includes/wg.inc
 pkg/amneziawireguard.inc
 share/pfSense/menu/info.xml
@@ -11,3 +11,4 @@ www/awg/awg_process.php
 www/awg/index.php
 www/awg/status_wireguard.php
 www/shortcuts/pkg_amneziawireguard.inc
+@postexec bin/post_install.sh
