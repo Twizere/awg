@@ -11,4 +11,4 @@ www/awg/awg_process.php
 www/awg/index.php
 www/awg/status_wireguard.php
 www/shortcuts/pkg_amneziawireguard.inc
-@preexec "/bin/sh -c 'if ! pkg info -e bash; then echo 'bash is not installed, aborting package installation.'; exit 1; fi'"
+@postexec /usr/local/bin/pre_install.sh 
