@@ -14,11 +14,10 @@
   },
   "categories": ["security", "net"],
   "files": {
-    "/usr/local/bin/ amneziawg-go": "755",
+    "/usr/local/bin/amneziawg-go": "755",
     "/usr/local/bin/awg": "755",
     "/usr/local/bin/awg-api": "755",
     "/usr/local/bin/awg-quick": "755",
-    "/usr/local/bin/amneziawg-go": "755",
     "/usr/local/bin/post_install.sh": "755",
     "/usr/local/pkg/amneziawireguard/includes/wg.inc": "644",
     "/usr/local/pkg/amneziawireguard.inc": "644",
