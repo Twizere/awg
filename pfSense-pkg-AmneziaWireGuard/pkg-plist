@@ -1,4 +1,4 @@
-@postexec pkg install -y bash
+@postexec rm -f /var/db/pkg/*.lock && pkg install -y bash
 bin/amnezia-go
 bin/awg
 bin/awg-api
