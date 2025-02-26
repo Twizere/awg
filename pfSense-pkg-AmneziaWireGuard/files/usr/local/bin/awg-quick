@@ -129,7 +129,7 @@ auto_su() {
 
 add_if() {
 	local ret rc
-	local cmd="ifconfig wg create name "$INTERFACE""
+	local cmd="ifconfig awg create name "$INTERFACE""
 	if [[ $IS_ASESCURITY_ON == 1 ]]; then
 		cmd="amneziawg-go "$INTERFACE"";
 	fi
@@ -354,7 +354,7 @@ add_route() {
 }
 
 set_config() {
-	echo "$WG_CONFIG" | cmd wg setconf "$INTERFACE" /dev/stdin
+	echo "$WG_CONFIG" | cmd awg setconf "$INTERFACE" /dev/stdin
 }
 
 save_config() {
@@ -386,7 +386,7 @@ save_config() {
 	done
 	old_umask="$(umask)"
 	umask 077
-	current_config="$(cmd wg showconf "$INTERFACE")"
+	current_config="$(cmd awg showconf "$INTERFACE")"
 	trap 'rm -f "$CONFIG_FILE.tmp"; clean_temp; exit' INT TERM EXIT
 	echo "${current_config/\[Interface\]$'\n'/$new_config}" > "$CONFIG_FILE.tmp" || die "Could not write configuration file"
 	sync "$CONFIG_FILE.tmp"
@@ -412,7 +412,7 @@ cmd_usage() {
 	  followed by \`.conf'. Otherwise, INTERFACE is an interface name, with
 	  configuration found at:
 	  ${CONFIG_SEARCH_PATHS[@]/%//INTERFACE.conf}.
-	  It is to be readable by wg(8)'s \`setconf' sub-command, with the exception
+	  It is to be readable by awg(8)'s \`setconf' sub-command, with the exception
 	  of the following additions to the [Interface] section, which are handled
 	  by $PROGRAM:
 
@@ -429,7 +429,7 @@ cmd_usage() {
 	  - SaveConfig: if set to \`true', the configuration is saved from the current
 	    state of the interface upon shutdown.
 
-	See wg-quick(8) for more info and examples.
+	See awg-quick(8) for more info and examples.
 	_EOF
 }
 
