@@ -14,7 +14,7 @@
   },
   "categories": ["security", "net"],
   "files": {
-    "/usr/local/bin/amnezia-go": "755",
+    "/usr/local/bin/ amneziawg-go": "755",
     "/usr/local/bin/awg": "755",
     "/usr/local/bin/awg-api": "755",
     "/usr/local/bin/awg-quick": "755",

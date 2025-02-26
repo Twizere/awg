@@ -1,4 +1,4 @@
-bin/amnezia-go
+bin/ amneziawg-go
 bin/awg
 bin/awg-api
 bin/awg-quick
