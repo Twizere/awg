@@ -58,8 +58,8 @@ install:
 	@echo "   Files copied ✅"
 
 	#copying the executable
-	@cp -R ${FILESDIR}${PREFIX}/rc.d/* ${PREFIX}/rc.d/
-	@chmod +x ${PREFIX}/rc.d/*
+	@cp -R ${FILESDIR}${PREFIX}/etc/rc.d/* ${PREFIX}/etc/rc.d/
+	@chmod +x ${PREFIX}/etc/rc.d/*
 	@echo 'awg_api_enable="YES"' >> /etc/rc.conf.d/awg-api
 	@echo "   Service is set ✅"
 
