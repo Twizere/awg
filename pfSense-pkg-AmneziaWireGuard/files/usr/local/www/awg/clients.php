@@ -67,6 +67,10 @@ foreach (explode("\n", $wg_config) as $line) {
 echo "<div class='panel panel-success'>";
 echo "<div class='panel-heading'><h2 class='panel-title'>Peer Information</h2></div>";
 echo "<div class='panel-body'>";
+
+// Add the button to toggle the keys visibility
+echo "<button class='btn btn-primary' onclick='toggleKeys()'>Show/Hide Keys</button>";
+
 echo "<table class='table table-striped table-bordered'>";
 echo "<thead><tr>";
 echo "<th>" . gettext("ID") . "</th>";
@@ -81,10 +85,10 @@ echo "<tbody>";
 foreach ($peers as $peer) {
     echo "<tr>";
     echo "<td>" . htmlspecialchars($peer['ID']) . "</td>";
-    echo "<td>" . htmlspecialchars($peer['PublicKey']) . "</td>";
+    echo "<td class='public-key'>" . htmlspecialchars($peer['PublicKey']) . "</td>";
     echo "<td>" . htmlspecialchars($peer['PersistentKeepalive']) . "</td>";
     echo "<td>" . htmlspecialchars($peer['AllowedIPs']) . "</td>";
-    echo "<td>" . htmlspecialchars($peer['PrivateKey']) . "</td>";
+    echo "<td class='private-key'>" . htmlspecialchars($peer['PrivateKey']) . "</td>";
     echo "<td>" . htmlspecialchars($peer['UpdatedTime']) . "</td>";
     echo "</tr>";
 }
@@ -96,3 +100,19 @@ echo "</div>";
 
 include("foot.inc");
 ?>
+
+<script>
+// JavaScript function to toggle the visibility of the keys
+function toggleKeys() {
+    var publicKeyCells = document.querySelectorAll('.public-key');
+    var privateKeyCells = document.querySelectorAll('.private-key');
+    
+    publicKeyCells.forEach(function(cell) {
+        cell.style.display = (cell.style.display === 'none') ? '' : 'none';
+    });
+
+    privateKeyCells.forEach(function(cell) {
+        cell.style.display = (cell.style.display === 'none') ? '' : 'none';
+    });
+}
+</script>
