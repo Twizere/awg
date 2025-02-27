@@ -49,9 +49,6 @@ foreach (explode("\n", $wg_config) as $line) {
         if (strpos($line, "#_ID") !== false) {
             $current_peer['ID'] = trim(substr($line, strpos($line, ':') + 1));
         }
-        if (strpos($line, "#_PrivateKey") !== false) {
-            $current_peer['PrivateKey'] = trim(substr($line, strpos($line, '=') + 1));
-        }
         if (strpos($line, "#_UpdatedTime") !== false) {
             $current_peer['UpdatedTime'] = trim(substr($line, strpos($line, ':') + 1));
         }
@@ -76,7 +73,6 @@ echo "<th>" . gettext("ID") . "</th>";
 echo "<th>" . gettext("Public Key") . "</th>";
 echo "<th>" . gettext("Persistent Keepalive") . "</th>";
 echo "<th>" . gettext("Allowed IPs") . "</th>";
-echo "<th>" . gettext("Private Key") . "</th>";
 echo "<th>" . gettext("Updated Time") . "</th>";
 echo "</tr></thead>";
 echo "<tbody>";
@@ -87,7 +83,6 @@ foreach ($peers as $peer) {
     echo "<td>" . htmlspecialchars($peer['PublicKey']) . "</td>";
     echo "<td>" . htmlspecialchars($peer['PersistentKeepalive']) . "</td>";
     echo "<td>" . htmlspecialchars($peer['AllowedIPs']) . "</td>";
-    echo "<td>" . htmlspecialchars($peer['PrivateKey']) . "</td>";
     echo "<td>" . htmlspecialchars($peer['UpdatedTime']) . "</td>";
     echo "</tr>";
 }
