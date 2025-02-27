@@ -74,10 +74,10 @@ echo "<button class='btn btn-primary' onclick='toggleKeys()'>Show/Hide Keys</but
 echo "<table class='table table-striped table-bordered'>";
 echo "<thead><tr>";
 echo "<th>" . gettext("ID") . "</th>";
-echo "<th>" . gettext("Public Key") . "</th>";
+echo "<th class='key-column'>" . gettext("Public Key") . "</th>";
 echo "<th>" . gettext("Persistent Keepalive") . "</th>";
 echo "<th>" . gettext("Allowed IPs") . "</th>";
-echo "<th>" . gettext("Private Key") . "</th>";
+echo "<th class='key-column'>" . gettext("Private Key") . "</th>";
 echo "<th>" . gettext("Updated Time") . "</th>";
 echo "</tr></thead>";
 echo "<tbody>";
@@ -102,10 +102,11 @@ include("foot.inc");
 ?>
 
 <script>
-// JavaScript function to toggle the visibility of the keys
+// JavaScript function to toggle the visibility of the keys and headers
 function toggleKeys() {
     var publicKeyCells = document.querySelectorAll('.public-key');
     var privateKeyCells = document.querySelectorAll('.private-key');
+    var keyHeaders = document.querySelectorAll('.key-column');
     
     publicKeyCells.forEach(function(cell) {
         cell.style.display = (cell.style.display === 'none') ? '' : 'none';
@@ -113,6 +114,29 @@ function toggleKeys() {
 
     privateKeyCells.forEach(function(cell) {
         cell.style.display = (cell.style.display === 'none') ? '' : 'none';
+    });
+
+    keyHeaders.forEach(function(header) {
+        header.style.display = (header.style.display === 'none') ? '' : 'none';
+    });
+}
+
+// Hide the Public Key and Private Key by default when the page loads
+window.onload = function() {
+    var publicKeyCells = document.querySelectorAll('.public-key');
+    var privateKeyCells = document.querySelectorAll('.private-key');
+    var keyHeaders = document.querySelectorAll('.key-column');
+    
+    publicKeyCells.forEach(function(cell) {
+        cell.style.display = 'none';
+    });
+
+    privateKeyCells.forEach(function(cell) {
+        cell.style.display = 'none';
+    });
+
+    keyHeaders.forEach(function(header) {
+        header.style.display = 'none';
     });
 }
 </script>
