@@ -31,13 +31,14 @@ function get_awg_interfaces() {
             // If the line starts with an interface name (like awg0, awg1)
             if (preg_match('/^(\S+):/', $line, $matches)) {
                 $current_interface = $matches[1];
-                $status = "Down"; // Reset status on new interface
 
                 // Ensure we are only considering interfaces that start with 'awg'
                 if (strpos($current_interface, 'awg') === false) {
                     $current_interface = null; // Ignore non-awg interfaces
                     continue;
                 }
+                // Default status for new interface
+                $status = "Down"; 
             }
 
             // Check for 'RUNNING' flag to determine if the interface is up
@@ -45,8 +46,9 @@ function get_awg_interfaces() {
                 $status = "Running"; // Update status if RUNNING is found
             }
 
-            // If it's a valid interface, add to the list
-            if ($current_interface && $status === "Running" && !isset($interfaces[$current_interface])) {
+            // Check if the interface has any other flags we need to track
+            if ($current_interface && !isset($interfaces[$current_interface])) {
+                // Add to the interfaces array even if it's DOWN, to display it
                 $interfaces[$current_interface] = $status;
             }
         }
@@ -54,7 +56,7 @@ function get_awg_interfaces() {
     return $interfaces;
 }
 
-// Get all running AWG (Amenezia WG) interfaces
+// Get all AWG (Amenezia WG) interfaces
 $awg_interfaces = get_awg_interfaces();
 
 echo "<div class='panel panel-success'>";
