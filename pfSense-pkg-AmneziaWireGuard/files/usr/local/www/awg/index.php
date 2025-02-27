@@ -19,23 +19,31 @@ display_top_tabs($tab_array);
 
 // Function to detect AWG (Amenezia WG) WireGuard interfaces
 function get_awg_interfaces() {
-    // Run ifconfig to detect WireGuard interfaces
     $interfaces = [];
     $ifconfig_output = shell_exec('ifconfig');
+    
     if ($ifconfig_output) {
         $lines = explode("\n", $ifconfig_output);
         $current_interface = null;
+        $status = "Down"; // Default status is Down
 
         foreach ($lines as $line) {
-            // If the line starts with an interface name, we capture the interface
+            // If the line starts with an interface name (like awg0, awg1)
             if (preg_match('/^(\S+):/', $line, $matches)) {
                 $current_interface = $matches[1];
+                $status = "Down"; // Reset status on new interface
             }
-            // If the interface has 'wg' in its name, it’s a WireGuard interface for AWG
-            if ($current_interface && strpos($current_interface, 'wg') === 0) {
-                // Check for specific AWG WireGuard attributes (e.g., public key, listen port, etc.)
-                if (strpos($line, 'wg') !== false) {
-                    $interfaces[] = $current_interface;
+
+            // Check if the interface has 'awg' in its name and is running
+            if ($current_interface && strpos($current_interface, 'awg') === 0) {
+                // Check for 'RUNNING' flag to determine if the interface is up
+                if (strpos($line, 'RUNNING') !== false) {
+                    $status = "Running"; // Update status if RUNNING is found
+                }
+
+                // If it's a valid interface, add to the list
+                if ($status === "Running") {
+                    $interfaces[] = ['interface' => $current_interface, 'status' => $status];
                 }
             }
         }
@@ -58,9 +66,7 @@ if (!empty($awg_interfaces)) {
 
     // List all AWG interfaces with their status
     foreach ($awg_interfaces as $interface) {
-        // You could add more status checks here (e.g., check if the interface is up or the configuration is valid)
-        $status = "Running"; // Assuming the interface is running
-        echo "<tr><td>" . htmlspecialchars($interface) . "</td><td>" . htmlspecialchars($status) . "</td></tr>";
+        echo "<tr><td>" . htmlspecialchars($interface['interface']) . "</td><td>" . htmlspecialchars($interface['status']) . "</td></tr>";
     }
 
     echo "</tbody>";
