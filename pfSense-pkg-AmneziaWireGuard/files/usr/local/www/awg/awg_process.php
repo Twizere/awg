@@ -81,77 +81,88 @@ $section->addInput(new Form_Input(
     '*Private Key',
     'text',
     $privateKey
-))->setHelp('Enter the Private Key for the server.');
+))->setHelp('Enter the Private Key for the server.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'listen_port',
     '*Listen Port',
     'text',
     $listenPort
-))->setHelp('Port for the server to listen on.');
+))->setHelp('Port for the server to listen on.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'jc',
     'Jc',
     'text',
     $jC
-))->setHelp('Value for Jc.');
+))->setHelp('Value for Jc.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'jmin',
     'Jmin',
     'text',
     $jMin
-))->setHelp('Value for Jmin.');
+))->setHelp('Value for Jmin.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'jmax',
     'Jmax',
     'text',
     $jMax
-))->setHelp('Value for Jmax.');
+))->setHelp('Value for Jmax.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     's1',
     'S1',
     'text',
     $s1
-))->setHelp('Value for S1.');
+))->setHelp('Value for S1.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     's2',
     'S2',
     'text',
     $s2
-))->setHelp('Value for S2.');
+))->setHelp('Value for S2.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'h1',
     'H1',
     'text',
     $h1
-))->setHelp('Value for H1.');
+))->setHelp('Value for H1.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'h2',
     'H2',
     'text',
     $h2
-))->setHelp('Value for H2.');
+))->setHelp('Value for H2.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'h3',
     'H3',
     'text',
     $h3
-))->setHelp('Value for H3.');
+))->setHelp('Value for H3.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 $section->addInput(new Form_Input(
     'h4',
     'H4',
     'text',
     $h4
-))->setHelp('Value for H4.');
+))->setHelp('Value for H4.')
+  ->setAttribute('readonly', true);  // Make this field read-only
 
 // Add section to the form
 $form->add($section);
