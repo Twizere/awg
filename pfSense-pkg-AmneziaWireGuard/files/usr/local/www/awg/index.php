@@ -32,19 +32,22 @@ function get_awg_interfaces() {
             if (preg_match('/^(\S+):/', $line, $matches)) {
                 $current_interface = $matches[1];
                 $status = "Down"; // Reset status on new interface
+
+                // Ensure we are only considering interfaces that start with 'awg'
+                if (strpos($current_interface, 'awg') === false) {
+                    $current_interface = null; // Ignore non-awg interfaces
+                    continue;
+                }
             }
 
-            // Check if the interface has 'awg' in its name and is running
-            if ($current_interface && strpos($current_interface, 'awg') === 0) {
-                // Check for 'RUNNING' flag to determine if the interface is up
-                if (strpos($line, 'RUNNING') !== false) {
-                    $status = "Running"; // Update status if RUNNING is found
-                }
+            // Check for 'RUNNING' flag to determine if the interface is up
+            if ($current_interface && strpos($line, 'RUNNING') !== false) {
+                $status = "Running"; // Update status if RUNNING is found
+            }
 
-                // If it's a valid interface, add to the list
-                if ($status === "Running") {
-                    $interfaces[] = ['interface' => $current_interface, 'status' => $status];
-                }
+            // If it's a valid interface, add to the list
+            if ($current_interface && $status === "Running" && !isset($interfaces[$current_interface])) {
+                $interfaces[$current_interface] = $status;
             }
         }
     }
@@ -65,8 +68,8 @@ if (!empty($awg_interfaces)) {
     echo "<tbody>";
 
     // List all AWG interfaces with their status
-    foreach ($awg_interfaces as $interface) {
-        echo "<tr><td>" . htmlspecialchars($interface['interface']) . "</td><td>" . htmlspecialchars($interface['status']) . "</td></tr>";
+    foreach ($awg_interfaces as $interface => $status) {
+        echo "<tr><td>" . htmlspecialchars($interface) . "</td><td>" . htmlspecialchars($status) . "</td></tr>";
     }
 
     echo "</tbody>";
