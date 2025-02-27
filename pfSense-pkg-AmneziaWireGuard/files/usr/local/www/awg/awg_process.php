@@ -18,7 +18,7 @@ add_package_tabs("AWG", $tab_array);
 display_top_tabs($tab_array);
 
 // Read the WireGuard configuration file
-$wg_config_file = "/etc/amnezia/amneziawg/awg0.com";
+$wg_config_file = "/etc/amnezia/amneziawg/awg0.conf";
 $wg_config = file_exists($wg_config_file) ? file_get_contents($wg_config_file) : "Configuration file not found.";
 
 $server_config = "";
