@@ -9,7 +9,6 @@ COMMENT=Amnezia-WireGuard VPN integration for pfSense
 
 # Directories
 PREFIX=/usr/local
-ETC_PREFIX=/etc/local
 FILESDIR=./files
 PLIST=./pkg-plist
 
@@ -59,8 +58,8 @@ install:
 	@echo "   Files copied ✅"
 
 	#copying the executable
-	@cp -R ${FILESDIR}${ETC_PREFIX}/rc.d/* ${ETC_PREFIX}/rc.d/
-	@chmod +x ${ETC_PREFIX}/rc.d/*
+	@cp -R ${FILESDIR}${PREFIX}/rc.d/* ${PREFIX}/rc.d/
+	@chmod +x ${PREFIX}/rc.d/*
 	@echo 'awg_api_enable="YES"' >> /etc/rc.conf.d/awg-api
 	@echo "   Service is set ✅"
 
