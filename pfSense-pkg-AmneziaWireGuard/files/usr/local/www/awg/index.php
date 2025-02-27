@@ -71,7 +71,13 @@ if (!empty($awg_interfaces)) {
 
     // List all AWG interfaces with their status
     foreach ($awg_interfaces as $interface => $status) {
-        echo "<tr><td>" . htmlspecialchars($interface) . "</td><td>" . htmlspecialchars($status) . "</td></tr>";
+        // Apply color based on status
+        $status_color = ($status === "Running") ? "green" : "red";
+        
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($interface) . "</td>";
+        echo "<td style='color: {$status_color};'>" . htmlspecialchars($status) . "</td>";
+        echo "</tr>";
     }
 
     echo "</tbody>";
