@@ -6,9 +6,10 @@ require_once("pkg-utils.inc");
 require_once("filter.inc");
 require_once("certs.inc");
 
-$pgtitle = array("VPN", "Amnezia WG Configuration");
+$pgtitle = array("VPN", "Amenezia WG");
 include("head.inc");
 
+ 
 $tab_array = array();
 $tab_array[] = array(gettext("Server"), true, "index.php");
 $tab_array[] = array(gettext("Clients"), false, "clients.php");
@@ -17,7 +18,7 @@ add_package_tabs("AWG", $tab_array);
 display_top_tabs($tab_array);
 
 // Read the WireGuard configuration file
-$wg_config_file = "/etc/wireguard/wg0.conf";
+$wg_config_file = "/etc/amnezia/amneziawg/awg0.com";
 $wg_config = file_exists($wg_config_file) ? file_get_contents($wg_config_file) : "Configuration file not found.";
 
 $server_config = "";
