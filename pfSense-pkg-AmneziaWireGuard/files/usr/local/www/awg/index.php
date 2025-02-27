@@ -53,7 +53,7 @@ function get_awg_interfaces() {
                 }
             }
 
-            // Check if the interface has any other flags we need to track
+            // Add the interface status when we detect an interface name
             if ($current_interface && !isset($interfaces[$current_interface])) {
                 // Add to the interfaces array even if it's DOWN, to display it
                 $interfaces[$current_interface] = $status;
