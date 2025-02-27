@@ -46,6 +46,13 @@ function get_awg_interfaces() {
                 $status = "Running"; // Update status if RUNNING is found
             }
 
+            // Check for 'UP' flag which indicates an interface is "up"
+            if ($current_interface && strpos($line, 'UP') !== false) {
+                if ($status !== "Running") {
+                    $status = "Up"; // Mark it as UP but not Running if it doesn't have the RUNNING flag
+                }
+            }
+
             // Check if the interface has any other flags we need to track
             if ($current_interface && !isset($interfaces[$current_interface])) {
                 // Add to the interfaces array even if it's DOWN, to display it
@@ -72,7 +79,7 @@ if (!empty($awg_interfaces)) {
     // List all AWG interfaces with their status
     foreach ($awg_interfaces as $interface => $status) {
         // Apply color based on status
-        $status_color = ($status === "Running") ? "green" : "red";
+        $status_color = ($status === "Running") ? "green" : (($status === "Up") ? "orange" : "red");
         
         echo "<tr>";
         echo "<td>" . htmlspecialchars($interface) . "</td>";
