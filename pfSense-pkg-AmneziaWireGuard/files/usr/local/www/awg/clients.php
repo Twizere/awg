@@ -46,6 +46,10 @@ foreach (explode("\n", $wg_config) as $line) {
         }
 
         // Parse commented fields (ID, PrivateKey, UpdatedTime)
+        // Parse normal peer configurations
+        if (strpos($line, "#_PrivateKey") !== false) {
+            $current_peer['PrivateKey'] = trim(substr($line, strpos($line, '=') + 1));
+        }
         if (strpos($line, "#_ID") !== false) {
             $current_peer['ID'] = trim(substr($line, strpos($line, ':') + 1));
         }
