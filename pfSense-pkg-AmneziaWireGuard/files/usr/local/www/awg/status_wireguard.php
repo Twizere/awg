@@ -150,7 +150,7 @@
 // 				</tr>
 // <?php
 // 	endforeach;
-// elseif (empty(config_get_path('installedpackages/wireguard/tunnels/item'))):
+// elseif (empty(config_get_path('installedpackages/amneziawg/tunnels/item'))):
 // ?>
 // 				<tr>
 // 					<td colspan="9"><?php print_info_box(gettext('No WireGuard tunnels have been configured.'), 'warning', null); ?></td>

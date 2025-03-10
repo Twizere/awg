@@ -52,7 +52,7 @@ function wg_toggle_tunnel($tunnel_name) {
 		$input_errors		= wg_validate_tunnel_toggle($tunnel);
 
 		if (empty($input_errors)) {
-			config_set_path("installedpackages/wireguard/tunnels/item/{$tun_idx}", $tunnel);
+			config_set_path("installedpackages/amneziawg/tunnels/item/{$tun_idx}", $tunnel);
 
 			$action_text = $is_enabled ? 'Disabled' : 'Enabled';
 			
@@ -92,7 +92,7 @@ function wg_toggle_peer($peer_idx) {
 
 		// Boilerplate...
 		if (empty($input_errors)) {
-			config_set_path("installedpackages/wireguard/peers/item/{$peer_idx}", $peer);
+			config_set_path("installedpackages/amneziawg/peers/item/{$peer_idx}", $peer);
 
 			$action_text = $is_enabled ? 'Disabled' : 'Enabled';
 
@@ -130,7 +130,7 @@ function wg_delete_peer($peer_idx) {
 		// Boilerplate...
 		if (empty($input_errors)) {
 			// Delete the peer
-			config_del_path("installedpackages/wireguard/peers/item/{$peer_idx}");
+			config_del_path("installedpackages/amneziawg/peers/item/{$peer_idx}");
 
 			// Sync with configuration backend
 			wg_write_config("Deleted peer {$peer_idx} ({$peer['publickey']}).", true);
@@ -165,7 +165,7 @@ function wg_delete_tunnel($tunnel_name) {
 
 		if (empty($input_errors)) {
 			// Delete the tunnel
-			config_del_path("installedpackages/wireguard/tunnels/item/{$tun_idx}");
+			config_del_path("installedpackages/amneziawg/tunnels/item/{$tun_idx}");
 
 			// Sync with configuration backend
 			wg_write_config("Deleted tunnel {$tunnel['name']}.", true);
@@ -202,7 +202,7 @@ function wg_tunnel_unassign_peers($tunnel_name) {
 	$changes = false;
 	
 	foreach (wg_tunnel_get_peers_config($tunnel_name) as [$peer_idx, $peer, $is_new]) {
-		config_set_path("installedpackages/wireguard/peers/item/{$peer_idx}/tun", 'unassigned');
+		config_set_path("installedpackages/amneziawg/peers/item/{$peer_idx}/tun", 'unassigned');
 
 		// We've got at least one, so we need to resync with the backend...
 		$changes = true;
@@ -317,7 +317,7 @@ function wg_resolve_endpoints() {
 	wg_globals();
 
 	// Do we have any peers?
-	foreach (config_get_path('installedpackages/wireguard/peers/item', []) as $peer) {
+	foreach (config_get_path('installedpackages/amneziawg/peers/item', []) as $peer) {
 		// Strip port if empty
 		$peer['port'] = !empty($peer['port']) ? ":{$peer['port']}" : null;
 
@@ -363,15 +363,15 @@ function wg_get_endpoint_resolve_interval() {
 	global $wgg;
 
 	// Are we tracking the system value?
-	if (config_get_path('installedpackages/wireguard/config/0/resolve_interval_track') == 'yes') {
+	if (config_get_path('installedpackages/amneziawg/config/0/resolve_interval_track') == 'yes') {
 		if (is_numeric(config_get_path('system/aliasesresolveinterval'))) {
 			return config_get_path('system/aliasesresolveinterval');
 		}
 			
 		// Package default is the same as pfSense default (300 seconds)
 		return $wgg['default_resolve_interval'];
-	} elseif (is_numericint(config_get_path('installedpackages/wireguard/config/0/resolve_interval'))) {
-		return config_get_path('installedpackages/wireguard/config/0/resolve_interval');
+	} elseif (is_numericint(config_get_path('installedpackages/amneziawg/config/0/resolve_interval'))) {
+		return config_get_path('installedpackages/amneziawg/config/0/resolve_interval');
 	} else {
 		// Something is wrong, so just return the package default...
 		return $wgg['default_resolve_interval'];
@@ -390,7 +390,7 @@ function wg_do_settings_post($post) {
 	$changes = false;
 
 	// We need to save the "old config" to compare against later...
-	$pconfig = $old_config = config_get_path('installedpackages/wireguard/config/0');
+	$pconfig = $old_config = config_get_path('installedpackages/amneziawg/config/0');
 
 	$pconfig['enable']			= (!empty($post['enable']) && $post['enable'] == 'yes') ? 'on' : 'off';
 	$pconfig['keep_conf'] 			= empty($post['keep_conf']) ? 'no' : $post['keep_conf'];
@@ -403,7 +403,7 @@ function wg_do_settings_post($post) {
 	$input_errors = wg_validate_settings_post($pconfig);
 
 	if (empty($input_errors)) {
-		config_set_path('installedpackages/wireguard/config/0', $pconfig);
+		config_set_path('installedpackages/amneziawg/config/0', $pconfig);
 
 		// Sync with configuration backend
 		wg_write_config('Saved package settings.', true);
@@ -452,7 +452,7 @@ function wg_do_peer_post($post) {
 	$input_errors = wg_validate_peer_post($pconfig, $peer_idx);
 
 	if (empty($input_errors)) {
-		config_set_path("installedpackages/wireguard/peers/item/{$peer_idx}", $pconfig);
+		config_set_path("installedpackages/amneziawg/peers/item/{$peer_idx}", $pconfig);
 
 		// Sync with configuration backend
 		wg_write_config("Updated peer {$peer_idx} ({$pconfig['publickey']}).", true);
@@ -506,7 +506,7 @@ function wg_do_tunnel_post($post) {
 	$input_errors			= wg_validate_tunnel_post($pconfig, $tun_idx);
 
 	if (empty($input_errors)) {
-		config_set_path("installedpackages/wireguard/tunnels/item/{$tun_idx}", $pconfig);
+		config_set_path("installedpackages/amneziawg/tunnels/item/{$tun_idx}", $pconfig);
 
 		// Sync with configuration backend
 		wg_write_config("Updated tunnel {$pconfig['name']}.", true);
@@ -764,7 +764,7 @@ function wg_resync() {
 function wg_get_enabled_tunnels() {
 	$ret_tunnels = array();
 
-	foreach (config_get_path('installedpackages/wireguard/tunnels/item', []) as $tunnel) {
+	foreach (config_get_path('installedpackages/amneziawg/tunnels/item', []) as $tunnel) {
 		if (isset($tunnel['enabled']) && $tunnel['enabled'] == 'yes') {
 			$ret_tunnels[] = $tunnel;
 		}
@@ -792,7 +792,7 @@ function wg_create_config_files($clean = true) {
 	}
 
 	// Check if there are any configurations to write to disk
-	foreach (config_get_path('installedpackages/wireguard/tunnels/item', []) as $tunnel) {
+	foreach (config_get_path('installedpackages/amneziawg/tunnels/item', []) as $tunnel) {
 		wg_make_tunnel_conf_file($tunnel, false);
 	}
 }
