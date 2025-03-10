@@ -23,8 +23,8 @@
 require_once('util.inc');
 
 // WireGuard includes
-require_once('wireguard/includes/wg.inc');
-require_once('wireguard/includes/wg_globals.inc');
+require_once('amneziawireguard/includes/wg.inc');
+require_once('amneziawireguard/includes/wg_globals.inc');
 
 function wg_print_service_warning($only_with_tunnels = true) {
 	if (!wg_is_service_running() 

@@ -5,8 +5,8 @@
 // require_once('util.inc');
 
 // // WireGuard includes
-// require_once('wireguard/includes/wg.inc');
-// require_once('wireguard/includes/wg_guiconfig.inc');
+// require_once('amneziawireguard/includes/wg.inc');
+// require_once('amneziawireguard/includes/wg_guiconfig.inc');
 
 // global $wgg;
 
@@ -214,6 +214,6 @@
 // </script>
 
 // <?php
-// include('wireguard/includes/wg_foot.inc');
+// include('amneziawireguard/includes/wg_foot.inc');
 // include('foot.inc');
 ?>

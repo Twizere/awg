@@ -220,6 +220,6 @@ events.push(function() {
 </script>
 
 <?php
-include('wireguard/includes/wg_foot.inc');
+include('amneziawireguard/includes/wg_foot.inc');
 include('foot.inc');
 ?>
