@@ -32,7 +32,7 @@ require_once('service-utils.inc');
 
 // WireGuard includes
 require_once('amneziawireguard/includes/wg_globals.inc');
-require_once('amneziawireguard/includes/wg_install.inc');
+//require_once('amneziawireguard/includes/wg_install.inc');
 
 /*
 * A wrapper for wg_get_running_config to export everything plus extras for the status page
