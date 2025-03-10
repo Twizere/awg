@@ -29,7 +29,7 @@ require_once('services.inc');
 require_once('service-utils.inc');
 
 // WireGuard includes
-require_once('wireguard/includes/wg.inc');
+require_once('amneziawireguard/includes/wg.inc');
 
 global $wgg;
 
