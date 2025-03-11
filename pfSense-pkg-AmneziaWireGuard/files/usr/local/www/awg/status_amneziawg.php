@@ -3,7 +3,7 @@
 // pfSense includes
 require_once('guiconfig.inc');
 require_once('util.inc');
-include("head.inc");
+
 
 // Amnezia WG includes
 require_once('amneziawireguard/includes/wg.inc');
@@ -13,7 +13,6 @@ require_once('amneziawireguard/includes/wg_guiconfig.inc');
 global $wgg;
 $active_tab = "Status";
 $pgtitle[] = $active_tab;
-$pglinks = array("", "@self");
 include('amneziawireguard/includes/awg_header.inc');
 
 
