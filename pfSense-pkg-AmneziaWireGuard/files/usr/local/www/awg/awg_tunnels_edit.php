@@ -395,9 +395,9 @@ print($form);
 					<td><?=wg_generate_peer_allowedips_popup_link($peer_idx)?></td>
 					<td><?=htmlspecialchars(wg_format_endpoint(false, $peer))?></td>
 					<td style="cursor: pointer;">
-						<a class="fa-solid fa-pencil" title="<?=gettext('Edit Peer')?>" href="<?="vpn_wg_peers_edit.php?peer={$peer_idx}"?>"></a>
+						<a class="fa fa-solid fa-pencil" title="<?=gettext('Edit Peer')?>" href="<?="vpn_wg_peers_edit.php?peer={$peer_idx}"?>"></a>
 						<?=wg_generate_toggle_icon_link(($peer['enabled'] == 'yes'), 'peer', "?act=toggle&peer={$peer_idx}&tun={$tun}")?>
-						<a class="fa-solid fa-trash-can text-danger" title="<?=gettext('Delete Peer')?>" href="<?="?act=delete&peer={$peer_idx}&tun={$tun}"?>" usepost></a>
+						<a class="fa fa-solid fa-trash-can text-danger" title="<?=gettext('Delete Peer')?>" href="<?="?act=delete&peer={$peer_idx}&tun={$tun}"?>" usepost></a>
 					</td>
 				</tr>
 
@@ -424,7 +424,7 @@ print($form);
 if ($is_new):
 ?>
 	<button class="btn btn-success btn-sm" title="<?=gettext('Add Peer')?>" disabled>
-		<i class="fa-solid fa-plus icon-embed-btn"></i>
+		<i class="fa fa-solid fa-plus icon-embed-btn"></i>
 		<?=gettext('Add Peer')?>
 	</button>
 <?php
@@ -432,14 +432,14 @@ if ($is_new):
 else:
 ?>
 	<a href="<?="vpn_wg_peers_edit.php?tun={$pconfig['name']}"?>" class="btn btn-success btn-sm">
-		<i class="fa-solid fa-plus icon-embed-btn"></i>
+		<i class="fa fa-solid fa-plus icon-embed-btn"></i>
 		<?=gettext('Add Peer')?>
 	</a>
 <?php
 endif;
 ?>
 	<button type="submit" id="saveform" name="saveform" class="btn btn-primary btn-sm" value="save" title="<?=gettext('Save tunnel')?>">
-		<i class="fa-solid fa-save icon-embed-btn"></i>
+		<i class="fa fa-solid fa-save icon-embed-btn"></i>
 		<?=gettext('Save Tunnel')?>
 	</button>
 </nav>
