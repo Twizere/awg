@@ -3,7 +3,6 @@
 
 include("head.inc");
 $pgtitle = array("VPN", "Amenezia WG");
-$pglinks = array("", "@self");
 $shortcut_section = "Amnezia WG";
 
 $tab_array = array();
