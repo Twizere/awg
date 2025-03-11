@@ -28,7 +28,7 @@ require_once('util.inc');
 
 // WireGuard includes
 require_once('amneziawireguard/includes/wg_api.inc');
-//require_once('amneziawireguard/includes/wg_install.inc');
+require_once('amneziawireguard/includes/wg_install.inc');
 require_once('amneziawireguard/includes/wg_service.inc');
 require_once('amneziawireguard/includes/wg_validate.inc');
 require_once('amneziawireguard/includes/awgconfig.inc');
