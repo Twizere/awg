@@ -12,5 +12,4 @@ $tab_array[] = array(gettext("Clients"), $active_tab == "Clients", "clients.php"
 $tab_array[] = array(gettext("Client Export"), $active_tab == "Export", "export.php");
 add_package_tabs("AWG", $tab_array);
 
-
 ?>

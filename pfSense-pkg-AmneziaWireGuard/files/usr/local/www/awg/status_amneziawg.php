@@ -8,16 +8,17 @@ require_once('util.inc');
 // Amnezia WG includes
 require_once('amneziawireguard/includes/wg.inc');
 require_once('amneziawireguard/includes/wg_guiconfig.inc');
-include("head.inc");
+
 
 global $wgg;
 
 
+
+include('amneziawireguard/includes/awg_header.inc');
 $active_tab = "Status";
 $pgtitle[] = $active_tab;
-include('amneziawireguard/includes/awg_header.inc');
+include("head.inc");
 display_top_tabs($tab_array);
-
 
 
 // Initialize $wgg state
