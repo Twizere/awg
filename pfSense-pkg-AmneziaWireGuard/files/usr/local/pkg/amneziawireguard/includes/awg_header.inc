@@ -10,3 +10,8 @@ $tab_array[] = array(gettext("Client Export"), $active_tab == "Export", "export.
 add_package_tabs("AWG", $tab_array);
 
 ?>
+function wgRegTrimHandler() {
+	$('body').on('change', '.trim', function () {
+		$(this).val($(this).val().replace(/\s/g, ''));
+	});
+}
