@@ -14,6 +14,12 @@ global $wgg;
 
 // Initialize $wgg state
 wg_globals();
+include('amneziawireguard/includes/awg_header.inc');
+$active_tab = "Servers";
+$pgtitle[] = $active_tab;
+include("head.inc");
+$pglinks = array("", "@self");
+display_top_tabs($tab_array);
 
 $pconfig = [];
 
@@ -142,7 +148,7 @@ if (count(config_get_path('installedpackages/amneziawg/tunnels/item', [])) > 0):
 
 						<td style="cursor: pointer;">
 							<a class="fa-solid fa-user-plus" title="<?=gettext('Add Peer')?>" href="<?="vpn_wg_peers_edit.php?tun={$tunnel['name']}"?>"></a>
-							<a class="fa-solid fa-pencil" title="<?=gettext('Edit Tunnel')?>" href="<?="vpn_wg_tunnels_edit.php?tun={$tunnel['name']}"?>"></a>
+							<a class="fa-solid fa-pencil" title="<?=gettext('Edit Tunnel')?>" href="<?="awg_tunnels_edit.php?tun={$tunnel['name']}"?>"></a>
 							<a class="fa-solid fa-download" title="<?=gettext('Download Configuration')?>" href="<?="?act=download&tun={$tunnel['name']}"?>" usepost></a>
 							<?=wg_generate_toggle_icon_link(($tunnel['enabled'] == 'yes'), 'tunnel', "?act=toggle&tun={$tunnel['name']}")?>
 							<a class="fa-solid fa-trash-can text-danger" title="<?=gettext('Delete Tunnel')?>" href="<?="?act=delete&tun={$tunnel['name']}"?>" usepost></a>
@@ -204,7 +210,7 @@ endif;
 		</div>
 	</div>
 	<nav class="action-buttons">
-		<a href="vpn_wg_tunnels_edit.php" class="btn btn-success btn-sm">
+		<a href="awg_tunnels_edit.php" class="btn btn-success btn-sm">
 			<i class="fa-solid fa-plus icon-embed-btn"></i>
 			<?=gettext('Add Tunnel')?>
 		</a>

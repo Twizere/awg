@@ -327,7 +327,7 @@ function wg_generate_tunnel_address_popover_link($tunnel_name) {
 
 	if ([$tun_idx, $tunnel, $is_new] = wg_tunnel_get_config_by_name($tunnel_name, false)) {
 		if (!is_wg_tunnel_assigned($tunnel['name'])) {
-			return wg_compose_address_popover_link($tunnel['addresses']['row'], gettext('Interface Addresses'), "vpn_wg_tunnels_edit.php?tun={$tunnel_name}");
+			return wg_compose_address_popover_link($tunnel['addresses']['row'], gettext('Interface Addresses'), "awg_tunnels_edit.php?tun={$tunnel_name}");
 		} else {
 			$wg_pfsense_if = wg_get_pfsense_interface_info($tunnel['name']);
 
