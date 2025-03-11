@@ -25,8 +25,8 @@ require_once('config.inc');
 require_once('pfsense-utils.inc');
 require_once('util.inc');
 
-// WireGuard includes
-require_once('wireguard/includes/wg_api.inc');
+// Amnezia WireGuard includes
+require_once('amneziawireguard/includes/wg_api.inc');
 
 function wg_validate_peer_toggle($peer) {
 	$input_errors = array();
