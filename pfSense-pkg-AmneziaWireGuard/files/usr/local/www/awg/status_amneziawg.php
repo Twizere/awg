@@ -18,6 +18,7 @@ include('amneziawireguard/includes/awg_header.inc');
 $active_tab = "Status";
 $pgtitle[] = $active_tab;
 include("head.inc");
+$pglinks = array("", "@self");
 display_top_tabs($tab_array);
 
 

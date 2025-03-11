@@ -2,13 +2,10 @@
 
 $pgtitle = array("VPN", "Amenezia WG");
 $shortcut_section = "Amnezia WG";
-$pglinks = array("", "@self");
-
-
 $tab_array = array();
-$tab_array[] = array(gettext("Status"), $active_tab == "Status", "status_amneziawg.php");
-$tab_array[] = array(gettext("Server"), $active_tab == "Server", "server.php");
-$tab_array[] = array(gettext("Clients"), $active_tab == "Clients", "clients.php");
+$tab_array[] = array(gettext("Status"), $active_tab == "Status", "/awg/status_amneziawg.php");
+$tab_array[] = array(gettext("Servers"), $active_tab == "Server", "/awg/awg_tunnels.php");
+$tab_array[] = array(gettext("Clients"), $active_tab == "Clients", "/wg/vpn_wg_peers.php");
 $tab_array[] = array(gettext("Client Export"), $active_tab == "Export", "export.php");
 add_package_tabs("AWG", $tab_array);
 
