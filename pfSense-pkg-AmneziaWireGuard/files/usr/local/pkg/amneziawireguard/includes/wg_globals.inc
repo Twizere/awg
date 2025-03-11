@@ -52,7 +52,7 @@ define('WG_ERROR_SVC_STOP',		8);
 define('WG_ERROR_SVC_CREATE',		16);
 
 $wgg = array(
-	'wg'			=> '/usr/bin/wg',
+	'wg'			=> '/usr/local/bin/awg',
 	'ifconfig'		=> '/sbin/ifconfig',
 	'pkg'			=> '/usr/sbin/pkg',
 	'kldload'		=> '/sbin/kldload',
