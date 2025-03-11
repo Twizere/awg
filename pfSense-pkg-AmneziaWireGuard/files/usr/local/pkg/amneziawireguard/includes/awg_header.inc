@@ -10,3 +10,5 @@ $tab_array[] = array(gettext("Client Export"), $active_tab == "Export", "export.
 add_package_tabs("AWG", $tab_array);
 
 ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
