@@ -1,7 +1,7 @@
 <?php
 
 
-include("head.inc");
+
 $pgtitle = array("VPN", "Amenezia WG");
 $shortcut_section = "Amnezia WG";
 
