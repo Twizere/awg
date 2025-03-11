@@ -1,6 +1,6 @@
 <?php
 /*
- * wgconfig.class.php
+ * awgconfig.class.php
  *
  * part of pfSense (https://www.pfsense.org)
  * Copyright (c) 2021-2024 Rubicon Communications, LLC (Netgate)
@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-class wgconfig {
+class awgconfig {
 	private const SECTION_FIRSTLINE		= '_index_firstline';
 	private const SECTION_LASTLINE		= '_index_lastline';
 	private const SECTION_RAW		= '_rawdata';

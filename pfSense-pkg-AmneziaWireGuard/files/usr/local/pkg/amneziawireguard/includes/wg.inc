@@ -830,8 +830,8 @@ function wg_remove_config_settings() {
 function wg_make_tunnel_conf_file($tunnel, $include_endpoint = false) {
 	global $wgg;
 
-	// Init a new wgconfig object
-	$wc = new wgconfig($tunnel['name'], true);
+	// Init a new awgconfig object
+	$wc = new awgconfig($tunnel['name'], true);
 
 	$wc->set_path("{$wgg['conf_path']}/{$tunnel['name']}.conf");
 
