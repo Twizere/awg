@@ -14,12 +14,7 @@ global $wgg;
 
 // Initialize $wgg state
 wg_globals();
-include('amneziawireguard/includes/awg_header.inc');
-$active_tab = "Servers";
-$pgtitle[] = $active_tab;
-include("head.inc");
-$pglinks = array("", "@self");
-display_top_tabs($tab_array);
+
 
 $pconfig = [];
 
