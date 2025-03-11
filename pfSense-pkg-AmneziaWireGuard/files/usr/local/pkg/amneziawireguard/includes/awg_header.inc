@@ -1,10 +1,8 @@
 <?php
 
 $pgtitle = array("VPN", "Amenezia WG");
-$active_tab = "Status";
 $shortcut_section = "Amnezia WG";
 $pglinks = array("", "@self");
-
 
 
 $tab_array = array();
