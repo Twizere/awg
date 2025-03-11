@@ -89,7 +89,7 @@ function wg_deinstall() {
 	wg_delete_temp_files();
 
 	// Only delete WireGuard configuration if keep_conf is explicitly 'no'
-	if (config_get_path('installedpackages/wireguard/config/0/keep_conf') == 'no') {
+	if (config_get_path('installedpackages/amneziawg/config/0/keep_conf') == 'no') {
 		update_status("done.\n  Removing WireGuard configuration settings...");
 
 		// Removes WireGuard configuration
@@ -146,38 +146,38 @@ function wg_defaults_install() {
 
 	$config_changed = false;
 	$enable_config = wg_is_service_enabled() ? 'on' : 'off';
-	if (config_get_path('installedpackages/wireguard/config/0/enable') !== $enable_config) {
-		config_set_path('installedpackages/wireguard/config/0/enable', $enable_config);
+	if (config_get_path('installedpackages/amneziawg/config/0/enable') !== $enable_config) {
+		config_set_path('installedpackages/amneziawg/config/0/enable', $enable_config);
 		$config_changed = true;
 	}
 
-	if (config_get_path('installedpackages/wireguard/config/0/keep_conf') === null) {
-		config_set_path('installedpackages/wireguard/config/0/keep_conf', 'yes');
+	if (config_get_path('installedpackages/amneziawg/config/0/keep_conf') === null) {
+		config_set_path('installedpackages/amneziawg/config/0/keep_conf', 'yes');
 		$config_changed = true;
 	}
 
-	if (config_get_path('installedpackages/wireguard/config/0/resolve_interval') === null) {
-		config_set_path('installedpackages/wireguard/config/0/resolve_interval', $wgg['default_resolve_interval']);
+	if (config_get_path('installedpackages/amneziawg/config/0/resolve_interval') === null) {
+		config_set_path('installedpackages/amneziawg/config/0/resolve_interval', $wgg['default_resolve_interval']);
 		$config_changed = true;
 	}
 
-	if (config_get_path('installedpackages/wireguard/config/0/resolve_interval_track') === null) {
-		config_set_path('installedpackages/wireguard/config/0/resolve_interval_track', 'no');
+	if (config_get_path('installedpackages/amneziawg/config/0/resolve_interval_track') === null) {
+		config_set_path('installedpackages/amneziawg/config/0/resolve_interval_track', 'no');
 		$config_changed = true;
 	}
 
-	if (config_get_path('installedpackages/wireguard/config/0/interface_group') === null) {
-		config_set_path('installedpackages/wireguard/config/0/interface_group', 'all');
+	if (config_get_path('installedpackages/amneziawg/config/0/interface_group') === null) {
+		config_set_path('installedpackages/amneziawg/config/0/interface_group', 'all');
 		$config_changed = true;
 	}
 
-	if (config_get_path('installedpackages/wireguard/config/0/hide_secrets') === null) {
-		config_set_path('installedpackages/wireguard/config/0/hide_secrets', 'yes');
+	if (config_get_path('installedpackages/amneziawg/config/0/hide_secrets') === null) {
+		config_set_path('installedpackages/amneziawg/config/0/hide_secrets', 'yes');
 		$config_changed = true;
 	}
 
-	if (config_get_path('installedpackages/wireguard/config/0/hide_peers') === null) {
-		config_set_path('installedpackages/wireguard/config/0/hide_peers', 'yes');
+	if (config_get_path('installedpackages/amneziawg/config/0/hide_peers') === null) {
+		config_set_path('installedpackages/amneziawg/config/0/hide_peers', 'yes');
 		$config_changed = true;
 	}
 
@@ -358,7 +358,7 @@ function wg_ifgroup_install() {
 
 	wg_ifgroup_deinstall(true);
 
-	if (config_get_path('installedpackages/wireguard/config/0/interface_group') == 'none') {
+	if (config_get_path('installedpackages/amneziawg/config/0/interface_group') == 'none') {
 		// No point installing the interface group...
 		return;
 	}

@@ -153,7 +153,7 @@ $peers_hidden = wg_status_peers_hidden();
 						</tr>
 						<?php
 					endforeach;
-				elseif (empty(config_get_path('installedpackages/amneziawireguard/tunnels/item'))):
+				elseif (empty(config_get_path('installedpackages/amneziawg/tunnels/item'))):
 					?>
 					<tr>
 						<td colspan="9">
