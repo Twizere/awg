@@ -116,98 +116,103 @@ display_top_tabs($tab_array);
 
 <form name="mainform" method="post">
 	<div class="panel panel-default">
-		<div class="panel-heading"><h2 class="panel-title"><?=gettext('WireGuard Peers')?></h2></div>
+		<div class="panel-heading">
+			<h2 class="panel-title"><?= gettext('WireGuard Peers') ?></h2>
+		</div>
 		<div class="panel-body table-responsive">
 			<table class="table table-hover table-striped table-condensed">
 				<thead>
 					<tr>
-						<th><?=gettext('Description')?></th>
-						<th><?=gettext('Public key')?></th>
-						<th><?=gettext('Tunnel')?></th>
-						<th><?=gettext('Allowed IPs')?></th>
-						<th><?=htmlspecialchars(wg_format_endpoint(true))?></th>
-						<th><?=gettext('Actions')?></th>
+						<th><?= gettext('Description') ?></th>
+						<th><?= gettext('Public key') ?></th>
+						<th><?= gettext('Tunnel') ?></th>
+						<th><?= gettext('Allowed IPs') ?></th>
+						<th><?= htmlspecialchars(wg_format_endpoint(true)) ?></th>
+						<th><?= gettext('Actions') ?></th>
 					</tr>
 				</thead>
 				<tbody>
-<?php
-if (count(config_get_path('installedpackages/amneziawg/peers/item', [])) > 0):
+					<?php
+					if (count(config_get_path('installedpackages/amneziawg/peers/item', [])) > 0):
 
-		foreach (config_get_path('installedpackages/amneziawg/peers/item', []) as $peer_idx => $peer):
-?>
-					<tr ondblclick="document.location='<?="awg_peers_edit.php?peer={$peer_idx}"?>';" class="<?=wg_peer_status_class($peer)?>">
-						<td><?=htmlspecialchars(wg_truncate_pretty($peer['descr'], 16))?></td>
-						<td style="cursor: pointer;" class="pubkey" title="<?=htmlspecialchars($peer['publickey'])?>">
-							<?=htmlspecialchars(wg_truncate_pretty($peer['publickey'], 16))?>
-						</td>
-						<td><?=htmlspecialchars($peer['tun'])?></td>
-						<td><?=wg_generate_peer_allowedips_popup_link($peer_idx)?></td>
-						<td><?=htmlspecialchars(wg_format_endpoint(false, $peer))?></td>
-						<td style="cursor: pointer;">
-							<a class="fa-solid fa-pencil" title="<?=gettext('Edit Peer')?>" href="<?="awg_peers_edit.php?peer={$peer_idx}"?>"></a>
-							<?=wg_generate_toggle_icon_link(($peer['enabled'] == 'yes'), 'peer', "?act=toggle&peer={$peer_idx}")?>
-							<a class="fa-solid fa-trash-can text-danger" title="<?=gettext('Delete Peer')?>" href="<?="?act=delete&peer={$peer_idx}"?>" usepost></a>
-						</td>
-					</tr>
+						foreach (config_get_path('installedpackages/amneziawg/peers/item', []) as $peer_idx => $peer):
+							?>
+							<tr ondblclick="document.location='<?= "awg_peers_edit.php?peer={$peer_idx}" ?>';"
+								class="<?= wg_peer_status_class($peer) ?>">
+								<td><?= htmlspecialchars(wg_truncate_pretty($peer['descr'], 16)) ?></td>
+								<td style="cursor: pointer;" class="pubkey" title="<?= htmlspecialchars($peer['publickey']) ?>">
+									<?= htmlspecialchars(wg_truncate_pretty($peer['publickey'], 16)) ?>
+								</td>
+								<td><?= htmlspecialchars($peer['tun']) ?></td>
+								<td><?= wg_generate_peer_allowedips_popup_link($peer_idx) ?></td>
+								<td><?= htmlspecialchars(wg_format_endpoint(false, $peer)) ?></td>
+								<td style="cursor: pointer;">
+									<a class="fa fa-solid fa-pencil" title="<?= gettext('Edit Peer') ?>"
+										href="<?= "awg_peers_edit.php?peer={$peer_idx}" ?>"></a>
+									<?= wg_generate_toggle_icon_link(($peer['enabled'] == 'yes'), 'peer', "?act=toggle&peer={$peer_idx}") ?>
+									<a class="fa fa-solid fa-trash-can text-danger" title="<?= gettext('Delete Peer') ?>"
+										href="<?= "?act=delete&peer={$peer_idx}" ?>" usepost></a>
+								</td>
+							</tr>
 
-<?php
-		endforeach;
+							<?php
+						endforeach;
 
-else:
-?>
-					<tr>
-						<td colspan="6">
-							<?php print_info_box(gettext('No WireGuard peers have been configured. Click the "Add Peer" button below to create one.'), 'warning', null); ?>
-						</td>
-					</tr>
-<?php
-endif;
-?>
+					else:
+						?>
+						<tr>
+							<td colspan="6">
+								<?php print_info_box(gettext('No WireGuard peers have been configured. Click the "Add Peer" button below to create one.'), 'warning', null); ?>
+							</td>
+						</tr>
+						<?php
+					endif;
+					?>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	<nav class="action-buttons">
 		<a href="awg_peers_edit.php" class="btn btn-success btn-sm">
-			<i class="fa-solid fa-plus icon-embed-btn"></i>
-			<?=gettext('Add Peer')?>
+			<i class="fa fa-solid fa-plus icon-embed-btn"></i>
+			<?= gettext('Add Peer') ?>
 		</a>
 	</nav>
 </form>
 
 <script type="text/javascript">
-//<![CDATA[
-events.push(function() {
+	//<![CDATA[
+	events.push(function () {
 
-	$('.pubkey').click(function () {
+		$('.pubkey').click(function () {
 
-		var publicKey = $(this).attr('title');
+			var publicKey = $(this).attr('title');
 
-		try {
-			// The 'modern' way...
-			navigator.clipboard.writeText(publicKey);
-		} catch {
-			console.warn("Failed to copy text using navigator.clipboard, falling back to commands");
+			try {
+				// The 'modern' way...
+				navigator.clipboard.writeText(publicKey);
+			} catch {
+				console.warn("Failed to copy text using navigator.clipboard, falling back to commands");
 
-			// Convert the TD contents to an input with pub key
-			var pubKeyInput = $('<input/>', {val: publicKey});
-			var oldText = $(this).text();
+				// Convert the TD contents to an input with pub key
+				var pubKeyInput = $('<input/>', { val: publicKey });
+				var oldText = $(this).text();
 
-			// Add to DOM
-			$(this).html(pubKeyInput);
+				// Add to DOM
+				$(this).html(pubKeyInput);
 
-			// copy
-			pubKeyInput.select();
-			document.execCommand("copy");
+				// copy
+				pubKeyInput.select();
+				document.execCommand("copy");
 
-			// revert back to just text
-			$(this).html(oldText);
-		}
+				// revert back to just text
+				$(this).html(oldText);
+			}
+
+		});
 
 	});
-
-});
-//]]>
+	//]]>
 </script>
 
 <?php

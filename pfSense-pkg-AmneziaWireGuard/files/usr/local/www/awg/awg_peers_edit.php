@@ -307,7 +307,7 @@ print($form);
 
 <nav class="action-buttons">
 	<button type="submit" id="saveform" name="saveform" class="btn btn-primary btn-sm" value="save" title="<?=gettext('Save Peer')?>">
-		<i class="fa-solid fa-save icon-embed-btn"></i>
+		<i class="fa fa-solid fa-save icon-embed-btn"></i>
 		<?=gettext("Save Peer")?>
 	</button>
 </nav>
