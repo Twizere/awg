@@ -386,7 +386,7 @@ print($form);
 	if (!$is_new):
 		foreach (wg_tunnel_get_peers_config($pconfig['name']) as [$peer_idx, $peer, $is_new]):
 ?>
-				<tr ondblclick="document.location='<?="vpn_wg_peers_edit.php?peer={$peer_idx}"?>';" class="<?=wg_peer_status_class($peer)?>">
+				<tr ondblclick="document.location='<?="awg_peers_edit.php?peer={$peer_idx}"?>';" class="<?=wg_peer_status_class($peer)?>">
 					<td><?=htmlspecialchars($peer['descr'])?></td>
 					<td title="<?=htmlspecialchars($peer['publickey'])?>">
 						<?=htmlspecialchars(substr($peer['publickey'], 0, 16).'...')?>
@@ -395,7 +395,7 @@ print($form);
 					<td><?=wg_generate_peer_allowedips_popup_link($peer_idx)?></td>
 					<td><?=htmlspecialchars(wg_format_endpoint(false, $peer))?></td>
 					<td style="cursor: pointer;">
-						<a class="fa fa-solid fa-pencil" title="<?=gettext('Edit Peer')?>" href="<?="vpn_wg_peers_edit.php?peer={$peer_idx}"?>"></a>
+						<a class="fa fa-solid fa-pencil" title="<?=gettext('Edit Peer')?>" href="<?="awg_peers_edit.php?peer={$peer_idx}"?>"></a>
 						<?=wg_generate_toggle_icon_link(($peer['enabled'] == 'yes'), 'peer', "?act=toggle&peer={$peer_idx}&tun={$tun}")?>
 						<a class="fa fa-solid fa-trash-can text-danger" title="<?=gettext('Delete Peer')?>" href="<?="?act=delete&peer={$peer_idx}&tun={$tun}"?>" usepost></a>
 					</td>
@@ -431,7 +431,7 @@ if ($is_new):
 // Now we show the actual links once the tunnel is actually saved
 else:
 ?>
-	<a href="<?="vpn_wg_peers_edit.php?tun={$pconfig['name']}"?>" class="btn btn-success btn-sm">
+	<a href="<?="awg_peers_edit.php?tun={$pconfig['name']}"?>" class="btn btn-success btn-sm">
 		<i class="fa fa-solid fa-plus icon-embed-btn"></i>
 		<?=gettext('Add Peer')?>
 	</a>

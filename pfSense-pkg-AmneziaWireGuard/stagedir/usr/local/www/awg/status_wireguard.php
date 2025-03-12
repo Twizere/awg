@@ -88,7 +88,7 @@
 // 				<tr class="<?="treegrid-{$device_name}"?>">
 // 					<td>
 // 						<?=wg_interface_status_icon($device['status'])?>
-// 						<a href="vpn_wg_tunnels_edit.php?tun=<?=htmlspecialchars($device_name)?>"><?=htmlspecialchars($device_name)?></a>
+// 						<a href="awg_tunnels_edit.php?tun=<?=htmlspecialchars($device_name)?>"><?=htmlspecialchars($device_name)?></a>
 // 					</td>
 // 					<td><?=htmlspecialchars(wg_truncate_pretty($device['config']['descr'], 16))?></td>
 // 					<td><?=count($device['peers'])?></td>

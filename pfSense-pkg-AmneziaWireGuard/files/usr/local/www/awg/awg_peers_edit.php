@@ -1,6 +1,6 @@
 <?php
 /*
- * vpn_wg_peers_edit.php
+ * awg_peers_edit.php
  *
  * part of pfSense (https://www.pfsense.org)
  * Copyright (c) 2021-2024 Rubicon Communications, LLC (Netgate)
@@ -24,7 +24,7 @@
 ##|*IDENT=page-vpn-wireguard
 ##|*NAME=VPN: WireGuard: Edit
 ##|*DESCR=Allow access to the 'VPN: WireGuard' page.
-##|*MATCH=vpn_wg_peers_edit.php*
+##|*MATCH=awg_peers_edit.php*
 ##|-PRIV
 
 // pfSense includes
@@ -142,7 +142,7 @@ $section->addInput($input = new Form_Select(
 	'Tunnel',
 	$pconfig['tun'],
 	wg_get_tun_list()
-))->setHelp("WireGuard tunnel for this peer. (<a href='vpn_wg_tunnels_edit.php'>Create a New Tunnel</a>)");
+))->setHelp("WireGuard tunnel for this peer. (<a href='awg_tunnels_edit.php'>Create a New Tunnel</a>)");
 
 $section->addInput(new Form_Input(
 	'descr',

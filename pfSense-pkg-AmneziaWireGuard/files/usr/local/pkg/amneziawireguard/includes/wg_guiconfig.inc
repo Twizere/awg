@@ -350,7 +350,7 @@ function wg_generate_peer_allowedips_popup_link($peer_idx) {
 	$s = fn($x) => $x;
 
 	if ([$peer_idx, $peer, $is_new] = wg_peer_get_config($peer_idx, false)) {
-		return wg_compose_address_popover_link($peer['allowedips']['row'], gettext('Allowed IPs'), "vpn_wg_peers_edit.php?peer={$peer_idx}");
+		return wg_compose_address_popover_link($peer['allowedips']['row'], gettext('Allowed IPs'), "awg_peers_edit.php?peer={$peer_idx}");
 	}
 
 	return null;

@@ -149,7 +149,7 @@ display_top_tabs($tab_array);
 
 								<td style="cursor: pointer;">
 									<a class="fa fa-solid fa-user-plus" title="<?= gettext('Add Peer') ?>"
-										href="<?= "vpn_wg_peers_edit.php?tun={$tunnel['name']}" ?>"></a>
+										href="<?= "awg_peers_edit.php?tun={$tunnel['name']}" ?>"></a>
 									<a class="fa fa-solid fa-pencil" title="<?= gettext('Edit Tunnel') ?>"
 										href="<?= "awg_tunnels_edit.php?tun={$tunnel['name']}" ?>"></a>
 									<a class="fa fa-solid fa-download" title="<?= gettext('Download Configuration') ?>"
