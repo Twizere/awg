@@ -259,6 +259,6 @@ display_top_tabs($tab_array);
 </script>
 
 <?php
-// include('wireguard/includes/wg_foot.inc');
+// include('amneziawireguard/includes/wg_foot.inc');
 include('foot.inc');
 ?>

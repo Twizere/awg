@@ -38,8 +38,8 @@
 
 // $tab_array = array();
 // $tab_array[] = array(gettext("Tunnels"), false, "/awg/awg_tunnels.php");
-// $tab_array[] = array(gettext("Peers"), false, "/wg/vpn_wg_peers.php");
-// $tab_array[] = array(gettext("Settings"), false, "/wg/vpn_wg_settings.php");
+// $tab_array[] = array(gettext("Peers"), false, "/awg/awg_peers.php");
+// $tab_array[] = array(gettext("Settings"), false, "/awg/awg_settings.php");
 // $tab_array[] = array(gettext("Status"), true, "/wg/status_wireguard.php");
 
 // include("head.inc");
