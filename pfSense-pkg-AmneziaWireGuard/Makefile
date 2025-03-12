@@ -61,6 +61,8 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/etc/rc.d/* ${PREFIX}/etc/rc.d/
 	@chmod +x ${PREFIX}/etc/rc.d/*
 	@echo 'awg_api_enable="YES"' >> /etc/rc.conf.d/awg-api
+	@echo 'awg_quick_enable="YES"'  >> /etc/rc.conf.d/wg_quick
+
 	@echo "   Service is set ✅"
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/

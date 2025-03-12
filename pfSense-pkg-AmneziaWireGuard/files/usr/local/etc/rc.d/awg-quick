@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+# PROVIDE: awg_quick
+# REQUIRE: NETWORKING
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="awg_quick"
+rcvar="awg_quick_enable"
+command="/usr/local/bin/awg-quick"
+
+start_cmd="awg_quick_start"
+stop_cmd="awg_quick_stop"
+restart_cmd="awg_quick_restart"
+reload_cmd="awg_quick_reload"
+
+awg_quick_start() {
+    if [ -z "$1" ]; then
+        echo "Error: No interface provided. Usage: service awg-quick start <interface>"
+        exit 1
+    fi
+    echo "Starting AWG-Quick for interface: $1..."
+    ${command} up "$1"
+}
+
+awg_quick_stop() {
+    if [ -z "$1" ]; then
+        echo "Error: No interface provided. Usage: service awg-quick stop <interface>"
+        exit 1
+    fi
+    echo "Stopping AWG-Quick for interface: $1..."
+    ${command} down "$1"
+}
+
+awg_quick_restart() {
+    if [ -z "$1" ]; then
+        echo "Error: No interface provided. Usage: service awg-quick restart <interface>"
+        exit 1
+    fi
+    echo "Restarting AWG-Quick for interface: $1..."
+    awg_quick_stop "$1"
+    sleep 2
+    awg_quick_start "$1"
+}
+
+awg_quick_reload() {
+    if [ -z "$1" ]; then
+        echo "Error: No interface provided. Usage: service awg-quick reload <interface>"
+        exit 1
+    fi
+    echo "Reloading AWG-Quick config for interface: $1..."
+    /usr/local/bin/awg syncconf "$1" <(/usr/local/bin/awg-quick strip "$1")
+}
+
+load_rc_config $name
+: ${awg_quick_enable:=no}
+
+case "$1" in
+    start) awg_quick_start "$2" ;;
+    stop) awg_quick_stop "$2" ;;
+    restart) awg_quick_restart "$2" ;;
+    reload) awg_quick_reload "$2" ;;
+    *) echo "Usage: $0 {start|stop|restart|reload} <interface>" ;;
+esac
