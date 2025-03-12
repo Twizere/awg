@@ -14,6 +14,7 @@ start_cmd="awg_quick_start"
 stop_cmd="awg_quick_stop"
 restart_cmd="awg_quick_restart"
 reload_cmd="awg_quick_reload"
+status_cmd="awg_quick_status"
 
 awg_quick_start() {
     if [ -z "$1" ]; then
@@ -57,6 +58,20 @@ awg_quick_reload() {
     rm -f "$tmpfile"
 }
 
+awg_quick_status() {
+    if [ -z "$1" ]; then
+        echo "Error: No interface provided. Usage: service awg-quick status <interface>"
+        exit 1
+    fi
+    
+    if ifconfig "$1" 2>/dev/null | grep -q "UP"; then
+        echo "AWG-Quick ($1) is running."
+    else
+        echo "AWG-Quick ($1) is NOT running."
+        exit 1
+    fi
+}
+
 load_rc_config $name
 : ${awg_quick_enable:=no}
 
@@ -65,5 +80,6 @@ case "$1" in
     stop) awg_quick_stop "$2" ;;
     restart) awg_quick_restart "$2" ;;
     reload) awg_quick_reload "$2" ;;
-    *) echo "Usage: $0 {start|stop|restart|reload} <interface>" ;;
+    status) awg_quick_status "$2" ;;
+    *) echo "Usage: $0 {start|stop|restart|reload|status} <interface>" ;;
 esac
