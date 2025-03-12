@@ -364,7 +364,7 @@ class awgconfig {
 
 				$root = $default_local ? '/usr/local' : null;
 
-				$tunnel_path = "{$root}/etc/wireguard/{$tunnel_path}";
+				$tunnel_path = "{$root}/etc/amneziawireguard/{$tunnel_path}";
 			}
 		}
 
