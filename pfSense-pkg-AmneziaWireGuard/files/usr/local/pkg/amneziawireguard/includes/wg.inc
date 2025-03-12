@@ -434,6 +434,11 @@ function wg_do_peer_post($post) {
 	// We need to save the "old config" to compare against later...
 	$old_pconfig = $pconfig;
 
+	// Generate a UUID if it's a new peer or if the ID is missing
+    if (empty($pconfig['id'])) {
+        $pconfig['id'] = wg_generate_uuid();
+    }
+
 	$pconfig['enabled'] 		= empty($post['enabled']) ? 'no' : $post['enabled'];
 	$pconfig['tun'] 		= $post['tun'];
 	$pconfig['descr'] 		= $post['descr'];
@@ -474,6 +479,10 @@ function wg_do_peer_post($post) {
 	}
 
 	return array('input_errors' => $input_errors, 'changes' => $changes, 'tuns_to_sync' => $tuns_to_sync, 'pconfig' => $pconfig);
+}
+
+function wg_generate_uuid() {
+    return bin2hex(random_bytes(16));
 }
 
 /*
@@ -853,7 +862,7 @@ function wg_make_tunnel_conf_file($tunnel, $include_endpoint = false) {
 		if (isset($peer['enabled']) && $peer['enabled'] == 'yes') {
 			// Process peer entry and PublicKey
 			$wc->add_peer($peer['publickey'], "Peer: {$peer['descr']}");
-
+			
 			// Process PresharedKey
 			$wc->set_peer_attr($peer['publickey'], 'PresharedKey', $peer['presharedkey']);
 
