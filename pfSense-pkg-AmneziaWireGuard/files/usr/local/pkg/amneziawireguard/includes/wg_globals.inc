@@ -129,8 +129,9 @@ $wgg['xml_paths_to_clean']	= array($wgg['xml_path'], array('wireguard'));
 
 $wgg['depends_names']		= array(
 					$wgg['pkg_name'],
-					'wireguard-kmod',
-					'wireguard-tools-lite');
+					//'wireguard-kmod',
+					//'wireguard-tools-lite'
+					);
 
 $wgg['pid_path']		= "{$g['varrun_path']}/{$wgg['service_name']}.pid";
 $wgg['subsystems']		= array(
