@@ -87,9 +87,9 @@ if ($_POST) {
 	}
 }
 
-if (is_numericint($peer_idx) && is_array(config_get_path("installedpackages/wireguard/peers/item/{$peer_idx}"))) {
+if (is_numericint($peer_idx) && is_array(config_get_path("installedpackages/amneziawg/peers/item/{$peer_idx}"))) {
 	// Looks like we are editing an existing peer
-	$pconfig = config_get_path("installedpackages/wireguard/peers/item/{$peer_idx}");
+	$pconfig = config_get_path("installedpackages/amneziawg/peers/item/{$peer_idx}");
 	$is_new = false;
 } else {
 	// Default to enabled
@@ -246,7 +246,7 @@ if (!is_array($pconfig['allowedips'])
 		// Hack to ensure empty lists default to /128 mask
 		$pconfig['allowedips']['row'][0]['mask'] = '128';
 		if (!$is_new) {
-			config_set_path("installedpackages/wireguard/peers/item/{$peer_idx}/allowedips/row/0/mask", $pconfig['allowedips']['row'][0]['mask']);
+			config_set_path("installedpackages/amneziawg/peers/item/{$peer_idx}/allowedips/row/0/mask", $pconfig['allowedips']['row'][0]['mask']);
 		}
 }
 
