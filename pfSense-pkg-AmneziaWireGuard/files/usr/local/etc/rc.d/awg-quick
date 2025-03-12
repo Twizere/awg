@@ -8,7 +8,7 @@
 
 name="awg_quick"
 rcvar="awg_quick_enable"
-command="/usr/bin/awg-quick"
+command="/usr/local/bin/awg-quick"
 
 start_cmd="awg_quick_start"
 stop_cmd="awg_quick_stop"
@@ -52,8 +52,8 @@ awg_quick_reload() {
     echo "Reloading AWG-Quick config for interface: $1..."
     
     tmpfile=$(mktemp /tmp/awg-strip.XXXXXX)
-    /usr/bin/awg-quick strip "$1" > "$tmpfile"
-    /usr/bin/awg syncconf "$1" < "$tmpfile"
+    /usr/local/bin/awg-quick strip "$1" > "$tmpfile"
+    /usr/local/bin/awg syncconf "$1" < "$tmpfile"
     rm -f "$tmpfile"
 }
 
