@@ -842,6 +842,9 @@ function wg_make_tunnel_conf_file($tunnel, $include_endpoint = false) {
 
 	$wc->set_interface_attr('PrivateKey', $key['privkey_clamped']);
 
+	// Add and comment out the PublicKey in the [Interface] section
+    $wc->add_interface_attr("#_PublicKey = {$key['pubkey']}");
+
 	// Process interface ListenPort
 	$wc->set_interface_attr('ListenPort', $tunnel['listenport']);
 
