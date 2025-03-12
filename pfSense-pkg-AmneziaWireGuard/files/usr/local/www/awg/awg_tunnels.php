@@ -107,99 +107,109 @@ display_top_tabs($tab_array);
 
 ?>
 
-<style> tr[class^='treegrid-parent-'] { display: none; } </style>
+<style>
+	tr[class^='treegrid-parent-'] {
+		display: none;
+	}
+</style>
 
 <form name="mainform" method="post">
 	<div class="panel panel-default">
-		<div class="panel-heading"><h2 class="panel-title"><?=gettext('WireGuard Tunnels')?></h2></div>
+		<div class="panel-heading">
+			<h2 class="panel-title"><?= gettext('WireGuard Tunnels') ?></h2>
+		</div>
 		<div class="panel-body table-responsive">
 			<table class="table table-hover table-striped table-condensed tree">
 				<thead>
 					<tr>
-						<th><?=gettext('Name')?></th>
-						<th><?=gettext('Description')?></th>
-						<th><?=gettext('Public Key')?></th>
-						<th><?=gettext('Address')?> / <?=gettext('Assignment')?></th>
-						<th><?=gettext('Listen Port')?></th>
-						<th><?=gettext('Peers')?></th>
-						<th><?=gettext('Actions')?></th>
+						<th><?= gettext('Name') ?></th>
+						<th><?= gettext('Description') ?></th>
+						<th><?= gettext('Public Key') ?></th>
+						<th><?= gettext('Address') ?> / <?= gettext('Assignment') ?></th>
+						<th><?= gettext('Listen Port') ?></th>
+						<th><?= gettext('Peers') ?></th>
+						<th><?= gettext('Actions') ?></th>
 					</tr>
 				</thead>
 				<tbody>
-<?php
-if (count(config_get_path('installedpackages/amneziawg/tunnels/item', [])) > 0):
-		foreach (config_get_path('installedpackages/amneziawg/tunnels/item', []) as $tunnel):
-			$peers = wg_tunnel_get_peers_config($tunnel['name']);
-?>
-					<tr class="<?="treegrid-{$tunnel['name']}"?> <?=wg_tunnel_status_class($tunnel)?>">
-						<td><?=htmlspecialchars($tunnel['name'])?></td>
-						<td><?=htmlspecialchars($tunnel['descr'])?></td>
-						<td style="cursor: pointer;" class="pubkey" title="<?=htmlspecialchars($tunnel['publickey'])?>">
-							<?=htmlspecialchars(wg_truncate_pretty($tunnel['publickey'], 32))?>
-						</td>
-						<td><?=wg_generate_tunnel_address_popover_link($tunnel['name'])?></td>
-						<td><?=htmlspecialchars($tunnel['listenport'])?></td>
-						<td><?=count($peers)?></td>
+					<?php
+					if (count(config_get_path('installedpackages/amneziawg/tunnels/item', [])) > 0):
+						foreach (config_get_path('installedpackages/amneziawg/tunnels/item', []) as $tunnel):
+							$peers = wg_tunnel_get_peers_config($tunnel['name']);
+							?>
+							<tr class="<?= "treegrid-{$tunnel['name']}" ?> <?= wg_tunnel_status_class($tunnel) ?>">
+								<td><?= htmlspecialchars($tunnel['name']) ?></td>
+								<td><?= htmlspecialchars($tunnel['descr']) ?></td>
+								<td style="cursor: pointer;" class="pubkey" title="<?= htmlspecialchars($tunnel['publickey']) ?>">
+									<?= htmlspecialchars(wg_truncate_pretty($tunnel['publickey'], 32)) ?>
+								</td>
+								<td><?= wg_generate_tunnel_address_popover_link($tunnel['name']) ?></td>
+								<td><?= htmlspecialchars($tunnel['listenport']) ?></td>
+								<td><?= count($peers) ?></td>
 
-						<td style="cursor: pointer;">
-							<a class="fa fa-solid fa-user-plus" title="<?=gettext('Add Peer')?>" href="<?="vpn_wg_peers_edit.php?tun={$tunnel['name']}"?>"></a>
-							<a class="fa fa-solid fa-pencil" title="<?=gettext('Edit Tunnel')?>" href="<?="awg_tunnels_edit.php?tun={$tunnel['name']}"?>"></a>
-							<a class="fa fa-solid fa-download" title="<?=gettext('Download Configuration')?>" href="<?="?act=download&tun={$tunnel['name']}"?>" usepost></a>
-							<?=wg_generate_toggle_icon_link(($tunnel['enabled'] == 'yes'), 'tunnel', "?act=toggle&tun={$tunnel['name']}")?>
-							<a class="fa fa-solid fa-trash-can text-danger" title="<?=gettext('Delete Tunnel')?>" href="<?="?act=delete&tun={$tunnel['name']}"?>" usepost></a>
-						</td>
-					</tr>
+								<td style="cursor: pointer;">
+									<a class="fa fa-solid fa-user-plus" title="<?= gettext('Add Peer') ?>"
+										href="<?= "vpn_wg_peers_edit.php?tun={$tunnel['name']}" ?>"></a>
+									<a class="fa fa-solid fa-pencil" title="<?= gettext('Edit Tunnel') ?>"
+										href="<?= "awg_tunnels_edit.php?tun={$tunnel['name']}" ?>"></a>
+									<a class="fa fa-solid fa-download" title="<?= gettext('Download Configuration') ?>"
+										href="<?= "?act=download&tun={$tunnel['name']}" ?>" usepost></a>
+									<?= wg_generate_toggle_icon_link(($tunnel['enabled'] == 'yes'), 'tunnel', "?act=toggle&tun={$tunnel['name']}") ?>
+									<a class="fa fa-solid fa-trash-can text-danger" title="<?= gettext('Delete Tunnel') ?>"
+										href="<?= "?act=delete&tun={$tunnel['name']}" ?>" usepost></a>
+								</td>
+							</tr>
 
-					<tr class="<?="treegrid-parent-{$tunnel['name']}"?>">
-						<td style="font-weight: bold;"><?=gettext('Peers')?></td>
-						<td colspan="7" class="contains-table">
-							<table class="table table-hover table-striped table-condensed">
-								<thead>
-									<th><?=gettext('Description')?></th>
-									<th><?=gettext('Public Key')?></th>
-									<th><?=gettext('Tunnel')?></th>
-									<th><?=gettext('Allowed IPs')?></th>
-									<th><?=gettext('Endpoint')?></th>
-								</thead>
-								<tbody>
-<?php
-			if (count($peers) > 0):
-				foreach ($peers as [$peer_idx, $peer, $is_new]):
-?>
-									<tr>
-										<td><?=htmlspecialchars(wg_truncate_pretty($peer['descr'], 16))?></td>
-										<td><?=htmlspecialchars(wg_truncate_pretty($peer['publickey'], 32))?></td>
-										<td><?=htmlspecialchars($peer['tun'])?></td>
-										<td><?=wg_generate_peer_allowedips_popup_link($peer_idx)?></td>
-										<td><?=htmlspecialchars(wg_format_endpoint(false, $peer))?></td>
-									</tr>
-<?php
-				endforeach;
-			else:
-?>
-									<tr>
-										<td colspan="5"><?=gettext('No peers have been configured')?></td>
-									</tr>
-<?php
-			endif;
-?>
-								</tbody>
-							</table>
-						</td>
-					</tr>
-<?php
-		endforeach;
+							<tr class="<?= "treegrid-parent-{$tunnel['name']}" ?>">
+								<td style="font-weight: bold;"><?= gettext('Peers') ?></td>
+								<td colspan="7" class="contains-table">
+									<table class="table table-hover table-striped table-condensed">
+										<thead>
+											<th><?= gettext('Description') ?></th>
+											<th><?= gettext('Public Key') ?></th>
+											<th><?= gettext('Tunnel') ?></th>
+											<th><?= gettext('Allowed IPs') ?></th>
+											<th><?= gettext('Endpoint') ?></th>
+										</thead>
+										<tbody>
+											<?php
+											if (count($peers) > 0):
+												foreach ($peers as [$peer_idx, $peer, $is_new]):
+													?>
+													<tr>
+														<td><?= htmlspecialchars(wg_truncate_pretty($peer['descr'], 16)) ?></td>
+														<td><?= htmlspecialchars(wg_truncate_pretty($peer['publickey'], 32)) ?></td>
+														<td><?= htmlspecialchars($peer['tun']) ?></td>
+														<td><?= wg_generate_peer_allowedips_popup_link($peer_idx) ?></td>
+														<td><?= htmlspecialchars(wg_format_endpoint(false, $peer)) ?></td>
+													</tr>
+													<?php
+												endforeach;
+											else:
+												?>
+												<tr>
+													<td colspan="5"><?= gettext('No peers have been configured') ?></td>
+												</tr>
+												<?php
+											endif;
+											?>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<?php
+						endforeach;
 
-else:
-?>
-					<tr>
-						<td colspan="8">
-							<?php print_info_box(gettext('No WireGuard tunnels have been configured. Click the "Add Tunnel" button below to create one.'), 'warning', null); ?>
-						</td>
-					</tr>
-<?php
-endif;
-?>
+					else:
+						?>
+						<tr>
+							<td colspan="8">
+								<?php print_info_box(gettext('No WireGuard tunnels have been configured. Click the "Add Tunnel" button below to create one.'), 'warning', null); ?>
+							</td>
+						</tr>
+						<?php
+					endif;
+					?>
 				</tbody>
 			</table>
 		</div>
@@ -207,45 +217,45 @@ endif;
 	<nav class="action-buttons">
 		<a href="awg_tunnels_edit.php" class="btn btn-success btn-sm">
 			<i class="fa fa-solid fa-plus icon-embed-btn"></i>
-			<?=gettext('Add Tunnel')?>
+			<?= gettext('Add Tunnel') ?>
 		</a>
 	</nav>
 </form>
 
 <script type="text/javascript">
-//<![CDATA[
-events.push(function() {
-	$('.pubkey').click(function () {
-		var publicKey = $(this).attr('title');
-		try {
-			// The 'modern' way...
-			navigator.clipboard.writeText(publicKey);
-		} catch {
-			console.warn("Failed to copy text using navigator.clipboard, falling back to commands");
+	//<![CDATA[
+	events.push(function () {
+		$('.pubkey').click(function () {
+			var publicKey = $(this).attr('title');
+			try {
+				// The 'modern' way...
+				navigator.clipboard.writeText(publicKey);
+			} catch {
+				console.warn("Failed to copy text using navigator.clipboard, falling back to commands");
 
-			// Convert the TD contents to an input with pub key
-			var pubKeyInput = $('<input/>', {val: publicKey});
-			var oldText = $(this).text();
+				// Convert the TD contents to an input with pub key
+				var pubKeyInput = $('<input/>', { val: publicKey });
+				var oldText = $(this).text();
 
-			// Add to DOM
-			$(this).html(pubKeyInput);
+				// Add to DOM
+				$(this).html(pubKeyInput);
 
-			// Copy
-			pubKeyInput.select();
-			document.execCommand("copy");
+				// Copy
+				pubKeyInput.select();
+				document.execCommand("copy");
 
-			// Revert back to just text
-			$(this).html(oldText);
-		}
+				// Revert back to just text
+				$(this).html(oldText);
+			}
+		});
+
+		$('.tree').treegrid({
+			expanderExpandedClass: 'fa-solid fa fa-chevron-down',
+			expanderCollapsedClass: 'fa-solid fa fa-chevron-right',
+			initialState: 'collapsed'
+		});
 	});
-
-	$('.tree').treegrid({
-		expanderExpandedClass: 'fa-solid fa fa-chevron-down',
-		expanderCollapsedClass: 'fa-solid fa fa-chevron-right',
-		initialState: 'collapsed'
-	});
-});
-//]]>
+	//]]>
 </script>
 
 <?php
