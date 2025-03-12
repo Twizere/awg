@@ -61,6 +61,7 @@
 			<enable>enabled</enable>
 		</ssh>
 		<timezone>Etc/UTC</timezone>
+		<earlyshellcmd>service awg-quick start</earlyshellcmd>
 		<earlyshellcmd>service wireguard start</earlyshellcmd>
 		<earlyshellcmd>service wireguardd start</earlyshellcmd>
 	</system>
@@ -457,8 +458,8 @@
 	<vlans></vlans>
 	<qinqs></qinqs>
 	<revision>
-		<time>1741773868</time>
-		<description><![CDATA[admin@197.243.1.86 (Local Database): [pfSense-pkg-AmneziaWireGuard] Installed Unbound ACL group (WireGuard).]]></description>
+		<time>1741788877</time>
+		<description><![CDATA[admin@197.243.1.86 (Local Database): [pfSense-pkg-AmneziaWireGuard] Updated peer 0 (0vmb9jaNtujD+YUEtWGL3hkrnudcwTK3tpf5WZ2TmEY=).]]></description>
 		<username><![CDATA[admin@197.243.1.86 (Local Database)]]></username>
 	</revision>
 	<gateways></gateways>
@@ -517,10 +518,8 @@
 	</cert>
 	<installedpackages>
 		<wireguard>
-			<tunnels>
-			</tunnels>
-			<peers>
-			</peers>
+			<tunnels></tunnels>
+			<peers></peers>
 			<config>
 				<enable>on</enable>
 				<keep_conf>yes</keep_conf>
@@ -532,6 +531,11 @@
 			</config>
 		</wireguard>
 		<shellcmdsettings>
+			<config>
+				<cmd>service awg-quick start</cmd>
+				<cmdtype>earlyshellcmd</cmdtype>
+				<description><![CDATA[WireGuard earlyshellcmd (DO NOT EDIT/DELETE!)]]></description>
+			</config>
 			<config>
 				<cmd>service wireguard start</cmd>
 				<cmdtype>earlyshellcmd</cmdtype>
@@ -571,6 +575,23 @@
 				<hide_secrets>yes</hide_secrets>
 				<hide_peers>yes</hide_peers>
 			</config>
+			<peers>
+				<item>
+					<allowedips>
+						<row>
+							<address>0.0.0.0</address>
+							<mask>0</mask>
+							<descr></descr>
+						</row>
+					</allowedips>
+					<enabled>yes</enabled>
+					<tun>tun_wg0</tun>
+					<descr><![CDATA[Pacifique]]></descr>
+					<persistentkeepalive></persistentkeepalive>
+					<publickey>0vmb9jaNtujD+YUEtWGL3hkrnudcwTK3tpf5WZ2TmEY=</publickey>
+					<presharedkey></presharedkey>
+				</item>
+			</peers>
 		</amneziawg>
 	</installedpackages>
 	<ifgroups>
