@@ -865,6 +865,8 @@ function wg_make_tunnel_conf_file($tunnel, $include_endpoint = false) {
 			
 			// Adding Generated Commented ID 
 			$wc->set_peer_attr($peer['publickey'], '#_ID', $peer['id']);
+			// Adding Generated Commented ID 
+			$wc->set_peer_attr($peer['publickey'], '#_Description', $peer['descr']);
 
 			// Process PresharedKey
 			$wc->set_peer_attr($peer['publickey'], 'PresharedKey', $peer['presharedkey']);
