@@ -565,7 +565,7 @@ events.push(function() {
 	// Supress "Delete" button if there are fewer than two rows
 	checkLastRow();
 
-	wgRegTrimHandler();
+	// wgRegTrimHandler();
 
 	$('#copypubkey').click(function () {
 		var $this = $(this);
@@ -595,7 +595,7 @@ events.push(function() {
 	$('#gen_junk_packet_options').prop('type', 'button');
 	$('#gen_packet_junk_sizes').prop('type', 'button');
 	$('#gen_magic_headers').prop('type', 'button');
-	
+
 
 	// Request a new public/private key pair
 	$('#genkeys').click(function(event) {
