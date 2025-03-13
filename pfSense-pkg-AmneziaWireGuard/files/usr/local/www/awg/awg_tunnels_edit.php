@@ -319,13 +319,13 @@ $section->addInput(new Form_Input(
 	['placeholder' => 'H4']
 ))->setHelp('The header of the packet of transmitted data. Recommended value: Random < uint_max. Default value: 2020456680');
 
-$section->add(new Form_Button(
-	'gen_defaults',
-	'Generate Defaults',
-	null,
-	'fa-solid fa-cog'
-))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values for AmneziaWireGuard options.');
+// $section->add(new Form_Button(
+// 	'gen_defaults',
+// 	'Generate Defaults',
+// 	null,
+// 	'fa-solid fa-cog'
+// ))->addClass('btn-primary btn-sm')
+//   ->setHelp('Generate default values for AmneziaWireGuard options.');
 
 $form->add($section);
 
