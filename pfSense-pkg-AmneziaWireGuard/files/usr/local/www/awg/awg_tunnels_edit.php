@@ -272,6 +272,14 @@ $group->add(new Form_Input(
 	['placeholder' => 'Jmax']
 ))->setHelp('Maximum size for Junk packets. Recommended: 1000.');
 
+$group->add(new Form_Button(
+	'gen_junk_packet_options',
+	'Generate',
+	null,
+	'fa-solid fa-cog'
+))->addClass('btn-primary btn-sm')
+  ->setHelp('Generate default values for Junk Packet Options.');
+
 $section->add($group);
 
 $group = new Form_Group('Packet Junk Sizes');
@@ -291,6 +299,14 @@ $group->add(new Form_Input(
 	$pconfig['s2'] ?? '',
 	['placeholder' => 'S2']
 ))->setHelp('Size of random data added to the response packet. Recommended: 50-500.');
+
+$group->add(new Form_Button(
+	'gen_packet_junk_sizes',
+	'Generate',
+	null,
+	'fa-solid fa-cog'
+))->addClass('btn-primary btn-sm')
+  ->setHelp('Generate default values for Packet Junk Sizes.');
 
 $section->add($group);
 
@@ -328,15 +344,15 @@ $group->add(new Form_Input(
 	['placeholder' => 'H4']
 ))->setHelp('Header for the transmitted data packet. Recommended: Random < uint_max.');
 
-$section->add($group);
+$group->add(new Form_Button(
+	'gen_magic_headers',
+	'Generate',
+	null,
+	'fa-solid fa-cog'
+))->addClass('btn-primary btn-sm')
+  ->setHelp('Generate default values for Magic Headers.');
 
-// $section->add(new Form_Button(
-// 	'gen_defaults',
-// 	'Generate Defaults',
-// 	null,
-// 	'fa-solid fa-cog'
-// ))->addClass('btn-primary btn-sm')
-//   ->setHelp('Generate default values for AmneziaWireGuard options.');
+$section->add($group);
 
 $form->add($section);
 
