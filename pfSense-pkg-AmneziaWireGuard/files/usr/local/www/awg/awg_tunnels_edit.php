@@ -253,7 +253,9 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['jc'] ?? '',
 	['placeholder' => 'Jc']
-))->setHelp('Number of random packets before the session starts. Recommended: 3-10.');
+))->setHelp('Number of random packets before the session starts. Recommended: 3-10.')
+->setWidth(2);
+
 
 $group->add(new Form_Input(
 	'jmin',
@@ -277,7 +279,6 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values.')
   ->setWidth(1);
 
 $section->add($group);
@@ -306,7 +307,6 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values.')
   ->setWidth(1);
 
 $section->add($group);
@@ -351,7 +351,6 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values.')
   ->setWidth(1);
 
 $section->add($group);
