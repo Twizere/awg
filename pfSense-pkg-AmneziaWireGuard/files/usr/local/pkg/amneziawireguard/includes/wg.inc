@@ -509,6 +509,15 @@ function wg_do_tunnel_post($post) {
 	$pconfig['listenport']		= empty($post['listenport']) ? next_wg_port() : $post['listenport'];
 	$pconfig['privatekey']		= $key['privkey'];
 	$pconfig['publickey']		= $key['pubkey'];
+	$pconfig['jc'] = $post['jc'];
+	$pconfig['jmin'] = $post['jmin'];
+	$pconfig['jmax'] = $post['jmax'];
+	$pconfig['s1'] = $post['s1'];
+	$pconfig['s2'] = $post['s2'];
+	$pconfig['h1'] = $post['h1'];
+	$pconfig['h2'] = $post['h2'];
+	$pconfig['h3'] = $post['h3'];
+	$pconfig['h4'] = $post['h4'];
 	$pconfig['mtu']			= empty($post['mtu']) ? $wgg['default_mtu'] : $post['mtu'];
 	$pconfig['addresses']['row'] 	= wg_tunnel_addresses($post);
 
@@ -866,7 +875,7 @@ function wg_make_tunnel_conf_file($tunnel, $include_endpoint = false) {
 			// Adding Generated Commented ID 
 			$wc->set_peer_attr($peer['publickey'], '#_ID', $peer['id']);
 			// Adding Generated Commented ID 
-			$wc->set_peer_attr($peer['publickey'], '#_Description', $peer['descr']);
+			$wc->set_peer_attr($peer['publickey'], '#_DDescription, $peer['ddescr]);
 
 			// Process PresharedKey
 			$wc->set_peer_attr($peer['publickey'], 'PresharedKey', $peer['presharedkey']);
