@@ -244,7 +244,6 @@ $group->add(new Form_Button(
 $section->add($group);
 
 $form->add($section);
-
 $section = new Form_Section('AmneziaWireGuard Options');
 $group = new Form_Group('Junk Packet Options');
 
@@ -254,7 +253,7 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['jc'] ?? '',
 	['placeholder' => 'Jc']
-))->setHelp('Number of random packets sent before the session starts. Recommended: 3-10.');
+))->setHelp('Number of random packets before the session starts. Recommended: 3-10.');
 
 $group->add(new Form_Input(
 	'jmin',
@@ -278,7 +277,8 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values for Junk Packet Options.');
+  ->setHelp('Generate default values.')
+  ->setWidth(1);
 
 $section->add($group);
 
@@ -290,8 +290,7 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['s1'] ?? '',
 	['placeholder' => 'S1']
-))->setHelp('Size of random data added to the init packet. Recommended: 50-500.')
-->setWidth(1);
+))->setHelp('Size of random data in the init packet. Recommended: 50-500.');
 
 $group->add(new Form_Input(
 	's2',
@@ -299,8 +298,7 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['s2'] ?? '',
 	['placeholder' => 'S2']
-))->setHelp('Size of random data added to the response packet. Recommended: 50-500.')
-->setWidth(1);
+))->setHelp('Size of random data in the response packet. Recommended: 50-500.');
 
 $group->add(new Form_Button(
 	'gen_packet_junk_sizes',
@@ -308,7 +306,7 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values for Packet Junk Sizes.')
+  ->setHelp('Generate default values.')
   ->setWidth(1);
 
 $section->add($group);
@@ -321,8 +319,7 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h1'] ?? '',
 	['placeholder' => 'H1']
-))->setHelp('Header for the first byte of the handshake. Recommended: Random < uint_max.')
-->setWidth(1);
+))->setHelp('Header for the first byte of the handshake. Recommended: Random < uint_max.');
 
 $group->add(new Form_Input(
 	'h2',
@@ -330,8 +327,7 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h2'] ?? '',
 	['placeholder' => 'H2']
-))->setHelp('Header for the first byte of the handshake response. Recommended: Random < uint_max.')
-->setWidth(1);
+))->setHelp('Header for the first byte of the handshake response. Recommended: Random < uint_max.');
 
 $group->add(new Form_Input(
 	'h3',
@@ -339,8 +335,7 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h3'] ?? '',
 	['placeholder' => 'H3']
-))->setHelp('Header for the UnderLoad packet. Recommended: Random < uint_max.')
-->setWidth(1);
+))->setHelp('Header for the UnderLoad packet. Recommended: Random < uint_max.');
 
 $group->add(new Form_Input(
 	'h4',
@@ -348,8 +343,7 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h4'] ?? '',
 	['placeholder' => 'H4']
-))->setHelp('Header for the transmitted data packet. Recommended: Random < uint_max.')
-->setWidth(1);
+))->setHelp('Header for the transmitted data packet. Recommended: Random < uint_max.');
 
 $group->add(new Form_Button(
 	'gen_magic_headers',
@@ -357,7 +351,7 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values for Magic Headers.')
+  ->setHelp('Generate default values.')
   ->setWidth(1);
 
 $section->add($group);
