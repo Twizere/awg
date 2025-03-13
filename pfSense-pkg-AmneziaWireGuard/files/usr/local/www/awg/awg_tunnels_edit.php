@@ -243,81 +243,83 @@ $group->add(new Form_Button(
 
 $section->add($group);
 
-$group = new Form_Group('AmneziaWireGuard Options');
+$form->add($section);
 
-$group->add(new Form_Input(
+$section = new Form_Section('AmneziaWireGuard Options');
+
+$section->addInput(new Form_Input(
 	'jc',
-	'Jc',
+	'Jc (Junk packet count)',
 	'text',
 	$pconfig['jc'] ?? '',
 	['placeholder' => 'Jc']
-))->setHelp('Default value: 87');
+))->setHelp('The number of packets with random data that are sent before the start of the session. Recommended range: [3,10]. Default value: 87');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	'jmin',
-	'Jmin',
+	'Jmin (Junk packet minimum size)',
 	'text',
 	$pconfig['jmin'] ?? '',
 	['placeholder' => 'Jmin']
-))->setHelp('Default value: 189');
+))->setHelp('The minimum packet size for Junk packet. All randomly generated packets will have a size no less than Jmin. Recommended value: 100. Default value: 189');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	'jmax',
-	'Jmax',
+	'Jmax (Junk packet maximum size)',
 	'text',
 	$pconfig['jmax'] ?? '',
 	['placeholder' => 'Jmax']
-))->setHelp('Default value: 327');
+))->setHelp('The maximum size for Junk packets. Recommended value: 1000. Default value: 327');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	's1',
-	'S1',
+	'S1 (Init packet junk size)',
 	'text',
 	$pconfig['s1'] ?? '',
 	['placeholder' => 'S1']
-))->setHelp('Default value: 5');
+))->setHelp('The size of random data that will be added to the init packet, the size of which is initially fixed. Recommended range: [50,500]. Default value: 5');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	's2',
-	'S2',
+	'S2 (Response packet junk size)',
 	'text',
 	$pconfig['s2'] ?? '',
 	['placeholder' => 'S2']
-))->setHelp('Default value: 118');
+))->setHelp('The size of random data that will be added to the response, the size of which is initially fixed. Recommended range: [50,500]. Default value: 118');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	'h1',
-	'H1',
+	'H1 (Init packet magic header)',
 	'text',
 	$pconfig['h1'] ?? '',
 	['placeholder' => 'H1']
-))->setHelp('Default value: 634737801');
+))->setHelp('The header of the first byte of the handshake. Recommended value: Random < uint_max. Default value: 634737801');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	'h2',
-	'H2',
+	'H2 (Response packet magic header)',
 	'text',
 	$pconfig['h2'] ?? '',
 	['placeholder' => 'H2']
-))->setHelp('Default value: 2135427817');
+))->setHelp('The header of the first byte of the handshake response. Recommended value: Random < uint_max. Default value: 2135427817');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	'h3',
-	'H3',
+	'H3 (Underload packet magic header)',
 	'text',
 	$pconfig['h3'] ?? '',
 	['placeholder' => 'H3']
-))->setHelp('Default value: 1515838044');
+))->setHelp('The UnderLoad packet header. Recommended value: Random < uint_max. Default value: 1515838044');
 
-$group->add(new Form_Input(
+$section->addInput(new Form_Input(
 	'h4',
-	'H4',
+	'H4 (Transport packet magic header)',
 	'text',
 	$pconfig['h4'] ?? '',
 	['placeholder' => 'H4']
-))->setHelp('Default value: 2020456680');
+))->setHelp('The header of the packet of transmitted data. Recommended value: Random < uint_max. Default value: 2020456680');
 
-$group->add(new Form_Button(
+$section->add(new Form_Button(
 	'gen_defaults',
 	'Generate Defaults',
 	null,
@@ -325,9 +327,8 @@ $group->add(new Form_Button(
 ))->addClass('btn-primary btn-sm')
   ->setHelp('Generate default values for AmneziaWireGuard options.');
 
-$section->add($group);
-
 $form->add($section);
+
 
 $section = new Form_Section("Interface Configuration ({$pconfig['name']})");
 
