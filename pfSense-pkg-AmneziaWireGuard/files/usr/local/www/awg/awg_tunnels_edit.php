@@ -592,6 +592,10 @@ events.push(function() {
 
 	// These are action buttons, not submit buttons
 	$("#genkeys").prop('type', 'button');
+	$('#gen_junk_packet_options').prop('type', 'button');
+	$('#gen_packet_junk_sizes').prop('type', 'button');
+	$('#gen_magic_headers').prop('type', 'button');
+	
 
 	// Request a new public/private key pair
 	$('#genkeys').click(function(event) {
@@ -627,30 +631,33 @@ events.push(function() {
 	});
 
 
-	// Save the form
-	$('#saveform').click(function(event) {
-		$(form).submit();
-	});
-
 	// Generate default values for Junk Packet Options
 	$('#gen_junk_packet_options').click(function(event) {
-		$('#jc').val('5');
-		$('#jmin').val('100');
-		$('#jmax').val('1000');
+		$('#jc').val(Math.floor(Math.random() * 125) + 3);
+		$('#jmin').val(Math.floor(Math.random() * 690) + 10);
+		let jmin = parseInt($('#jmin').val());
+		$('#jmax').val(Math.floor(Math.random() * 570) + jmin + 1);
 	});
 
 	// Generate default values for Packet Junk Sizes
 	$('#gen_packet_junk_sizes').click(function(event) {
-		$('#s1').val('250');
-		$('#s2').val('250');
+		$('#s1').val(Math.floor(Math.random() * 124) + 3);
+		$('#s2').val(Math.floor(Math.random() * 124) + 3);
 	});
 
 	// Generate default values for Magic Headers
 	$('#gen_magic_headers').click(function(event) {
-		$('#h1').val(Math.floor(Math.random() * 4294967295));
-		$('#h2').val(Math.floor(Math.random() * 4294967295));
-		$('#h3').val(Math.floor(Math.random() * 4294967295));
-		$('#h4').val(Math.floor(Math.random() * 4294967295));
+		let min = 0x10000011;
+		let max = 0x7FFFFF00;
+		$('#h1').val(Math.floor(Math.random() * (max - min)) + min);
+		$('#h2').val(Math.floor(Math.random() * (max - min)) + min);
+		$('#h3').val(Math.floor(Math.random() * (max - min)) + min);
+		$('#h4').val(Math.floor(Math.random() * (max - min)) + min);
+	});
+
+	// Save the form
+	$('#saveform').click(function(event) {
+	$(form).submit();
 	});
 
 });
