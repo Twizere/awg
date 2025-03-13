@@ -866,8 +866,20 @@ function wg_make_tunnel_conf_file($tunnel, $include_endpoint = false) {
 	// Process interface ListenPort
 	$wc->set_interface_attr('ListenPort', $tunnel['listenport']);
 
+	// Process amnezia wireguard interface attributes
+	$wc->set_interface_attr('jc', $tunnel['jc']);
+	$wc->set_interface_attr('jmin', $tunnel['jmin']);
+	$wc->set_interface_attr('jmax', $tunnel['jmax']);
+	$wc->set_interface_attr('s1', $tunnel['s1']);
+	$wc->set_interface_attr('s2', $tunnel['s2']);
+	$wc->set_interface_attr('h1', $tunnel['h1']);
+	$wc->set_interface_attr('h2', $tunnel['h2']);
+	$wc->set_interface_attr('h3', $tunnel['h3']);
+	$wc->set_interface_attr('h4', $tunnel['h4']);
+
 	// Process peer sections
-	foreach (wg_tunnel_get_peers_config($tunnel['name']) as [$peer_idx, $peer, $is_new]) {
+	foreach (wg_tunnel_get_peers_config($tunnel['name']) as $peer_config) {
+		list($peer_idx, $peer, $is_new) = $peer_config;
 		if (isset($peer['enabled']) && $peer['enabled'] == 'yes') {
 			// Process peer entry and PublicKey
 			$wc->add_peer($peer['publickey'], "Peer: {$peer['descr']}");
