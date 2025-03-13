@@ -290,7 +290,8 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['s1'] ?? '',
 	['placeholder' => 'S1']
-))->setHelp('Size of random data added to the init packet. Recommended: 50-500.');
+))->setHelp('Size of random data added to the init packet. Recommended: 50-500.')
+->setWidth(1);
 
 $group->add(new Form_Input(
 	's2',
@@ -298,7 +299,8 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['s2'] ?? '',
 	['placeholder' => 'S2']
-))->setHelp('Size of random data added to the response packet. Recommended: 50-500.');
+))->setHelp('Size of random data added to the response packet. Recommended: 50-500.')
+->setWidth(1);
 
 $group->add(new Form_Button(
 	'gen_packet_junk_sizes',
@@ -306,7 +308,8 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values for Packet Junk Sizes.');
+  ->setHelp('Generate default values for Packet Junk Sizes.')
+  ->setWidth(1);
 
 $section->add($group);
 
@@ -318,7 +321,8 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h1'] ?? '',
 	['placeholder' => 'H1']
-))->setHelp('Header for the first byte of the handshake. Recommended: Random < uint_max.');
+))->setHelp('Header for the first byte of the handshake. Recommended: Random < uint_max.')
+->setWidth(1);
 
 $group->add(new Form_Input(
 	'h2',
@@ -326,7 +330,8 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h2'] ?? '',
 	['placeholder' => 'H2']
-))->setHelp('Header for the first byte of the handshake response. Recommended: Random < uint_max.');
+))->setHelp('Header for the first byte of the handshake response. Recommended: Random < uint_max.')
+->setWidth(1);
 
 $group->add(new Form_Input(
 	'h3',
@@ -334,7 +339,8 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h3'] ?? '',
 	['placeholder' => 'H3']
-))->setHelp('Header for the UnderLoad packet. Recommended: Random < uint_max.');
+))->setHelp('Header for the UnderLoad packet. Recommended: Random < uint_max.')
+->setWidth(1);
 
 $group->add(new Form_Input(
 	'h4',
@@ -342,7 +348,8 @@ $group->add(new Form_Input(
 	'text',
 	$pconfig['h4'] ?? '',
 	['placeholder' => 'H4']
-))->setHelp('Header for the transmitted data packet. Recommended: Random < uint_max.');
+))->setHelp('Header for the transmitted data packet. Recommended: Random < uint_max.')
+->setWidth(1);
 
 $group->add(new Form_Button(
 	'gen_magic_headers',
@@ -350,7 +357,8 @@ $group->add(new Form_Button(
 	null,
 	'fa-solid fa-cog'
 ))->addClass('btn-primary btn-sm')
-  ->setHelp('Generate default values for Magic Headers.');
+  ->setHelp('Generate default values for Magic Headers.')
+  ->setWidth(1);
 
 $section->add($group);
 
@@ -629,6 +637,27 @@ events.push(function() {
 	// Save the form
 	$('#saveform').click(function(event) {
 		$(form).submit();
+	});
+
+	// Generate default values for Junk Packet Options
+	$('#gen_junk_packet_options').click(function(event) {
+		$('#jc').val('5');
+		$('#jmin').val('100');
+		$('#jmax').val('1000');
+	});
+
+	// Generate default values for Packet Junk Sizes
+	$('#gen_packet_junk_sizes').click(function(event) {
+		$('#s1').val('250');
+		$('#s2').val('250');
+	});
+
+	// Generate default values for Magic Headers
+	$('#gen_magic_headers').click(function(event) {
+		$('#h1').val(Math.floor(Math.random() * 4294967295));
+		$('#h2').val(Math.floor(Math.random() * 4294967295));
+		$('#h3').val(Math.floor(Math.random() * 4294967295));
+		$('#h4').val(Math.floor(Math.random() * 4294967295));
 	});
 
 });
