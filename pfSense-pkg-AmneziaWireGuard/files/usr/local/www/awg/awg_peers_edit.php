@@ -360,6 +360,23 @@ events.push(function() {
 
 	// These are action buttons, not submit buttons
 	$('#genpsk').prop('type','button');
+	$("#genkeys").prop('type', 'button');
+
+		// Request a new public/private key pair
+	$('#genkeys').click(function(event) {
+	if ($('#privatekey').val().length == 0 || confirm(<?=json_encode($genKeyWarning)?>)) {
+		ajaxRequest = $.ajax({
+			url: '/awg/awg_peers_edit.php',
+			type: 'post',
+			data: {act: 'genkeys'},
+			success: function(response, textStatus, jqXHR) {
+				resp = JSON.parse(response);
+				$('#publickey').val(resp.pubkey);
+				$('#privatekey').val(resp.privkey);
+			}
+		});
+		}
+	});
 
 	// Request a new pre-shared key
 	$('#genpsk').click(function(event) {
