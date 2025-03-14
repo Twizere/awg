@@ -36,6 +36,7 @@ install:
 	@install -d ${PREFIX}/share/${PACKAGE}
 	@install -d ${PREFIX}/share/${PACKAGE}/menu
 	@install -d ${PREFIX}/www/awg/js
+	@install -d ${PREFIX}/www/awg/api
 	@install -d ${PREFIX}/www/widgets
 	@install -d ${PREFIX}/www/shortcuts
 	@echo "   Directories created ✅"
@@ -54,7 +55,6 @@ install:
 	#copying the executable
 	@cp -R ${FILESDIR}${PREFIX}/bin/* ${PREFIX}/bin/
 	@chmod +x ${PREFIX}/bin/*
-	
 	@echo "   Files copied ✅"
 
 	#copying the executable
@@ -62,14 +62,14 @@ install:
 	@chmod +x ${PREFIX}/etc/rc.d/*
 	@echo 'awg_api_enable="YES"' >> /etc/rc.conf.d/awg-api
 	@echo 'awg_quick_enable="YES"'  >> /etc/rc.conf.d/wg_quick
-
 	@echo "   Service is set ✅"
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
+	@cp -R ${FILESDIR}${PREFIX}/www/awg/api/* ${PREFIX}/www/awg/api
+	@echo " WEB & API are set ✅"
 
-	@echo "pfSense Config init is set ✅"
 	@php -f ${PREFIX}/pkg/amneziawireguard/includes/wg_service.inc install
-
+		@echo "pfSense Config init is set ✅"
 	#shortcuts
 	@cp -R ${FILESDIR}${PREFIX}/www/shortcuts/* ${PREFIX}/www/shortcuts/
 
