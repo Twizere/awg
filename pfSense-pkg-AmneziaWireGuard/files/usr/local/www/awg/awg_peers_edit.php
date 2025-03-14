@@ -102,8 +102,6 @@ if (is_numericint($peer_idx) && is_array(config_get_path("installedpackages/amne
 	$is_dynamic = true;
 }
 
-$shortcut_section = "wireguard";
-
 
 $pglinks = array("", "/awg/awg_tunnels.php", "/awg/awg_peers.php", "@self");
 include('amneziawireguard/includes/awg_header.inc');

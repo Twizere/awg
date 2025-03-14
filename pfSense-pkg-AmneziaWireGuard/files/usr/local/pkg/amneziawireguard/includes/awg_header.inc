@@ -1,7 +1,7 @@
 <?php
 
 $pgtitle = array("VPN", "Amenezia WG");
-$shortcut_section = "amneziawireguard";
+$shortcut_section = "ameneziawg";
 $tab_array = array();
 $tab_array[] = array(gettext("Status"), $active_tab == "Status", "/awg/status_amneziawg.php");
 $tab_array[] = array(gettext("Servers"), $active_tab == "Servers", "/awg/awg_tunnels.php");

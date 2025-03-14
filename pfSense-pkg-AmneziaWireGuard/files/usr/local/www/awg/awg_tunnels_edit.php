@@ -133,7 +133,7 @@ if (!$is_new) {
 	config_set_path("installedpackages/amneziawg/tunnels/item/{$tun_idx}/mtu", $pconfig['mtu']);
 }
 
-$shortcut_section = "wireguard";
+
 
 $pglinks = array("", "/awg/wg_tunnels.php", "/awg/wg_tunnels.php", "@self");
 include('amneziawireguard/includes/awg_header.inc');

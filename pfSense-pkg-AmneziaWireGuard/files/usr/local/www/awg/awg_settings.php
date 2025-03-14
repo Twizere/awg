@@ -91,7 +91,7 @@ wg_defaults_install();
 // Grab current configuration from the XML
 $pconfig = config_get_path('installedpackages/wireguard/config/0');
 
-$shortcut_section = 'wireguard';
+
 
 $pglinks = array('', '/awg/awg_tunnels.php', '@self');
 include('amneziawireguard/includes/awg_header.inc');

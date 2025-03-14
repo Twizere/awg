@@ -3,9 +3,9 @@
 
 global $shortcuts;
 
-$shortcuts['ameneziawireguard'] = array();
-$shortcuts['amneziawireguard']['main'] = '/awg/status_amneziawg.php';
-$shortcuts['amneziawireguard']['status'] = '/awg/awg_settings.php';
-$shortcuts['amneziawireguard']['service'] = 'amneziawg_service';
+$shortcuts['ameneziawg'] = array();
+$shortcuts['ameneziawg']['main'] = '/awg/awg_settings.php';
+$shortcuts['ameneziawg']['status'] = '/awg/status_amneziawg.php';
+$shortcuts['ameneziawg']['service'] = 'amneziawg_service';
 
 ?>
