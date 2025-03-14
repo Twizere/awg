@@ -135,15 +135,10 @@ if (!$is_new) {
 
 $shortcut_section = "wireguard";
 
-$pgtitle = array(gettext("VPN"), gettext("WireGuard"), gettext("Tunnels"), gettext("Edit"));
 $pglinks = array("", "/awg/wg_tunnels.php", "/awg/wg_tunnels.php", "@self");
-
-$tab_array = array();
-$tab_array[] = array(gettext("Tunnels"), true, "/awg/awg_tunnels.php");
-$tab_array[] = array(gettext("Peers"), false, "/awg/awg_peers.php");
-$tab_array[] = array(gettext("Settings"), false, "/awg/awg_settings.php");
-$tab_array[] = array(gettext("Status"), false, "/wg/status_wireguard.php");
-
+include('amneziawireguard/includes/awg_header.inc');
+$active_tab = "Servers";
+$pgtitle[] = [$active_tab,gettext("Edit")];
 include("head.inc");
 
 wg_print_service_warning();

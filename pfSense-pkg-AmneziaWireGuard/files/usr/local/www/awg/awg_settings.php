@@ -93,16 +93,11 @@ $pconfig = config_get_path('installedpackages/wireguard/config/0');
 
 $shortcut_section = 'wireguard';
 
-$pgtitle = array(gettext('VPN'), gettext('WireGuard'), gettext('Settings'));
-$pglinks = array('', '/wg/vpn_wg_tunnels.php', '@self');
-
-$tab_array = array();
-$tab_array[] = array(gettext('Tunnels'), false, '/wg/vpn_wg_tunnels.php');
-$tab_array[] = array(gettext('Peers'), false, '/wg/vpn_wg_peers.php');
-$tab_array[] = array(gettext('Settings'), true, '/awg/awg_settings.php');
-$tab_array[] = array(gettext('Status'), false, '/wg/status_wireguard.php');
-
-include('head.inc');
+$pglinks = array('', '/awg/awg_tunnels.php', '@self');
+include('amneziawireguard/includes/awg_header.inc');
+$active_tab = "Settings";
+$pgtitle[]= [$active_tab];
+include("head.inc");
 
 wg_print_service_warning();
 

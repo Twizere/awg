@@ -104,11 +104,11 @@ if (is_numericint($peer_idx) && is_array(config_get_path("installedpackages/amne
 
 $shortcut_section = "wireguard";
 
-$pgtitle = array(gettext("VPN"), gettext("WireGuard"), gettext("Peers"), gettext("Edit"));
+
 $pglinks = array("", "/awg/awg_tunnels.php", "/awg/awg_peers.php", "@self");
 include('amneziawireguard/includes/awg_header.inc');
 $active_tab = "Clients";
-$pgtitle[]= [gettext("Clients"),$active_tab];
+$pgtitle[]= [$active_tab,gettext("Edit")];
 include("head.inc");
 
 wg_print_service_warning();
