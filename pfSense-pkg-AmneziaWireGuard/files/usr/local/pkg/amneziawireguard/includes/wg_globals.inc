@@ -141,7 +141,7 @@ $wgg['wg_daemon'] 		= "{$wgg['php_wg']} -f {$wgg['wg_includes']}/wg_service.inc"
 
 $wgg['shellcmdentries']		= array(
 					array(
-						'cmd' => "service {$wgg['service_name']} start",
+						'cmd' => "service {$wgg['service_name']} start"
 						'cmdtype' => 'earlyshellcmd',
 						'description' => 'WireGuard earlyshellcmd (DO NOT EDIT/DELETE!)'));
 
