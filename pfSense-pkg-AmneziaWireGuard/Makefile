@@ -68,7 +68,7 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
 
 	@echo "pfSense Config init is set ✅"
-	@php -f ${PREFIX}/pkg/amneziawireguard/includes/wg_install.inc install
+	@php -f ${PREFIX}/pkg/amneziawireguard/includes/wg_service.inc install
 
 	#shortcuts
 	@cp -R ${FILESDIR}${PREFIX}/www/shortcuts/* ${PREFIX}/www/shortcuts/
