@@ -445,6 +445,7 @@ function wg_do_peer_post($post) {
 	$pconfig['endpoint'] 		= $post['endpoint'];
 	$pconfig['port'] 		= empty($post['port']) ? $wgg['default_port'] : $post['port'];
 	$pconfig['persistentkeepalive']	= $post['persistentkeepalive'];
+	$pconfig['privatekey'] 		= $post['privatekey'];
 	$pconfig['publickey'] 		= $post['publickey'];
 	$pconfig['presharedkey']	= $post['presharedkey'];
 	$pconfig['allowedips']['row'] 	= wg_peer_allowedips($post);
