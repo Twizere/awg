@@ -53,7 +53,8 @@ if (isset($argv[1])) {
 
 	switch (strtolower($argv[1])) {
 		case 'install':
-			
+			wg_install();
+			break;
 
 		default:
 			fwrite(STDOUT, "Usage:  {INSTALL} [SERIALIZE]");
