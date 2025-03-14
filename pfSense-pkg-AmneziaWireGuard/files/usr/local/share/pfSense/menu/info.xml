@@ -3,6 +3,6 @@
         <menu>
                 <name>Amnezia WG</name>
                 <section>VPN</section>
-                <url>/awg/index.php</url>
+                <url>/awg/awg_tunnels.php</url>
         </menu>
 </packagegui>
