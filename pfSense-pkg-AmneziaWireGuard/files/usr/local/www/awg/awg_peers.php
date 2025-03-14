@@ -88,8 +88,8 @@ if ($_POST) {
 }
 
 $pglinks = array('', '/awg/awg_tunnels.php', '@self');
-include('amneziawireguard/includes/awg_header.inc');
 $active_tab = "Clients";
+include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[] = $active_tab;
 include("head.inc");
 

@@ -85,8 +85,8 @@ if ($_POST) {
 	}
 }
 
-include('amneziawireguard/includes/awg_header.inc');
 $active_tab = "Servers";
+include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[] = $active_tab;
 include("head.inc");
 $pglinks = array("", "@self");

@@ -108,8 +108,8 @@ if (is_numericint($peer_idx) && is_array(config_get_path("installedpackages/amne
 
 
 $pglinks = array("", "/awg/awg_tunnels.php", "/awg/awg_peers.php", "@self");
-include('amneziawireguard/includes/awg_header.inc');
 $active_tab = "Clients";
+include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[]= [$active_tab,gettext("Edit")];
 include("head.inc");
 
