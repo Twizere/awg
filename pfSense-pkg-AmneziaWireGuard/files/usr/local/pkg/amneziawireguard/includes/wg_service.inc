@@ -45,7 +45,7 @@ if (isset($argv[1])) {
 	switch (strtolower($argv[1])) {
 		case 'install':
 			wg_install();
-			break;
+			exit($ret_code);
 	}
 
 	if (!wg_is_cli()) {
