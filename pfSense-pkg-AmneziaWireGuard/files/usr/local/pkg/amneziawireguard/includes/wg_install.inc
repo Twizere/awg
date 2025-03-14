@@ -32,6 +32,46 @@ require_once('amneziawireguard/includes/wg_api.inc');
 require_once('amneziawireguard/includes/wg_globals.inc');
 require_once('amneziawireguard/includes/wg_service.inc');
 
+
+
+if (isset($argv[1])) {
+	$ret_code = 0;
+
+	ignore_user_abort(true);
+
+	set_time_limit(0);
+
+	pcntl_async_signals(true);
+
+	if (!wg_is_cli()) {
+		// Bail out if we aren't in the CLI...
+		die("FATAL: This script can only be started through the CLI.\n");
+	}
+
+	if (PHP_BINARY != $wgg['php_wg']) {
+		// Bail out if we aren't running under under the correct executable...
+		die("FATAL: This script can only be executed by {$wgg['php_wg']}.\n");
+	}
+
+	// Should we serialize the return output?
+	$serialize = (isset($argv[2]) && strtolower($argv[2]) == 'serialize');
+
+	switch (strtolower($argv[1])) {
+		case 'install':
+			
+
+		default:
+			fwrite(STDOUT, "Usage:  {INSTALL} [SERIALIZE]");
+			$ret_code = 1;
+			break;
+	}
+
+	// We are done...
+	exit($ret_code);
+}
+
+
+
 /*
  * This is the main install hook
  */
