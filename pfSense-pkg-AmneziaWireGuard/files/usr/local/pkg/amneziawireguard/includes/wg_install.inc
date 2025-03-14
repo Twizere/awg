@@ -43,11 +43,6 @@ if (isset($argv[1])) {
 
 	pcntl_async_signals(true);
 
-	if (!wg_is_cli()) {
-		// Bail out if we aren't in the CLI...
-		die("FATAL: This script can only be started through the CLI.\n");
-	}
-
 	if (PHP_BINARY != $wgg['php_wg']) {
 		// Bail out if we aren't running under under the correct executable...
 		die("FATAL: This script can only be executed by {$wgg['php_wg']}.\n");
