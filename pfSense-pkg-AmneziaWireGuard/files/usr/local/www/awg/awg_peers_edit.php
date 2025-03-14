@@ -194,14 +194,35 @@ $section->addInput(new Form_Input(
   ->setHelp('Interval (in seconds) for Keep Alive packets sent to this peer.<br />
 	     Default is empty (disabled).');
 
-$section->addInput(new Form_Input(
-	'publickey',
-	'*Public Key',
-	'text',
-	$pconfig['publickey'],
-	['placeholder' => 'Public Key', 'autocomplete' => 'new-password']
-))->addClass('trim')
-  ->setHelp('WireGuard public key for this peer.');
+		 $group = new Form_Group('*Interface Keys');
+
+		 $group->add(new Form_Input(
+			 'privatekey',
+			 'Private Key',
+			 wg_secret_input_type(),
+			 $pconfig['privatekey'],
+			 ['autocomplete' => 'new-password']
+		 ))->addClass('trim')
+		   ->setHelp('Private key (used when exporting the Peer Configuration)))');
+		 
+		 $group->add(new Form_Input(
+			 'publickey',
+			 '*Public Key',
+			 'text',
+			 $pconfig['publickey']
+		 ))->addClass('trim')
+		   ->setHelp('Public key for this peer (Required). (<a id="copypubkey" style="cursor: pointer;" data-success-text="Copied" data-timeout="3000">Copy</a>)')->setReadonly();
+		 
+		 $group->add(new Form_Button(
+			 'genkeys',
+			 'Generate',
+			 null,
+			 'fa-solid fa-key'
+		 ))->addClass('btn-primary btn-sm')
+		   ->setHelp('New Keys')
+		   ->setWidth(1);
+		 
+		 $section->add($group);
 
 $group = new Form_Group('Pre-shared Key');
 
