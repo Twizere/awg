@@ -68,11 +68,6 @@ if ($_POST) {
 			case 'delete':
 				$res = wg_delete_peer($peer_idx);
 				break;
-			case 'genkeys':
-				// Process ajax call requesting new key pair
-				print(wg_gen_keypair(true));
-				exit;
-				break;
 			default:
 				// Shouldn't be here, so bail out.
 				header('Location: /awg/awg_peers.php');

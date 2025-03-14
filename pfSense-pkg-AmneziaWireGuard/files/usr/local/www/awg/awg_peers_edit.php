@@ -73,7 +73,11 @@ if ($_POST) {
 			}
 			
 			break;
-
+		case 'genkeys':
+			// Process ajax call requesting new key pair
+			print(wg_gen_keypair(true));
+			exit;
+			break;
 		case 'genpsk':
 			// Process ajax call requesting new pre-shared key
 			print(wg_gen_psk());
