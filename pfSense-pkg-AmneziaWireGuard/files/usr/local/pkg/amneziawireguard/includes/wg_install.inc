@@ -30,7 +30,7 @@ require_once('util.inc');
 // WireGuard includes
 require_once('amneziawireguard/includes/wg_api.inc');
 require_once('amneziawireguard/includes/wg_globals.inc');
-require_once('amneziawireguard/includes/wg_service.inc');
+
 
 
 
@@ -65,7 +65,7 @@ if (isset($argv[1])) {
 	exit($ret_code);
 }
 
-
+require_once('amneziawireguard/includes/wg_service.inc');
 
 /*
  * This is the main install hook
