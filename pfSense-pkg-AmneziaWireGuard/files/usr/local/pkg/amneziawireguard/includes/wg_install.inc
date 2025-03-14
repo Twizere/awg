@@ -30,38 +30,6 @@ require_once('util.inc');
 // WireGuard includes
 require_once('amneziawireguard/includes/wg_api.inc');
 require_once('amneziawireguard/includes/wg_globals.inc');
-
-
-
-
-if (isset($argv[1])) {
-	$ret_code = 0;
-
-	ignore_user_abort(true);
-
-	set_time_limit(0);
-
-	pcntl_async_signals(true);
-
-
-	// Should we serialize the return output?
-	$serialize = (isset($argv[2]) && strtolower($argv[2]) == 'serialize');
-
-	switch (strtolower($argv[1])) {
-		case 'install':
-			wg_install();
-			break;
-
-		default:
-			fwrite(STDOUT, "Usage:  {INSTALL} [SERIALIZE]");
-			$ret_code = 1;
-			break;
-	}
-
-	// We are done...
-	exit($ret_code);
-}
-
 require_once('amneziawireguard/includes/wg_service.inc');
 
 /*

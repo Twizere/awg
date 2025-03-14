@@ -42,6 +42,12 @@ if (isset($argv[1])) {
 
 	pcntl_async_signals(true);
 
+	switch (strtolower($argv[1])) {
+		case 'install':
+			wg_install();
+			break;
+	}
+
 	if (!wg_is_cli()) {
 		// Bail out if we aren't in the CLI...
 		die("FATAL: This script can only be started through the CLI.\n");
