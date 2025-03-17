@@ -41,31 +41,38 @@ function wg_install() {
 	$g['wireguard_installing'] = true;
 
 	update_status("done.\n  Installing WireGuard early shell commands...");
+	print "Installing WireGuard early shell commands...\n";
 
 	// Installs the WireGuard earlyshellcmds
 	wg_earlyshellcmd_install();
 
 	update_status("done.\n  Creating WireGuard interface group...");
+	print "Creating WireGuard interface group...\n";
 
 	// Create the 'WireGuard' interface group
 	wg_ifgroup_install();
 
 	update_status("done.\n  Creating WireGuard Unbound access list...");
+	print "Creating WireGuard Unbound access list...\n";
 
 	// Create the WireGuard Unbound ACL
 	wg_unbound_acl_install();
 
 	update_status("done.\n  Installing WireGuard service...");
+	print "Installing WireGuard service...\n";
 
 	// Create the WireGuard service
 	wg_service_install();
 
 	update_status("done.\n  Applying WireGuard default settings as necessary...");
+	print "Applying WireGuard default settings as necessary...\n";
 
 	wg_defaults_install();
 
 	update_status("done.\n");
+	print "WireGuard installation complete.\n";
 }
+
 
 /*
  * This is the main deinstall hook
