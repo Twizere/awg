@@ -377,80 +377,58 @@ function wg_service_daemon() {
 }
 
 function wg_deregister_service_env() {
-	global $h_lock, $wgg;
-	print("DE-registering service environment\n");
-	if (!is_null($h_lock)) {
-		// Attempt to release exclusive lock
-		@flock($h_lock, LOCK_UN);
+    global $h_lock, $wgg;
+    static $already_deregistered = false;
 
-		// Attempt to close file handler
-		@fclose($h_lock);
-	}
+    if ($already_deregistered) {
+        print("[WireGuard] Service environment already deregistered, skipping...\n");
+        return;
+    }
 
-	// Attempt to delete PID file
-	unlink_if_exists($wgg['pid_path']);
+    print("[WireGuard] DE-registering service environment\n");
+
+    if (!is_null($h_lock)) {
+        // Attempt to release exclusive lock
+        @flock($h_lock, LOCK_UN);
+
+        // Attempt to close file handler
+        @fclose($h_lock);
+        $h_lock = null; // Set to null to prevent reuse
+    }
+
+    // Attempt to delete PID file
+    unlink_if_exists($wgg['pid_path']);
+
+    $already_deregistered = true; // Mark as deregistered
 }
+
 
 function wg_register_service_env($close_fdio = false) {
     global $h_lock, $wgg;
 
-    print("[WireGuard] Calling wg_deregister_service_env()\\n");
-	wg_deregister_service_env();
-	print("[WireGuard] Finished calling wg_deregister_service_env()\\n");
-
-
-    // Attempt to open the PID file
-    if (!$h_lock = fopen($wgg['pid_path'], 'a+')) {
-        print("[WireGuard] Failed to open PID file: " . $wgg['pid_path'] . "\n");
-        return;
+    static $deregistered = false;
+    if (!$deregistered) {
+        print("[WireGuard] Calling wg_deregister_service_env()\n");
+        wg_deregister_service_env();
+        print("[WireGuard] Finished calling wg_deregister_service_env()\n");
+        $deregistered = true;
     }
 
-    // Attempt to acquire an exclusive lock (non-blocking)
-    if (!flock($h_lock, LOCK_EX | LOCK_NB)) {
-        print("[WireGuard] Failed to acquire lock on PID file: " . $wgg['pid_path'] . "\n");
-        fclose($h_lock);
-        return;
+    if ($h_lock = fopen($wgg['pid_path'], 'a+')) {
+        flock($h_lock, LOCK_EX);
+        ftruncate($h_lock, 0);
+        fseek($h_lock, 0, 0);
+        fwrite($h_lock, getmypid());
+        fflush($h_lock);
     }
 
-    // Truncate the file to ensure only the latest PID is written
-    if (!ftruncate($h_lock, 0)) {
-        print("[WireGuard] Failed to truncate PID file: " . $wgg['pid_path'] . "\n");
-        fclose($h_lock);
-        return;
-    }
-
-    // Move file pointer to the beginning
-    if (fseek($h_lock, 0, SEEK_SET) !== 0) {
-        print("[WireGuard] Failed to seek PID file: " . $wgg['pid_path'] . "\n");
-        fclose($h_lock);
-        return;
-    }
-
-    // Get current process ID
-    $pid = getmypid();
-    if ($pid === false) {
-        print("[WireGuard] Failed to retrieve process ID\n");
-        fclose($h_lock);
-        return;
-    }
-
-    // Write PID to the file
-    if (fwrite($h_lock, $pid) === false) {
-        print("[WireGuard] Failed to write PID to file: " . $wgg['pid_path'] . "\n");
-        fclose($h_lock);
-        return;
-    }
-
-    // Ensure data is flushed to disk
-    fflush($h_lock);
-
-    // Optionally close standard input/output/error to daemonize process
     if ($close_fdio) {
         fclose(STDIN);
         fclose(STDOUT);
         fclose(STDERR);
     }
 }
+
 
 function wg_register_daemon_sig_handler() {
 	pcntl_signal(SIGTERM, 'wg_daemon_sig_handler');
