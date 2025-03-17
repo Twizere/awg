@@ -471,7 +471,7 @@ function wg_is_cli() {
 // Checks if the service is running
 function wg_is_service_running() {
 	global $wgg;
-	//print_info_box(gettext('Service pid :'.$wgg['pid_path'] ), 'danger', null);
+	print_info_box(gettext('Service pid :'.$wgg['pid_path'] ), 'danger', null);
 
 	if (!($h_lock = @fopen($wgg['pid_path'], 'r')) || !file_exists($wgg['pid_path'])) {
 		return false;
