@@ -394,8 +394,10 @@ function wg_deregister_service_env() {
 function wg_register_service_env($close_fdio = false) {
     global $h_lock, $wgg;
 
-    // Remove any previous service registration
-    wg_deregister_service_env();
+    print("[WireGuard] Calling wg_deregister_service_env()\\n");
+	wg_deregister_service_env();
+	print("[WireGuard] Finished calling wg_deregister_service_env()\\n");
+
 
     // Attempt to open the PID file
     if (!$h_lock = fopen($wgg['pid_path'], 'a+')) {
