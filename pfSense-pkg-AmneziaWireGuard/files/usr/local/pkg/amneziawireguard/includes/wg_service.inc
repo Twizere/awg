@@ -44,7 +44,9 @@ if (isset($argv[1])) {
 
 	switch (strtolower($argv[1])) {
 		case 'install':
+			
 			wg_install();
+			die("Installed \n");
 			exit($ret_code);
 	}
 
