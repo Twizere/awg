@@ -378,7 +378,7 @@ function wg_service_daemon() {
 
 function wg_deregister_service_env() {
 	global $h_lock, $wgg;
-	print("DE-registering service environment");
+	print("DE-registering service environment\n");
 	if (!is_null($h_lock)) {
 		// Attempt to release exclusive lock
 		@flock($h_lock, LOCK_UN);
@@ -395,19 +395,21 @@ function wg_register_service_env($close_fdio = false) {
 	global $h_lock, $wgg;
 
 	wg_deregister_service_env();
-	print("registering service environment");
+	print("registering service environment\n");
 	if ($h_lock = fopen($wgg['pid_path'], 'a+')) {
 		flock($h_lock, LOCK_EX);
 		ftruncate($h_lock, 0);
 		fseek($h_lock, 0, 0);
 		fwrite($h_lock, getmypid());
 		fflush($h_lock);
+		print("Opened / Created PID successfully \n");
 	}
 
 	if ($close_fdio) {
 		fclose(STDIN);
 		fclose(STDOUT);
 		fclose(STDERR);
+		print("Closed PID file successfully \n");
 	}
 }
 
