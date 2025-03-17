@@ -399,27 +399,27 @@ function wg_register_service_env($close_fdio = false) {
 
     // Attempt to open the PID file
     if (!$h_lock = fopen($wgg['pid_path'], 'a+')) {
-        error_log("[WireGuard] Failed to open PID file: " . $wgg['pid_path']);
+        print("[WireGuard] Failed to open PID file: " . $wgg['pid_path'] . "\n");
         return;
     }
 
     // Attempt to acquire an exclusive lock (non-blocking)
     if (!flock($h_lock, LOCK_EX | LOCK_NB)) {
-        error_log("[WireGuard] Failed to acquire lock on PID file: " . $wgg['pid_path']);
+        print("[WireGuard] Failed to acquire lock on PID file: " . $wgg['pid_path'] . "\n");
         fclose($h_lock);
         return;
     }
 
     // Truncate the file to ensure only the latest PID is written
     if (!ftruncate($h_lock, 0)) {
-        error_log("[WireGuard] Failed to truncate PID file: " . $wgg['pid_path']);
+        print("[WireGuard] Failed to truncate PID file: " . $wgg['pid_path'] . "\n");
         fclose($h_lock);
         return;
     }
 
     // Move file pointer to the beginning
     if (fseek($h_lock, 0, SEEK_SET) !== 0) {
-        error_log("[WireGuard] Failed to seek PID file: " . $wgg['pid_path']);
+        print("[WireGuard] Failed to seek PID file: " . $wgg['pid_path'] . "\n");
         fclose($h_lock);
         return;
     }
@@ -427,14 +427,14 @@ function wg_register_service_env($close_fdio = false) {
     // Get current process ID
     $pid = getmypid();
     if ($pid === false) {
-        error_log("[WireGuard] Failed to retrieve process ID");
+        print("[WireGuard] Failed to retrieve process ID\n");
         fclose($h_lock);
         return;
     }
 
     // Write PID to the file
     if (fwrite($h_lock, $pid) === false) {
-        error_log("[WireGuard] Failed to write PID to file: " . $wgg['pid_path']);
+        print("[WireGuard] Failed to write PID to file: " . $wgg['pid_path'] . "\n");
         fclose($h_lock);
         return;
     }
