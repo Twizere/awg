@@ -392,25 +392,62 @@ function wg_deregister_service_env() {
 }
 
 function wg_register_service_env($close_fdio = false) {
-	global $h_lock, $wgg;
+    global $h_lock, $wgg;
 
-	wg_deregister_service_env();
-	print("registering service environment\n");
-	if ($h_lock = fopen($wgg['pid_path'], 'a+')) {
-		flock($h_lock, LOCK_EX);
-		ftruncate($h_lock, 0);
-		fseek($h_lock, 0, 0);
-		fwrite($h_lock, getmypid());
-		fflush($h_lock);
-		print("Opened / Created PID successfully \n");
-	}
+    // Remove any previous service registration
+    wg_deregister_service_env();
 
-	if ($close_fdio) {
-		fclose(STDIN);
-		fclose(STDOUT);
-		fclose(STDERR);
-		print("Closed PID file successfully \n");
-	}
+    // Attempt to open the PID file
+    if (!$h_lock = fopen($wgg['pid_path'], 'a+')) {
+        error_log("[WireGuard] Failed to open PID file: " . $wgg['pid_path']);
+        return;
+    }
+
+    // Attempt to acquire an exclusive lock (non-blocking)
+    if (!flock($h_lock, LOCK_EX | LOCK_NB)) {
+        error_log("[WireGuard] Failed to acquire lock on PID file: " . $wgg['pid_path']);
+        fclose($h_lock);
+        return;
+    }
+
+    // Truncate the file to ensure only the latest PID is written
+    if (!ftruncate($h_lock, 0)) {
+        error_log("[WireGuard] Failed to truncate PID file: " . $wgg['pid_path']);
+        fclose($h_lock);
+        return;
+    }
+
+    // Move file pointer to the beginning
+    if (fseek($h_lock, 0, SEEK_SET) !== 0) {
+        error_log("[WireGuard] Failed to seek PID file: " . $wgg['pid_path']);
+        fclose($h_lock);
+        return;
+    }
+
+    // Get current process ID
+    $pid = getmypid();
+    if ($pid === false) {
+        error_log("[WireGuard] Failed to retrieve process ID");
+        fclose($h_lock);
+        return;
+    }
+
+    // Write PID to the file
+    if (fwrite($h_lock, $pid) === false) {
+        error_log("[WireGuard] Failed to write PID to file: " . $wgg['pid_path']);
+        fclose($h_lock);
+        return;
+    }
+
+    // Ensure data is flushed to disk
+    fflush($h_lock);
+
+    // Optionally close standard input/output/error to daemonize process
+    if ($close_fdio) {
+        fclose(STDIN);
+        fclose(STDOUT);
+        fclose(STDERR);
+    }
 }
 
 function wg_register_daemon_sig_handler() {
