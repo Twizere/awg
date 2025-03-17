@@ -381,7 +381,7 @@ function wg_deregister_service_env() {
     static $already_deregistered = false;
 
     if ($already_deregistered) {
-        print("[WireGuard] Service environment already deregistered, skipping...\n");
+        //print("[WireGuard] Service environment already deregistered, skipping...\n");
         return;
     }
 
@@ -408,9 +408,9 @@ function wg_register_service_env($close_fdio = false) {
 
     static $deregistered = false;
     if (!$deregistered) {
-        print("[WireGuard] Calling wg_deregister_service_env()\n");
+        //print("[WireGuard] Calling wg_deregister_service_env()\n");
         wg_deregister_service_env();
-        print("[WireGuard] Finished calling wg_deregister_service_env()\n");
+        //print("[WireGuard] Finished calling wg_deregister_service_env()\n");
         $deregistered = true;
     }
 
