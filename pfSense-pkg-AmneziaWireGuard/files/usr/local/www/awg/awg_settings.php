@@ -68,7 +68,7 @@ if ($_POST) {
 
 				if (empty($input_errors) && $res['changes']) {
 					wg_toggle_wireguard();
-					mark_subsystem_dirty($wgg['subsystems']['wg']);
+					//mark_subsystem_dirty($wgg['subsystems']['wg']);
 					$save_success = true;
 				}
 
