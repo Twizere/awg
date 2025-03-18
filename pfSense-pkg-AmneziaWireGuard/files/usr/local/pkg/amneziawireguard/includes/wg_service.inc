@@ -169,6 +169,9 @@ function wg_service_cli_stop($serialize = true) {
     // Now we restart any additional services
     $ret_code |= wg_restart_extra_services();
 
+
+	//Destroying the tunnels when we stop the service 
+	wg_destroy_tunnels();
 	return $ret_code;
 }
 
