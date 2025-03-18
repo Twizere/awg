@@ -188,9 +188,10 @@ function wg_delete_tunnel($tunnel_name) {
 }
 
 function wg_toggle_wireguard() {
-	if (wg_is_service_enabled() && !wg_is_service_running()) {
+	//if (wg_is_service_enabled() && !wg_is_service_running()) {
+	if (wg_is_service_enabled()) {
 		return wg_service_fpm_start();
-	} elseif (!wg_is_service_enabled() && wg_is_service_running()) {
+	} elseif (!wg_is_service_enabled()) {
 		return wg_service_fpm_stop();
 	}
 
