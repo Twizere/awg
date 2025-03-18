@@ -48,9 +48,6 @@ if ($_POST) {
 
 		if (is_subsystem_dirty($wgg['subsystems']['wg'])) {
 			if (wg_is_service_running() && wg_is_service_enabled()  ) {
-				echo "<script>console.log('Arrived at wg_is_service_running() and wg_is_service_enabled() check.');</script>";
-				echo "<script>console.log('wg_is_service_running(): " . (wg_is_service_running() ? 'true' : 'false') . "');</script>";
-				echo "<script>console.log('wg_is_service_enabled(): " . (wg_is_service_enabled() ? 'true' : 'false') . "');</script>";
 				$tunnels_to_apply = wg_apply_list_get('tunnels');
 				$sync_status = wg_tunnel_sync($tunnels_to_apply, true, true);
 				$ret_code |= $sync_status['ret_code'];
