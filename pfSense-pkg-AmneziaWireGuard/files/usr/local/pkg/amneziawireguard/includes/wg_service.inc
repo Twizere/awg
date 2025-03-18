@@ -170,8 +170,15 @@ function wg_service_cli_stop($serialize = true) {
     $ret_code |= wg_restart_extra_services();
 
 
-	//Destroying the tunnels when we stop the service 
-	wg_destroy_tunnels();
+	//stoping the tunnels when we stop the service 
+	foreach (wg_get_running_ifs() as $tunnel) {
+		$cmds = array();
+		$res = wg_ifconfig_if_updown($tunnel,false, $cmds);
+		if ($res) {
+			print("Tunnel {$tunnel} is stopped\n");
+		}
+		
+	}
 	return $ret_code;
 }
 
