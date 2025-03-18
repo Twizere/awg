@@ -175,7 +175,7 @@ function wg_service_cli_stop($serialize = true) {
 		$cmds = array();
 		$res = wg_ifconfig_if_updown($tunnel,false, $cmds);
 		if ($res) {
-			print("Tunnel {$tunnel} is stopped\n");
+			if (wg_is_cli() && !$serialize) print("Tunnel {$tunnel} is stopped\n");
 		}
 		
 	}
