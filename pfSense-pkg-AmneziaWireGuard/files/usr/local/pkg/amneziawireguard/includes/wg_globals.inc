@@ -126,7 +126,7 @@ $wgg['wg_classes']		= "{$wgg['wg_pkg_root']}/classes";
 $wgg['wg_includes']		= "{$wgg['wg_pkg_root']}/includes";
 
 $wgg['conf_paths_to_clean']	= array($wgg['conf_path'], '/etc/wireguard', '/etc/wg');
-$wgg['xml_paths_to_clean']	= array($wgg['xml_path'], array('wireguard'));
+$wgg['xml_paths_to_clean']	= array($wgg['xml_path'], array('amneziawg'));
 
 $wgg['depends_names']		= array(
 					$wgg['pkg_name'],
