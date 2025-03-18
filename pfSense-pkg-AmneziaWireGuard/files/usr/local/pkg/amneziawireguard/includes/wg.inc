@@ -770,7 +770,7 @@ function wg_resync() {
 		wg_resolve_endpoints();
 	} elseif (is_module_loaded($wgg['kmod'])) {
 		// We don't want active tunnels when the service isn't running
-		//wg_destroy_tunnels();
+		wg_destroy_tunnels();
 	}
 
 	// We definitely aren't installing at this point...
