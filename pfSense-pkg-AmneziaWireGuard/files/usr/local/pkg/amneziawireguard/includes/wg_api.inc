@@ -219,7 +219,7 @@ function wg_ifconfig_if_updown($if_name, $up = true, &$cmds = null) {
 	if (wg_is_valid_tunnel($if_name, true)) { 
 		// Are we trying to down-an-up or up-a-down? Anything else is wrong in this context...
 		if ((!wg_interface_status($if_name) && $up) || (wg_interface_status($if_name) && !$up)) {
-			$cmd = "{$wgg['ifconfig']} {$s(escapeshellarg($if_name))} {$s(escapeshellarg($state($up)))} 2>&1";
+			$cmd = $up?"{$wgg['ifconfig']} {$s(escapeshellarg($if_name))} {$s(escapeshellarg($state($up)))} 2>&1" : $cmd = "{$wgg['awg-quick']} {$s(escapeshellarg($state($up)))} {$wgg['conf_path']}/{$s(escapeshellarg($if_name))}.conf";;
 			$error = $up ? WG_ERROR_IF_UP : WG_ERROR_IF_DOWN;
 			$cmds[] = $res = wg_exec($cmd, 'interface', $error);
 			$ret_code = $res['ret_code'];
