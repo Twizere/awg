@@ -53,6 +53,7 @@ define('WG_ERROR_SVC_CREATE',		16);
 
 $wgg = array(
 	'wg'			=> '/usr/local/bin/awg',
+	'awg-quick'		=> '/usr/local/bin/awg-quick',
 	'ifconfig'		=> '/sbin/ifconfig',
 	'pkg'			=> '/usr/sbin/pkg',
 	'kldload'		=> '/sbin/kldload',
