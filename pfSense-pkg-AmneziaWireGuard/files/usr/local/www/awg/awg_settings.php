@@ -220,7 +220,7 @@ print($form);
 
 <nav class="action-buttons">
 	<button type="submit" id="saveform" name="saveform" class="btn btn-sm btn-primary" value="save" title="<?=gettext('Save Settings')?>">
-		<i class="fa-solid fa-save icon-embed-btn"></i>
+		<i class="fa fa-solid fa-save icon-embed-btn"></i>
 		<?=gettext('Save')?>
 	</button>
 </nav>
