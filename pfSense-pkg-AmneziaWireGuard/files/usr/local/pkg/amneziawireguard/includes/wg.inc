@@ -935,6 +935,93 @@ function wg_download_tunnel($tunnel_name, $failure_redirect) {
 	header("Location: {$failure_redirect}");
 }
 
+// TESTTING DOWNLOADING THE PEER 
+function wg_download_peer($peer_idx, $failure_redirect) {
+	global $wgg;
+
+	// Fetch and build the latest info
+	wg_resync();
+
+	$now = new DateTimeImmutable();
+
+	$stamp = $now->format('YmdHis');
+
+	// Get peer configuration
+	if ([$peer_idx, $peer, $is_new] = wg_peer_get_config($peer_idx)) {
+		// Generate the peer configuration file
+		wg_make_peer_conf_file($peer);
+
+		$conf_path = "{$wgg['conf_path']}/peer-{$peer['publickey']}.conf";
+
+		$name = "peer-{$peer['publickey']}-{$stamp}.conf";
+
+		if (file_exists($conf_path)) {
+			send_user_download('file', $conf_path, $name);
+		}
+	}
+
+	// If something goes wrong, bail out to the failure redirect location
+	header("Location: {$failure_redirect}");
+}
+
+// TESTING WRITING THE PEER 
+function wg_make_peer_conf_file($peer, $include_endpoint = false) {
+	global $wgg;
+
+	// Init a new awgconfig object
+	$wc = new awgconfig($peer['publickey'], true);
+
+	$wc->set_path("{$wgg['conf_path']}/peer-{$peer['publickey']}.conf");
+
+	$wc->initialize_file("Description: {$peer['descr']}");
+
+	// Process peer entry and PublicKey
+	$wc->set_interface_attr('PublicKey', $peer['publickey']);
+
+	// Process PresharedKey
+	$wc->set_interface_attr('PresharedKey', $peer['presharedkey']);
+
+	// Process AllowedIPs
+	foreach ((array) $peer['allowedips']['row'] as $ip) {
+		$wc->add_interface_attr('AllowedIPs', "{$ip['address']}/{$ip['mask']}");
+	}
+
+	// Process PersistentKeepalive
+	$keepalive = $peer['persistentkeepalive'];
+	$keepalive = (!empty($keepalive) && is_numericint($keepalive)) ? $keepalive : '0';
+	$wc->set_interface_attr('PersistentKeepalive', $keepalive);
+
+	// Process tunnel (interface) parameters
+	if (wg_is_valid_tunnel($peer['tun'])) {
+		$tunnel = wg_tunnel_get_config_by_name($peer['tun'])[1];
+
+		// Process interface PrivateKey
+		$key = wg_gen_publickey($tunnel['privatekey']);
+		$wc->add_peer($key['pubkey'], "Tunnel: {$tunnel['descr']}");
+
+		$wc->set_peer_attr($key['pubkey'], 'PrivateKey', $key['privkey_clamped']);
+		$wc->set_peer_attr($key['pubkey'], 'ListenPort', $tunnel['listenport']);
+
+		// Process amnezia wireguard interface attributes
+		$wc->set_peer_attr($key['pubkey'], 'jc', $tunnel['jc']);
+		$wc->set_peer_attr($key['pubkey'], 'jmin', $tunnel['jmin']);
+		$wc->set_peer_attr($key['pubkey'], 'jmax', $tunnel['jmax']);
+		$wc->set_peer_attr($key['pubkey'], 's1', $tunnel['s1']);
+		$wc->set_peer_attr($key['pubkey'], 's2', $tunnel['s2']);
+		$wc->set_peer_attr($key['pubkey'], 'h1', $tunnel['h1']);
+		$wc->set_peer_attr($key['pubkey'], 'h2', $tunnel['h2']);
+		$wc->set_peer_attr($key['pubkey'], 'h3', $tunnel['h3']);
+		$wc->set_peer_attr($key['pubkey'], 'h4', $tunnel['h4']);
+
+		// Process tunnel addresses
+		foreach ((array) $tunnel['addresses']['row'] as $address) {
+			$wc->add_peer_attr($key['pubkey'], 'Address', "{$address['address']}/{$address['mask']}");
+		}
+	}
+
+	$wc->write_file();
+}
+
 function wg_autoloader($classname) {
 	global $wgg;
 

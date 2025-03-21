@@ -68,6 +68,10 @@ if ($_POST) {
 			case 'delete':
 				$res = wg_delete_peer($peer_idx);
 				break;
+			case 'download':
+				wg_download_peer($peer_idx, '/awg/awg_peers.php');
+				exit();
+				break;
 			default:
 				// Shouldn't be here, so bail out.
 				header('Location: /awg/awg_peers.php');
@@ -151,6 +155,8 @@ display_top_tabs($tab_array);
 									<?= wg_generate_toggle_icon_link(($peer['enabled'] == 'yes'), 'peer', "?act=toggle&peer={$peer_idx}") ?>
 									<a class="fa fa-solid fa-trash-can text-danger" title="<?= gettext('Delete Peer') ?>"
 										href="<?= "?act=delete&peer={$peer_idx}" ?>" usepost></a>
+									<a class="fa fa-solid fa-download" title="<?= gettext('Download Configuration') ?>"
+										href="<?= "?act=download&peer={$peer_idx}"?>" usepost></a>
 								</td>
 							</tr>
 
