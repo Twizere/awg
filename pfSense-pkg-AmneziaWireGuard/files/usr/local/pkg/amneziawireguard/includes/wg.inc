@@ -957,6 +957,10 @@ function wg_download_peer($peer_idx, $failure_redirect) {
 
 		if (file_exists($conf_path)) {
 			send_user_download('file', $conf_path, $name);
+
+			// Delete the file after downloading
+			unlink($conf_path);
+			return;
 		}
 	}
 
