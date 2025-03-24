@@ -107,6 +107,14 @@ function listPeers() {
 //     exec("pfctl -f /etc/pf.conf", $output, $status);
 //     return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
 // }
+function getInputData() {
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        respond(400, "Invalid JSON input");
+    }
+    return $input;
+}
+
 
 $request = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
@@ -114,15 +122,19 @@ $apiKey = $_SERVER['HTTP_X_API_KEY'];
 $iface = $_SERVER['X-INTERFACE-NAME'];
  
 authenticate($apiKey);
+$input = getInputData();
+
 if ($request == "POST") {
-    $action = $_POST['act'] ?? '';
+    
+
+    $action = $input['act'] ?? '';
     switch ($action) {
         case "peers":
             respond(200, listPeers());
             break;
 
         case "reload":
-            $interface = $_POST['interface'] ?? '';
+            $interface = $input['interface'] ?? '';
             if (!$interface) respond(400, "Missing interface name");
             respond(200, reloadAWG($interface));
             break;
