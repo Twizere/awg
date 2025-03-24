@@ -146,7 +146,7 @@ $section->add($group);
 //     $pconfig['token_expiry']
 // ))->setHelp(gettext('Specify the token expiry time in seconds. Default is 3600 seconds (1 hour).'));
 
-$section = new Form_Section(gettext('IP Whitelist Configuration'));
+$section = new Form_Section(gettext('API Access Control'));
 
 $section->addInput(new Form_StaticText(
     gettext('Hint'),
@@ -203,8 +203,6 @@ $section->addInput(new Form_Button(
     null,
     'fa-solid fa-plus'
 ))->addClass('btn-success btn-sm addbtn');
-
-$form->add($section);
 
 // Rate Limiting
 $section->addInput(new Form_Input(
