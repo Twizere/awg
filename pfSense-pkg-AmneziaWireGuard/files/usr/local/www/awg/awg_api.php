@@ -139,7 +139,8 @@ $group->add(new Form_Input(
     wg_secret_input_type(),
     $pconfig['api_key']
 ))->addClass('trim')
-->setHelp(gettext('Provide the API key for authentication.'))
+->setHelp(gettext('Provide the API key for authentication.') . 
+    '<a id="copyapikey" style="cursor: pointer;" data-success-text="Copied" data-timeout="3000">' . gettext('Copy') . '</a>')
 ->setReadonly()
 ->setWidth(6);
 
@@ -149,7 +150,7 @@ $group->add(new Form_Button(
     null,
     'fa-solid fa-key'
 ))->addClass('btn-primary btn-sm')
-->setHelp(gettext('Generate a new API key ') . '(<a id="copyapikey" style="cursor: pointer;" data-success-text="Copied" data-timeout="3000">' . gettext('Copy') . '</a>)');
+->setHelp(gettext('Generate a new API key ') );
 
 
 $section->add($group);
