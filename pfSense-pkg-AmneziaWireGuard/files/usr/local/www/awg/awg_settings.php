@@ -102,7 +102,7 @@ include("head.inc");
 wg_print_service_warning();
 
 if ($save_success) {
-	//print_info_box(gettext('The changes have been applied successfully.'), 'success');
+	print_info_box(gettext('The changes have been applied successfully.'), 'success');
 }
 
 if (isset($_POST['apply'])) {

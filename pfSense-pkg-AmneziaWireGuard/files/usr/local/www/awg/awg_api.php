@@ -62,8 +62,8 @@ $pconfig = config_get_path('installedpackages/amneziawg/api');
 
 
 
-$pglinks = array('', '/awg/awg_tunnels.php', '@self');
-$active_tab = "Settings";
+$pglinks = array('', '@self');
+$active_tab = "Api";
 include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[]= [$active_tab];
 include("head.inc");
@@ -71,7 +71,7 @@ include("head.inc");
 wg_print_service_warning();
 
 if ($save_success) {
-	//print_info_box(gettext('The changes have been applied successfully.'), 'success');
+	print_info_box(gettext('The changes have been applied successfully.'), 'success');
 }
 
 if (isset($_POST['apply'])) {
