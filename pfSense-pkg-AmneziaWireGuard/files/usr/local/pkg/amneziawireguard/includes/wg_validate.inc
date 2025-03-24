@@ -94,6 +94,54 @@ function wg_validate_settings_post($pconfig) {
 	// Consumers expect an array
 	return $input_errors;
 }
+/*
+ * Validate API settings
+ */
+function wg_validate_api_settings_post($pconfig) {
+	$input_errors = array();
+
+	// Validate API enable flag
+	if (!isset($pconfig['api_enable']) || !in_array($pconfig['api_enable'], ['yes', 'no'])) {
+		$input_errors[] = gettext('Invalid API enable flag. Must be "yes" or "no".');
+	}
+
+	// Validate authentication method
+	if (empty($pconfig['auth_method']) || !in_array($pconfig['auth_method'], ['none', 'apikey'])) {
+		$input_errors[] = gettext('Invalid authentication method. Must be "none" or "apikey".');
+	}
+
+	// Validate API key if authentication method is apikey
+	if ($pconfig['auth_method'] == 'apikey' && empty($pconfig['api_key'])) {
+		$input_errors[] = gettext('API key must be specified when authentication method is "apikey".');
+	}
+
+	// Validate rate limit
+	if (!empty($pconfig['rate_limit']) && (!is_numeric($pconfig['rate_limit']) || intval($pconfig['rate_limit']) < 0)) {
+		$input_errors[] = gettext('Rate limit must be a non-negative integer.');
+	}
+
+	// Validate IP whitelist
+	if (!empty($pconfig['ip_whitelist']['row']) && is_array($pconfig['ip_whitelist']['row'])) {
+		foreach ($pconfig['ip_whitelist']['row'] as $row) {
+			$address = trim($row['whitelist_address']);
+			$subnet = trim($row['whitelist_address_subnet']);
+
+			if (!empty($address) && !is_ipaddr($address)) {
+				$input_errors[] = gettext("Whitelist address {$address} is not a valid IP address.");
+			}
+
+			if (!empty($address) && empty($subnet)) {
+				$input_errors[] = gettext("Whitelist subnet must be specified for address {$address}.");
+			}
+
+			if (!empty($subnet) && (!ctype_digit($subnet) || intval($subnet) < 0 || intval($subnet) > 32)) {
+				$input_errors[] = gettext("Whitelist subnet {$subnet} is not a valid subnet mask.");
+			}
+		}
+	}
+
+	return $input_errors;
+}
 
 /*
  * Valildate a tunnel
