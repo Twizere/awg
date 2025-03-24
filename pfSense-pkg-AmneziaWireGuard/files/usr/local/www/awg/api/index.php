@@ -57,9 +57,9 @@ function respond($status, $message) {
 }
 
 
-function authenticate() {
+function authenticate($apiKey) {
     $providedKey="";
-    if (!empty($_SERVER['HTTP_X_API_KEY']) && isset($_SERVER['HTTP_X_API_KEY'])) {
+    if (!empty($apiKey) && isset($apiKey)) {
         $providedKey = $_SERVER['HTTP_X_API_KEY'];
     }else {
         respond(401, "Unauthorized: Key is empty ");
@@ -110,17 +110,26 @@ function listPeers() {
 
 $request = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
+$apiKey = $_SERVER['HTTP_X_API_KEY'];
+$iface = $_SERVER['X-INTERFACE-NAME'];
  
-authenticate();
+authenticate($apiKey);
+if ($request == "POST") {
+    $action = $_POST['act'] ?? '';
+    switch ($action) {
+        case "peers":
+            respond(200, listPeers());
+            break;
 
-if ($request == "GET" && $uri == "/peers") {
-    respond(200, listPeers());
-}
+        case "reload":
+            $interface = $_POST['interface'] ?? '';
+            if (!$interface) respond(400, "Missing interface name");
+            respond(200, reloadAWG($interface));
+            break;
 
-if ($request == "POST" && $uri == "/reload") {
-    $interface = $_POST['interface'] ?? '';
-    if (!$interface) respond(400, "Missing interface name");
-    respond(200, reloadAWG($interface));
+        default:
+            respond(400, "Invalid action specified");
+    }
 }
 
 
