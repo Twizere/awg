@@ -62,7 +62,18 @@ $s = fn($x) => $x;
 wg_defaults_install();
 
 // Grab current configuration from the XML
-$pconfig = config_get_path('installedpackages/amneziawg/api');
+$pconfig = config_get_path('installedpackages/amneziawg/api', []);
+
+// Map the XML whitelist data to the expected structure
+if (!empty($pconfig['ip_whitelist']) && is_array($pconfig['ip_whitelist']['row'])) {
+    foreach ($pconfig['ip_whitelist']['row'] as $index => $row) {
+        $pconfig['ip_whitelist']['row'][$index] = [
+            'address' => $row['whitelist_address'] ?? '',
+            'mask' => $row['whitelist_address_subnet'] ?? '32',
+            'descr' => $row['whitelist_address_descr'] ?? '',
+        ];
+    }
+}
 
 
 
