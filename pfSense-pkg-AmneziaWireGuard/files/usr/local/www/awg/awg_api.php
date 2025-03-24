@@ -42,7 +42,11 @@ if ($_POST) {
 				}
 
 				break;
-
+            case 'genkeys':
+                // Process ajax call requesting new key pair
+                print(wg_gen_apikey());
+                exit;
+                break;
 			default:
 				// Shouldn't be here, so bail out.
 				header('Location: /awg/awg_settings.php');
@@ -124,7 +128,7 @@ $group->add(new Form_Input(
     wg_secret_input_type(),
     $pconfig['api_key']
 ))->addClass('trim')
-->setHelp(gettext('Provide the API key for authentication. This field is required if "API Key" is selected as the authentication method.'))
+->setHelp(gettext('Provide the API key for authentication.'))
 ->setReadonly()
 ->setWidth(4);
 
@@ -135,7 +139,8 @@ $group->add(new Form_Button(
     'fa-solid fa-key'
 ))->addClass('btn-primary btn-sm')
 ->setHelp(gettext('Generate a new API key'))
-->setWidth(1);
+->setWidth(2);
+
 
 $section->add($group);
 $form->add($section);
@@ -186,7 +191,7 @@ foreach ($pconfig['ip_whitelist']['row'] as $counter => $item) {
         'text',
         $item['descr']
     ))->setHelp($counter == $last ? gettext('Description for administrative reference (not parsed).') : '')
-      ->setWidth(4);
+      ->setWidth(6);
 
     $group->add(new Form_Button(
         "deleterow{$counter}",
@@ -254,6 +259,24 @@ events.push(function() {
 	updateResolveInterval($('#resolve_interval_track').prop('checked'));
 });
 //]]>
+
+$("#genapikey").prop('type', 'button');
+
+// Generate a new API key
+$('#genapikey').click(function(event) {
+    if ($('#api_key').val().length == 0 || confirm(<?=json_encode(gettext('Are you sure you want to generate a new API key? This will overwrite the existing key.'))?>)) {
+        ajaxRequest = $.ajax({
+            url: '/awg/awg_api.php',
+            type: 'post',
+            data: {act: 'genapikey'},
+            success: function(response, textStatus, jqXHR) {
+                resp = JSON.parse(response);
+                $('#api_key').val(resp.api_key);
+            }
+        });
+    }
+});
+
 </script>
 
 <?php

@@ -1025,4 +1025,19 @@ function wg_get_tunnel_networks($family = 'both') {
 	return $wg_tunnel_networks;
 }
 
+
+/*
+ * This function generates a new API key and returns it.
+ * If $json is true, the result will be returned as a JSON object.
+ */
+function wg_gen_apikey($json = false) {
+	global $wgg;
+
+	// Generate a new API key using the WireGuard binary
+	$api_key = exec("{$wgg['wg']} genkey");
+
+	// Return the API key, optionally as JSON
+	return $json ? json_encode(['api_key' => $api_key]) : $api_key;
+}
+
 ?>
