@@ -128,7 +128,7 @@ $iface = $_SERVER['X-INTERFACE-NAME'];
 
 authenticate($apiKey);
 
-respond(200,$_SERVER);
+respond(200, ['message' => json_decode(file_get_contents('php://input'), true)]);
 exit;
 $input = getInputData();
 
