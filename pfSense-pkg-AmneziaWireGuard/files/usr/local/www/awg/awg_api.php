@@ -146,12 +146,65 @@ $section->add($group);
 //     $pconfig['token_expiry']
 // ))->setHelp(gettext('Specify the token expiry time in seconds. Default is 3600 seconds (1 hour).'));
 
-// IP Whitelisting
-$section->addInput(new Form_Textarea(
-    'ip_whitelist',
-    gettext('IP Whitelist'),
-    $pconfig['ip_whitelist']
-))->setHelp(gettext('Enter a comma-separated list of IP addresses or CIDR ranges allowed to access the API.'));
+$section = new Form_Section(gettext('IP Whitelist Configuration'));
+
+$section->addInput(new Form_StaticText(
+    gettext('Hint'),
+    gettext('Allowed IP entries here will be transformed into proper subnet start boundaries prior to validating and saving. ' .
+            'These entries must be unique. Otherwise, traffic to the conflicting networks will only be routed to the last entry in the list.')
+));
+
+// Initialize the IP whitelist array if necessary
+if (!is_array($pconfig['ip_whitelist'])
+    || !is_array($pconfig['ip_whitelist']['row'])
+    || empty($pconfig['ip_whitelist']['row'])) {
+        array_init_path($pconfig, 'ip_whitelist/row/0');
+        $pconfig['ip_whitelist']['row'][0]['mask'] = '32'; // Default to /32 mask for IPv4
+}
+
+$last = count($pconfig['ip_whitelist']['row']) - 1;
+
+foreach ($pconfig['ip_whitelist']['row'] as $counter => $item) {
+    $group = new Form_Group($counter == 0 ? gettext('Whitelisted IPs') : null);
+
+    $group->addClass('repeatable');
+
+    $group->add(new Form_IpAddress(
+        "whitelist_address{$counter}",
+        gettext('Allowed Subnet or Host'),
+        $item['address'],
+        'BOTH'
+    ))->addClass('trim')
+      ->setHelp($counter == $last ? gettext('IPv4 or IPv6 subnet or host allowed to access the API.') : '')
+      ->addMask("whitelist_address_subnet{$counter}", $item['mask'], 128, 0)
+      ->setWidth(4);
+
+    $group->add(new Form_Input(
+        "whitelist_address_descr{$counter}",
+        gettext('Description'),
+        'text',
+        $item['descr']
+    ))->setHelp($counter == $last ? gettext('Description for administrative reference (not parsed).') : '')
+      ->setWidth(4);
+
+    $group->add(new Form_Button(
+        "deleterow{$counter}",
+        gettext('Delete'),
+        null,
+        'fa-solid fa-trash-can'
+    ))->addClass('btn-warning btn-sm');
+
+    $section->add($group);
+}
+
+$section->addInput(new Form_Button(
+    'addrow',
+    gettext('Add Whitelisted IP'),
+    null,
+    'fa-solid fa-plus'
+))->addClass('btn-success btn-sm addbtn');
+
+$form->add($section);
 
 // Rate Limiting
 $section->addInput(new Form_Input(
