@@ -108,6 +108,10 @@ function listPeers() {
 //     return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
 // }
 function getInputData() {
+    if ($_SERVER['CONTENT_TYPE'] !== 'application/json') {
+        respond(400, "Invalid Content-Type. Expected application/json");
+    }
+
     $input = json_decode(file_get_contents('php://input'), true);
     if (json_last_error() !== JSON_ERROR_NONE) {
         respond(400, "Invalid JSON input");
