@@ -126,8 +126,8 @@ function getHttpVariables() {
         'SESSION' => isset($_SESSION) ? $_SESSION : null,
         'ENV' => $_ENV,
     ];
-    return json_encode($httpVariables, JSON_PRETTY_PRINT);
-    exit;
+    respond(200,$httpVariables);
+    
 }
 
 
