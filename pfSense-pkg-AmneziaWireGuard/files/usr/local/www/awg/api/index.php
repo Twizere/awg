@@ -115,12 +115,27 @@ function getInputData() {
     return $input;
 }
 
+function getHttpVariables() {
+    $httpVariables = [
+        'GET' => $_GET,
+        'POST' => $_POST,
+        'SERVER' => $_SERVER,
+        'FILES' => $_FILES,
+        'COOKIE' => $_COOKIE,
+        'REQUEST' => $_REQUEST,
+        'SESSION' => isset($_SESSION) ? $_SESSION : null,
+        'ENV' => $_ENV,
+    ];
+    return json_encode($httpVariables, JSON_PRETTY_PRINT);
+    exit;
+}
+
 
 $uri = $_SERVER['REQUEST_URI'];
 $apiKey = $_SERVER['HTTP_X_API_KEY'];
 $iface = $_SERVER['X-INTERFACE-NAME'];
 
-
+getHttpVariables();
 authenticate($apiKey);
 $input = getInputData();
 
