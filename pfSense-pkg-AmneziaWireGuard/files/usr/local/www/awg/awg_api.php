@@ -130,7 +130,7 @@ $group->add(new Form_Input(
 ))->addClass('trim')
 ->setHelp(gettext('Provide the API key for authentication.'))
 ->setReadonly()
-->setWidth(4);
+->setWidth(6);
 
 $group->add(new Form_Button(
     'genapikey',
@@ -138,7 +138,7 @@ $group->add(new Form_Button(
     null,
     'fa-solid fa-key'
 ))->addClass('btn-primary btn-sm')
-->setHelp(gettext('Generate a new API key'));
+->setHelp(gettext('Generate a new API key ') . '(<a id="copyapikey" style="cursor: pointer;" data-success-text="Copied" data-timeout="3000">' . gettext('Copy') . '</a>)');
 
 
 $section->add($group);
@@ -241,6 +241,23 @@ print($form);
 //<![CDATA[
 events.push(function() {
 	wgRegTrimHandler();
+
+    $('#copyapikey').click(function () {
+        var $this = $(this);
+        var originalText = $this.text();
+
+        // Copy the API key to the clipboard
+        navigator.clipboard.writeText($('#api_key').val());
+
+        $this.text($this.attr('data-success-text'));
+
+        setTimeout(function() {
+            $this.text(originalText);
+        }, $this.attr('data-timeout'));
+
+        // Prevents the browser from scrolling
+        return false;
+    });
 
     $("#genapikey").prop('type', 'button');
 
