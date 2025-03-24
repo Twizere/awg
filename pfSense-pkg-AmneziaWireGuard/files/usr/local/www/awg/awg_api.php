@@ -107,7 +107,7 @@ $section->addInput($api_enable);
 // API Authentication Method
 $auth_methods = array(
     'none' => gettext('None'),
-    'key' => gettext('API Key'),
+    'apikey' => gettext('API Key'),
     // 'token' => gettext('Bearer Token'),
     // 'basic' => gettext('Basic Authentication')
 );
