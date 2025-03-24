@@ -42,9 +42,9 @@ if ($_POST) {
 				}
 
 				break;
-            case 'genkeys':
+            case 'genapikey':
                 // Process ajax call requesting new key pair
-                print(wg_gen_apikey());
+                print(wg_gen_apikey(true));
                 exit;
                 break;
 			default:
