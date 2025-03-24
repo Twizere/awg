@@ -58,20 +58,13 @@ function respond($status, $message) {
 
 
 function authenticate() {
-    $headers = [];
-    foreach ($_SERVER as $key => $value) {
-        if (strpos($key, 'HTTP_') === 0) {
-            $headerName = str_replace('_', '-', substr($key, 5));
-            $headers[$headerName] = $value;
-        }
-    }
-    echo json_encode(["data" => $_SERVER]);
-    exit;
-    if (empty($headers) && isset($_SERVER['HTTP_X_API_KEY'])) {
-        $headers["X-API-Key"] = $_SERVER['HTTP_X_API_KEY'];
+    $providedKey="";
+    if (empty($_SERVER['HTTP_X_API_KEY']) && isset($_SERVER['HTTP_X_API_KEY'])) {
+        $providedKey = $_SERVER['HTTP_X_API_KEY'];
     }else {
         respond(401, "Unauthorized: Key is empty ");
     }
+
     $apiConfig = getAPIConfig();
 
     // Check if API is enabled
@@ -84,10 +77,9 @@ function authenticate() {
 
     switch ($authMethod) {
         case 'apikey':
-            $providedKey = $headers["X-API-Key"] ?? '';
             $configuredKey = $apiConfig['api_key'] ?? '';
             if (trim($providedKey) !== trim($configuredKey)) {
-                respond(401, "Unauthorized: Invalid API Key. Provided: " . $providedKey);
+                respond(401, "Unauthorized: Invalid API Key. ");
             }
             break;
 
