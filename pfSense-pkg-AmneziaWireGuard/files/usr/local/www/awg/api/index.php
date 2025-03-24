@@ -13,17 +13,15 @@ require_once('amneziawireguard/includes/wg.inc');
 
 header("Content-Type: application/json");
 
-define('AUTH_KEY_FILE', '/etc/awg/auth_key.enc');
-define('CONFIG_DIR', '/etc/awg/configs/');
-define('API_SECRET', 'your-secret-passphrase');
+// Grab current configuration from the XML
+$pconfig = config_get_path('installedpackages/amneziawg/api', []);
+
 ignore_user_abort(true);
 
 $apiConfig = getAPIConfig();
 if (empty($apiConfig)) {
     $defaultConfig = [
-        "enabled" => true,
-        "version" => "1.0",
-        "created_at" => date("Y-m-d H:i:s"),
+        "api_enable" => true,
     ];
     saveAPIConfig($defaultConfig);
 }
@@ -58,61 +56,54 @@ function respond($status, $message) {
     exit;
 }
 
-function generateAPIKey() {
-    return bin2hex(random_bytes(32));
-}
-
-function encryptAPIKey($apiKey) {
-    return openssl_encrypt($apiKey, 'AES-256-CBC', API_SECRET, 0, substr(API_SECRET, 0, 16));
-}
-
-function decryptAPIKey() {
-    $encrypted = file_get_contents(AUTH_KEY_FILE);
-    return openssl_decrypt($encrypted, 'AES-256-CBC', API_SECRET, 0, substr(API_SECRET, 0, 16));
-}
 
 function authenticate() {
     $headers = getallheaders();
-    if (!isset($headers["X-API-Key"]) || trim($headers["X-API-Key"]) !== decryptAPIKey()) {
-        respond(401, "Unauthorized");
+    $apiConfig = getAPIConfig();
+
+    // Check if API is enabled
+    if (empty($apiConfig['enabled']) || !$apiConfig['enabled']) {
+        respond(403, "API is disabled");
+    }
+
+    // Check authentication method
+    $authMethod = $apiConfig['auth_method'] ?? 'none';
+
+    switch ($authMethod) {
+        case 'apikey':
+            if (!isset($headers["X-API-Key"]) || trim($headers["X-API-Key"]) !== ($apiConfig['api_key'] ?? '')) {
+                respond(401, "Unauthorized: Invalid API Key");
+            }
+            break;
+
+        case 'none':
+            // No authentication required
+            break;
+
+        default:
+            respond(400, "Invalid authentication method");
     }
 }
 
 function listPeers() {
-    $configFiles = glob(CONFIG_DIR . "*.conf");
-    $peers = [];
-    foreach ($configFiles as $file) {
-        $peers[] = basename($file);
-    }
-    return $peers;
+   
 }
-
-function reloadAWG($interface) {
-    exec("awg-quick down $interface && awg-quick up $interface", $output, $status);
-    return $status === 0 ? "WireGuard restarted successfully." : "Failed to reload WireGuard.";
-}
-
-function applyFirewallRules($interface, $ipCidr) {
-    $rules = [
-        "set skip on lo0",
-        "nat on vtnet0 from {$ipCidr} to any -> (vtnet0)",
-        "pass in on $interface from any to $ipCidr keep state",
-        "pass out on vtnet0 from $ipCidr to any keep state",
-    ];
-    file_put_contents('/etc/pf.conf', implode("\n", $rules) . "\n");
-    exec("pfctl -f /etc/pf.conf", $output, $status);
-    return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
-}
+ 
+// function applyFirewallRules($interface, $ipCidr) {
+//     $rules = [
+//         "set skip on lo0",
+//         "nat on vtnet0 from {$ipCidr} to any -> (vtnet0)",
+//         "pass in on $interface from any to $ipCidr keep state",
+//         "pass out on vtnet0 from $ipCidr to any keep state",
+//     ];
+//     file_put_contents('/etc/pf.conf', implode("\n", $rules) . "\n");
+//     exec("pfctl -f /etc/pf.conf", $output, $status);
+//     return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
+// }
 
 $request = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
-
-if ($request == "POST" && $uri == "/genkey") {
-    $apiKey = generateAPIKey();
-    file_put_contents(AUTH_KEY_FILE, encryptAPIKey($apiKey));
-    respond(200, "New API key generated: " . $apiKey);
-}
-
+ 
 authenticate();
 
 if ($request == "GET" && $uri == "/peers") {
@@ -125,12 +116,6 @@ if ($request == "POST" && $uri == "/reload") {
     respond(200, reloadAWG($interface));
 }
 
-if ($request == "POST" && $uri == "/applyFirewall") {
-    $interface = $_POST['interface'] ?? '';
-    $ipCidr = $_POST['ipCidr'] ?? '';
-    if (!$interface || !$ipCidr) respond(400, "Missing parameters");
-    respond(200, applyFirewallRules($interface, $ipCidr));
-}
 
 respond(404, "Invalid request");
 ?>
