@@ -17,6 +17,41 @@ define('AUTH_KEY_FILE', '/etc/awg/auth_key.enc');
 define('CONFIG_DIR', '/etc/awg/configs/');
 define('API_SECRET', 'your-secret-passphrase');
 ignore_user_abort(true);
+
+$apiConfig = getAPIConfig();
+if (empty($apiConfig)) {
+    $defaultConfig = [
+        "enabled" => true,
+        "version" => "1.0",
+        "created_at" => date("Y-m-d H:i:s"),
+    ];
+    saveAPIConfig($defaultConfig);
+}
+function saveAPIConfig($configData) {
+    global $config;
+
+    if (!is_array($config['installedpackages'])) {
+        $config['installedpackages'] = [];
+    }
+
+    if (!is_array($config['installedpackages']['amneziawg'])) {
+        $config['installedpackages']['amneziawg'] = [];
+    }
+
+    if (!is_array($config['installedpackages']['amneziawg']['api'])) {
+        $config['installedpackages']['amneziawg']['api'] = [];
+    }
+
+    $config['installedpackages']['amneziawg']['api'] = $configData;
+
+    write_config("Updated AmneziaWireGuard API configuration");
+}
+
+function getAPIConfig() {
+    global $config;
+
+    return $config['installedpackages']['amneziawg']['api'] ?? [];
+}
 function respond($status, $message) {
     http_response_code($status);
     echo json_encode(["message" => $message]);

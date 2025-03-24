@@ -89,7 +89,7 @@ $s = fn($x) => $x;
 wg_defaults_install();
 
 // Grab current configuration from the XML
-$pconfig = config_get_path('installedpackages/wireguard/config/0');
+$pconfig = config_get_path('installedpackages/amneziawg/config/0');
 
 
 
