@@ -2,8 +2,8 @@
 
 // pfSense includes
 require_once('config.inc');
-require_once('functions.inc');
-require_once('guiconfig.inc');
+// require_once('functions.inc');
+// require_once('guiconfig.inc');
 require_once('globals.inc');
 require_once('gwlb.inc');
 require_once('util.inc');
