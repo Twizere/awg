@@ -74,8 +74,10 @@ function authenticate() {
 
     switch ($authMethod) {
         case 'apikey':
-            if (!isset($headers["X-API-Key"]) || trim($headers["X-API-Key"]) !== ($apiConfig['api_key'] ?? '')) {
-                respond(401, "Unauthorized: Invalid API Key , the key is " . $headers["X-API-Key"]);
+            $providedKey = $headers["X-API-Key"] ?? '';
+            $configuredKey = $apiConfig['api_key'] ?? '';
+            if (trim($providedKey) !== trim($configuredKey)) {
+                respond(401, "Unauthorized: Invalid API Key. Provided: " . $providedKey);
             }
             break;
 
