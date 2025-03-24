@@ -1,8 +1,14 @@
 <?php
 
 // pfSense includes
+require_once('config.inc');
 require_once('functions.inc');
 require_once('guiconfig.inc');
+require_once('globals.inc');
+require_once('gwlb.inc');
+require_once('util.inc');
+require_once('services.inc');
+require_once('service-utils.inc');
 
 // WireGuard includes
 require_once('amneziawireguard/includes/wg.inc');
