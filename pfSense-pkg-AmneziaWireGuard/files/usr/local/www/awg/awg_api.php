@@ -242,6 +242,24 @@ print($form);
 events.push(function() {
 	wgRegTrimHandler();
 
+    $("#genapikey").prop('type', 'button');
+
+    // Generate a new API key
+    $('#genapikey').click(function(event) {
+        if ($('#api_key').val().length == 0 || confirm(<?=json_encode(gettext('Are you sure you want to generate a new API key? This will overwrite the existing key.'))?>)) {
+            ajaxRequest = $.ajax({
+                url: '/awg/awg_api.php',
+                type: 'post',
+                data: {act: 'genapikey'},
+                success: function(response, textStatus, jqXHR) {
+                    resp = JSON.parse(response);
+                    $('#api_key').val(resp.api_key);
+                }
+            });
+        }
+    });
+
+
 	// Save the form
 	$('#saveform').click(function () {
 		$(form).submit();
@@ -259,22 +277,7 @@ events.push(function() {
 });
 //]]>
 
-$("#genapikey").prop('type', 'button');
 
-// Generate a new API key
-$('#genapikey').click(function(event) {
-    if ($('#api_key').val().length == 0 || confirm(<?=json_encode(gettext('Are you sure you want to generate a new API key? This will overwrite the existing key.'))?>)) {
-        ajaxRequest = $.ajax({
-            url: '/awg/awg_api.php',
-            type: 'post',
-            data: {act: 'genapikey'},
-            success: function(response, textStatus, jqXHR) {
-                resp = JSON.parse(response);
-                $('#api_key').val(resp.api_key);
-            }
-        });
-    }
-});
 
 </script>
 
