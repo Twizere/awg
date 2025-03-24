@@ -59,7 +59,7 @@ function respond($status, $message) {
 
 function authenticate() {
     $providedKey="";
-    if (empty($_SERVER['HTTP_X_API_KEY']) && isset($_SERVER['HTTP_X_API_KEY'])) {
+    if (!empty($_SERVER['HTTP_X_API_KEY']) && isset($_SERVER['HTTP_X_API_KEY'])) {
         $providedKey = $_SERVER['HTTP_X_API_KEY'];
     }else {
         respond(401, "Unauthorized: Key is empty ");
