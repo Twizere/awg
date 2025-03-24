@@ -124,8 +124,12 @@ $request = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 $apiKey = $_SERVER['HTTP_X_API_KEY'];
 $iface = $_SERVER['X-INTERFACE-NAME'];
- 
+
+
 authenticate($apiKey);
+
+respond(200,$_SERVER);
+exit;
 $input = getInputData();
 
 if ($request == "POST") {
