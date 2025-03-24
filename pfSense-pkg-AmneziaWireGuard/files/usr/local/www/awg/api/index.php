@@ -108,31 +108,23 @@ function listPeers() {
 //     return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
 // }
 function getInputData() {
-    if ($_SERVER['CONTENT_TYPE'] !== 'application/json') {
-        respond(400, "Invalid Content-Type. Expected application/json");
-    }
-
-    $input = json_decode(file_get_contents('php://input'), true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        respond(400, "Invalid JSON input");
+    $input = $_POST;
+    if (empty($input)) {
+        respond(400, "No POST data received");
     }
     return $input;
 }
 
 
-$request = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 $apiKey = $_SERVER['HTTP_X_API_KEY'];
 $iface = $_SERVER['X-INTERFACE-NAME'];
 
 
 authenticate($apiKey);
-
-respond(200, ['message' => json_decode(file_get_contents('php://input'), true)]);
-exit;
 $input = getInputData();
 
-if ($request == "POST") {
+if ($input) {
     
 
     $action = $input['act'] ?? '';
