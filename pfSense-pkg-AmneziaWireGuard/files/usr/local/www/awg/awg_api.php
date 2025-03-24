@@ -1,0 +1,222 @@
+<?php
+
+
+// pfSense includes
+require_once('functions.inc');
+require_once('guiconfig.inc');
+
+// WireGuard includes
+require_once('amneziawireguard/includes/wg.inc');
+require_once('amneziawireguard/includes/wg_guiconfig.inc');
+
+global $wgg;
+
+// Initialize $wgg state
+wg_globals();
+
+$save_success = false;
+
+if ($_POST) {
+	if (isset($_POST['apply'])) {
+		$ret_code = 0;
+
+		if (is_subsystem_dirty($wgg['subsystems']['wg'])) {
+			
+			if ($ret_code == 0) {
+				clear_subsystem_dirty($wgg['subsystems']['wg']);
+			}
+		}
+	}
+
+	if (isset($_POST['act'])) {
+		switch ($_POST['act']) {
+			case 'save':
+				$res = wg_do_api_settings_post($_POST);
+				$input_errors = $res['input_errors'];
+				$pconfig = $res['pconfig'];
+
+				if (empty($input_errors) && $res['changes']) {
+					// wg_toggle_wireguard();
+					mark_subsystem_dirty($wgg['subsystems']['wg']);
+					$save_success = true;
+				}
+
+				break;
+
+			default:
+				// Shouldn't be here, so bail out.
+				header('Location: /awg/awg_settings.php');
+				break;
+		}
+	}
+}
+
+// A dirty string hack
+$s = fn($x) => $x;
+
+// Just to make sure defaults are properly assigned if anything is missing
+wg_defaults_install();
+
+// Grab current configuration from the XML
+$pconfig = config_get_path('installedpackages/amneziawg/api');
+
+
+
+$pglinks = array('', '/awg/awg_tunnels.php', '@self');
+$active_tab = "Settings";
+include('amneziawireguard/includes/awg_header.inc');
+$pgtitle[]= [$active_tab];
+include("head.inc");
+
+wg_print_service_warning();
+
+if ($save_success) {
+	//print_info_box(gettext('The changes have been applied successfully.'), 'success');
+}
+
+if (isset($_POST['apply'])) {
+	print_apply_result_box($ret_code);
+}
+
+wg_print_config_apply_box();
+
+if (!empty($input_errors)) {
+	print_input_errors($input_errors);
+}
+
+display_top_tabs($tab_array);
+
+$form = new Form(false);
+
+$section = new Form_Section(gettext('API Configurations and Settings'));
+
+// Enable API
+$api_enable = new Form_Checkbox(
+    'api_enable',
+    gettext('Enable API'),
+    gettext('Enable API functionality'),
+    $pconfig['api_enable'] == 'yes'
+);
+
+$section->addInput($api_enable);
+
+// API Authentication Method
+$auth_methods = array(
+    'none' => gettext('None'),
+    'key' => gettext('API Key'),
+    // 'token' => gettext('Bearer Token'),
+    // 'basic' => gettext('Basic Authentication')
+);
+
+$section->addInput(new Form_Select(
+    'auth_method',
+    gettext('Authentication Method'),
+    $pconfig['auth_method'],
+    $auth_methods
+))->setHelp(gettext('Select the authentication method for API access.'));
+
+// API Key
+$group = new Form_Group(gettext('API Key'));
+
+$group->add(new Form_Input(
+    'api_key',
+    gettext('API Key'),
+    'text',
+    $pconfig['api_key']
+))->addClass('trim')
+->setHelp(gettext('Provide the API key for authentication. This field is required if "API Key" is selected as the authentication method.'))
+->setReadonly();
+
+$group->add(new Form_Button(
+    'genapikey',
+    gettext('Generate'),
+    null,
+    'fa-solid fa-key'
+))->addClass('btn-primary btn-sm')
+->setHelp(gettext('Generate a new API key'))
+->setWidth(1);
+
+$section->add($group);
+
+// // Token Expiry
+// $section->addInput(new Form_Input(
+//     'token_expiry',
+//     gettext('Token Expiry (in seconds)'),
+//     'text',
+//     $pconfig['token_expiry']
+// ))->setHelp(gettext('Specify the token expiry time in seconds. Default is 3600 seconds (1 hour).'));
+
+// IP Whitelisting
+$section->addInput(new Form_Textarea(
+    'ip_whitelist',
+    gettext('IP Whitelist'),
+    $pconfig['ip_whitelist']
+))->setHelp(gettext('Enter a comma-separated list of IP addresses or CIDR ranges allowed to access the API.'));
+
+// Rate Limiting
+$section->addInput(new Form_Input(
+    'rate_limit',
+    gettext('Rate Limit (requests per minute)'),
+    'text',
+    $pconfig['rate_limit']
+))->setHelp(gettext('Specify the maximum number of API requests allowed per minute. Set to 0 for no limit.'));
+
+$form->add($section);
+
+$section = new Form_Section(gettext('User Interface Settings'));
+
+// Hide API Secrets
+$section->addInput(new Form_Checkbox(
+    'hide_api_secrets',
+    gettext('Hide API Secrets'),
+    gettext('Enable'),
+    $pconfig['hide_api_secrets'] == 'yes'
+))->setHelp(gettext("With 'Hide API Secrets' enabled, sensitive API information (e.g., keys, tokens) will be hidden in the user interface."));
+
+$form->add($section);
+
+$form->addGlobal(new Form_Input(
+    'act',
+    '',
+    'hidden',
+    'save'
+));
+
+print($form);
+
+?>
+
+<nav class="action-buttons">
+	<button type="submit" id="saveform" name="saveform" class="btn btn-sm btn-primary" value="save" title="<?=gettext('Save Settings')?>">
+		<i class="fa fa-solid fa-save icon-embed-btn"></i>
+		<?=gettext('Save')?>
+	</button>
+</nav>
+
+<script type="text/javascript">
+//<![CDATA[
+events.push(function() {
+	wgRegTrimHandler();
+
+	// Save the form
+	$('#saveform').click(function () {
+		$(form).submit();
+	});
+
+	$('#resolve_interval_track').click(function () {
+		updateResolveInterval(this.checked);
+	});
+
+	function updateResolveInterval(state) {
+		$('#resolve_interval').prop( "disabled", state);
+	}
+
+	updateResolveInterval($('#resolve_interval_track').prop('checked'));
+});
+//]]>
+</script>
+
+<?php
+// include('amneziawireguard/includes/wg_foot.inc');
+include('foot.inc');
+?>
