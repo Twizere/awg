@@ -61,6 +61,8 @@ function authenticate() {
     $headers = function_exists('getallheaders') ? getallheaders() : [];
     if (empty($headers) && isset($_SERVER['HTTP_X_API_KEY'])) {
         $headers["X-API-Key"] = $_SERVER['HTTP_X_API_KEY'];
+        respond(401, "Unauthorized: Key is empty ");
+        
     }
     $apiConfig = getAPIConfig();
 
