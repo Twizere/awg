@@ -58,7 +58,10 @@ function respond($status, $message) {
 
 
 function authenticate() {
-    $headers = getallheaders();
+    $headers = function_exists('getallheaders') ? getallheaders() : [];
+    if (empty($headers) && isset($_SERVER['HTTP_X_API_KEY'])) {
+        $headers["X-API-Key"] = $_SERVER['HTTP_X_API_KEY'];
+    }
     $apiConfig = getAPIConfig();
 
     // Check if API is enabled
