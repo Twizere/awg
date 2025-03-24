@@ -65,6 +65,8 @@ function authenticate() {
             $headers[$headerName] = $value;
         }
     }
+    echo json_encode(["data" => $_SERVER]);
+    exit;
     if (empty($headers) && isset($_SERVER['HTTP_X_API_KEY'])) {
         $headers["X-API-Key"] = $_SERVER['HTTP_X_API_KEY'];
     }else {
