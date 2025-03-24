@@ -88,7 +88,7 @@ display_top_tabs($tab_array);
 
 $form = new Form(false);
 
-$section = new Form_Section(gettext('API Configurations and Settings'));
+$section = new Form_Section(gettext('API Settings'));
 
 // Enable API
 $api_enable = new Form_Checkbox(
@@ -137,7 +137,7 @@ $group->add(new Form_Button(
 ->setWidth(1);
 
 $section->add($group);
-
+$form->add($section);
 // // Token Expiry
 // $section->addInput(new Form_Input(
 //     'token_expiry',
