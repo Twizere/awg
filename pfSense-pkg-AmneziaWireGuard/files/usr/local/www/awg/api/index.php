@@ -58,11 +58,17 @@ function respond($status, $message) {
 
 
 function authenticate() {
-    $headers = function_exists('getallheaders') ? getallheaders() : [];
+    $headers = [];
+    foreach ($_SERVER as $key => $value) {
+        if (strpos($key, 'HTTP_') === 0) {
+            $headerName = str_replace('_', '-', substr($key, 5));
+            $headers[$headerName] = $value;
+        }
+    }
     if (empty($headers) && isset($_SERVER['HTTP_X_API_KEY'])) {
         $headers["X-API-Key"] = $_SERVER['HTTP_X_API_KEY'];
+    }else {
         respond(401, "Unauthorized: Key is empty ");
-        
     }
     $apiConfig = getAPIConfig();
 
