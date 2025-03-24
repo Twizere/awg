@@ -138,8 +138,7 @@ $group->add(new Form_Button(
     null,
     'fa-solid fa-key'
 ))->addClass('btn-primary btn-sm')
-->setHelp(gettext('Generate a new API key'))
-->setWidth(2);
+->setHelp(gettext('Generate a new API key'));
 
 
 $section->add($group);
@@ -191,7 +190,7 @@ foreach ($pconfig['ip_whitelist']['row'] as $counter => $item) {
         'text',
         $item['descr']
     ))->setHelp($counter == $last ? gettext('Description for administrative reference (not parsed).') : '')
-      ->setWidth(6);
+      ->setWidth(4);
 
     $group->add(new Form_Button(
         "deleterow{$counter}",
