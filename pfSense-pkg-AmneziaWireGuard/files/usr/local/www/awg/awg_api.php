@@ -121,11 +121,12 @@ $group = new Form_Group(gettext('API Key'));
 $group->add(new Form_Input(
     'api_key',
     gettext('API Key'),
-    'text',
+    wg_secret_input_type(),
     $pconfig['api_key']
 ))->addClass('trim')
 ->setHelp(gettext('Provide the API key for authentication. This field is required if "API Key" is selected as the authentication method.'))
-->setReadonly();
+->setReadonly()
+->setWidth(4);
 
 $group->add(new Form_Button(
     'genapikey',
@@ -211,18 +212,6 @@ $section->addInput(new Form_Input(
     'text',
     $pconfig['rate_limit']
 ))->setHelp(gettext('Specify the maximum number of API requests allowed per minute. Set to 0 for no limit.'));
-
-$form->add($section);
-
-$section = new Form_Section(gettext('User Interface Settings'));
-
-// Hide API Secrets
-$section->addInput(new Form_Checkbox(
-    'hide_api_secrets',
-    gettext('Hide API Secrets'),
-    gettext('Enable'),
-    $pconfig['hide_api_secrets'] == 'yes'
-))->setHelp(gettext("With 'Hide API Secrets' enabled, sensitive API information (e.g., keys, tokens) will be hidden in the user interface."));
 
 $form->add($section);
 
