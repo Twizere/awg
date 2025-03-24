@@ -418,7 +418,48 @@ function wg_do_settings_post($post) {
 
 	return array('input_errors' => $input_errors, 'changes' => $changes, 'pconfig' => $pconfig);
 }
+/*
+ * Takes a raw post for API settings, validates it, and saves it to the configuration system
+ */
+function wg_do_api_settings_post($post) {
+	global $wgg;
 
+	$pconfig = $input_errors = array();
+
+	// Assume no changes will be made...
+	$changes = false;
+
+	// Fetch the current configuration
+	$pconfig = $old_config = config_get_path('installedpackages/amneziawg/api', []);
+
+	// Update configuration values based on the POST data
+	$pconfig['api_enable'] = (!empty($post['api_enable']) && $post['api_enable'] == 'yes') ? 'yes' : 'no';
+	$pconfig['auth_method'] = $post['auth_method'];
+	$pconfig['api_key'] = $post['api_key'];
+	$pconfig['rate_limit'] = is_numeric($post['rate_limit']) ? $post['rate_limit'] : 0;
+
+	// Process the IP whitelist
+	$pconfig['ip_whitelist']['row'] = wg_parse_post_repeatables($post, array('whitelist_address', 'whitelist_address_subnet', 'whitelist_address_descr'));
+
+	// Validate the API settings
+	$input_errors = wg_validate_api_settings_post($pconfig);
+
+	if (empty($input_errors)) {
+		// Save the updated configuration
+		config_set_path('installedpackages/amneziawg/api', $pconfig);
+
+		// Sync with configuration backend
+		wg_write_config('Updated API settings.', true);
+
+		// Resync the package
+		wg_resync();
+
+		// Check if there are meaningful changes
+		$changes = ($pconfig != $old_config);
+	}
+
+	return array('input_errors' => $input_errors, 'changes' => $changes, 'pconfig' => $pconfig);
+}
 /*
  * Takes a raw post for a peer, validates it, and saves it to the configuration system
  */
