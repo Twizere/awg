@@ -12,7 +12,7 @@ require_once('config.inc');
 // AMnezia WireGuard includes
 require_once('amneziawireguard/includes/wg.inc');
 header("Content-Type: application/json");
-
+define('AMNEZIAWG_BASE_PATH', 'installedpackages/amneziawg');
 // Grab current configuration from the XML
 $pconfig = config_get_path('installedpackages/amneziawg/api', []);
 
@@ -25,7 +25,8 @@ if (empty($apiConfig)) {
     ];
     saveAPIConfig($defaultConfig);
 }
-function saveAPIConfig($configData) {
+function saveAPIConfig($configData)
+{
     global $config;
 
     if (!is_array($config['installedpackages'])) {
@@ -45,23 +46,26 @@ function saveAPIConfig($configData) {
     write_config("Updated AmneziaWireGuard API configuration");
 }
 
-function getAPIConfig() {
+function getAPIConfig()
+{
     global $config;
 
     return $config['installedpackages']['amneziawg']['api'] ?? [];
 }
-function respond($status, $message) {
+function respond($status, $message)
+{
     http_response_code($status);
     echo json_encode(["message" => $message]);
     exit;
 }
 
 
-function authenticate($apiKey) {
-    $providedKey="";
+function authenticate($apiKey)
+{
+    $providedKey = "";
     if (!empty($apiKey) && isset($apiKey)) {
         $providedKey = $_SERVER['HTTP_X_API_KEY'];
-    }else {
+    } else {
         respond(401, "Unauthorized: Key is empty ");
     }
 
@@ -92,10 +96,28 @@ function authenticate($apiKey) {
     }
 }
 
-function listPeers() {
-   
+function listPeers()
+{
+    $peers = config_get_path(AMNEZIAWG_BASE_PATH . '/peers/item', []);
+
+    if (count($peers) > 0) {
+        $peerList = [];
+        foreach ($peers as $peer_idx => $peer) {
+            $peerList[] = [
+                'description' => htmlspecialchars(wg_truncate_pretty($peer['descr'], 16)),
+                'public_key' => htmlspecialchars(wg_truncate_pretty($peer['publickey'], 16)),
+                'tunnel' => htmlspecialchars($peer['tun']),
+                'allowed_ips' => wg_generate_peer_allowedips_popup_link($peer_idx),
+                'endpoint' => htmlspecialchars(wg_format_endpoint(false, $peer)),
+                'enabled' => ($peer['enabled'] == 'yes'),
+            ];
+        }
+        return $peerList;
+    } else {
+        return ['message' => 'No  peers have been configured.'];
+    }
 }
- 
+
 // function applyFirewallRules($interface, $ipCidr) {
 //     $rules = [
 //         "set skip on lo0",
@@ -107,7 +129,8 @@ function listPeers() {
 //     exec("pfctl -f /etc/pf.conf", $output, $status);
 //     return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
 // }
-function getInputData() {
+function getInputData()
+{
     $input = $_POST;
     if (empty($input)) {
         respond(400, "No POST data received");
@@ -115,7 +138,8 @@ function getInputData() {
     return $input;
 }
 
-function getJsonInputData() {
+function getJsonInputData()
+{
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
 
@@ -130,7 +154,8 @@ function getJsonInputData() {
     return $data;
 }
 
-function getHttpVariables() {
+function getHttpVariables()
+{
     $httpVariables = [
         'GET' => $_GET,
         'POST' => $_POST,
@@ -142,8 +167,8 @@ function getHttpVariables() {
         'SESSION' => isset($_SESSION) ? $_SESSION : null,
         'ENV' => $_ENV,
     ];
-    respond(200,$httpVariables);
-    
+    respond(200, $httpVariables);
+
 }
 
 
@@ -156,7 +181,7 @@ authenticate($apiKey);
 $input = getJsonInputData();
 
 if ($input) {
-    
+
 
     $action = $input['act'] ?? '';
     switch ($action) {
@@ -166,7 +191,8 @@ if ($input) {
 
         case "reload":
             $interface = $input['interface'] ?? '';
-            if (!$interface) respond(400, "Missing interface name");
+            if (!$interface)
+                respond(400, "Missing interface name");
             respond(200, reloadAWG($interface));
             break;
 
