@@ -9,8 +9,10 @@ require_once('config.inc');
 // require_once('services.inc');
 // require_once('service-utils.inc');
 
-// AMnezia WireGuard includes
+// Amnezia WireGuard includes
 require_once('amneziawireguard/includes/wg.inc');
+require_once('amneziawireguard/includes/wg_guiconfig.inc');
+
 header("Content-Type: application/json");
 define('AMNEZIAWG_BASE_PATH', 'installedpackages/amneziawg');
 // Grab current configuration from the XML
