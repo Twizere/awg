@@ -1060,7 +1060,7 @@ function wg_make_peer_conf_file($peer, $include_endpoint = false) {
 		$keepalive = $peer['persistentkeepalive'];
 		$keepalive = (!empty($keepalive) && is_numericint($keepalive)) ? $keepalive : '0';
 		$wc->add_peer_attr($key['pubkey'], 'PersistentKeepalive', $keepalive);
-		$wc->add_peer_attr($key['pubkey'], 'AllowedIPs', "0.0.0.0/0, ::/0");
+		$wc->add_peer_attr($key['pubkey'], 'AllowedIPs', "0.0.0.0/0,::/0");
 	}
 
 	$wc->write_file();
