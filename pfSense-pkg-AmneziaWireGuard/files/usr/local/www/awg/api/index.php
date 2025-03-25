@@ -16,7 +16,7 @@ require_once('amneziawireguard/includes/wg_guiconfig.inc');
 header("Content-Type: application/json");
 define('AMNEZIAWG_BASE_PATH', 'installedpackages/amneziawg');
 // Grab current configuration from the XML
-$pconfig = config_get_path('installedpackages/amneziawg/api', []);
+$pconfig = config_get_path(AMNEZIAWG_BASE_PATH.'/api', []);
 
 //ignore_user_abort(true);
 
@@ -123,6 +123,31 @@ function listPeers()
     }
 }
 
+function listTunnels()
+{
+    $tunnels = config_get_path(AMNEZIAWG_BASE_PATH.'/tunnels/item', []);
+
+    if (count($tunnels) > 0) {
+        $tunnelList = [];
+        foreach ($tunnels as $tunnel) {
+            $peers = wg_tunnel_get_peers_config($tunnel['name']);
+            $tunnelList[] = [
+                'name' => htmlspecialchars($tunnel['name']),
+                'description' => htmlspecialchars($tunnel['descr']),
+                'public_key' => htmlspecialchars($tunnel['publickey']),
+                'address' => array_map(function ($ip) {
+                    return "{$ip['address']}/{$ip['mask']}";
+                }, $tunnel['addresses']['row'] ?? []),
+                'listen_port' => htmlspecialchars($tunnel['listenport']),
+                'peer_count' => count($peers),
+                'enabled' => ($tunnel['enabled'] == 'yes'),
+            ];
+        }
+        return $tunnelList;
+    } else {
+        return ['message' => 'No tunnels have been configured.'];
+    }
+}
 
 // function applyFirewallRules($interface, $ipCidr) {
 //     $rules = [
@@ -143,6 +168,8 @@ function getInputData()
     }
     return $input;
 }
+
+
 
 function getJsonInputData()
 {
@@ -194,7 +221,9 @@ if ($input) {
         case "peers":
             respond(200, listPeers());
             break;
-
+        case "tunnels":
+            respond(200, listTunnels());
+            break;
         case "reload":
             $interface = $input['interface'] ?? '';
             if (!$interface)
