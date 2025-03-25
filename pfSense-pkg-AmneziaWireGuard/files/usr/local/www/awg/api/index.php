@@ -109,7 +109,7 @@ function listPeers()
                 'description' => htmlspecialchars(wg_truncate_pretty($peer['descr'], 16)),
                 'public_key' => htmlspecialchars(wg_truncate_pretty($peer['publickey'], 16)),
                 'tunnel' => htmlspecialchars($peer['tun']),
-                'allowed_ips' => wg_generate_peer_allowedips_popup_link($peer_idx),
+                'allowed_ips' => $peer['allowedips'] ?? '',
                 'endpoint' => htmlspecialchars(wg_format_endpoint(false, $peer)),
                 'enabled' => ($peer['enabled'] == 'yes'),
             ];
