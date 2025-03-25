@@ -112,7 +112,7 @@ function listPeers()
                 'allowed_ips' => array_map(function ($ip) {
                     return "{$ip['address']}/{$ip['mask']}";
                 }, $peer['allowedips']['row'] ?? []),
-                'endpoint' => htmlspecialchars(wg_format_endpoint(true, $peer)),
+                'endpoint' => htmlspecialchars(wg_format_endpoint(false, $peer,'endpoint','port')),
                 'enabled' => ($peer['enabled'] == 'yes'),
             ];
         }
