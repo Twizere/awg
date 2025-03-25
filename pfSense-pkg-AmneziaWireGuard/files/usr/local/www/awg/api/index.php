@@ -54,10 +54,17 @@ function getAPIConfig()
 
     return $config['installedpackages']['amneziawg']['api'] ?? [];
 }
-function respond($status, $message)
+function respond($status, $data = '', $message = '')     
 {
     http_response_code($status);
-    echo json_encode(["message" => $message]);
+    $response = [];
+    if (!empty($data)) {
+        $response['data'] = $data;
+    }
+    if (!empty($message)) {
+        $response['message'] = $message;
+    }
+    echo json_encode($response);
     exit;
 }
 
@@ -68,14 +75,14 @@ function authenticate($apiKey)
     if (!empty($apiKey) && isset($apiKey)) {
         $providedKey = $_SERVER['HTTP_X_API_KEY'];
     } else {
-        respond(401, "Unauthorized: Key is empty ");
+        respond(401, '',"Unauthorized: Key is empty ");
     }
 
     $apiConfig = getAPIConfig();
 
     // Check if API is enabled
     if (empty($apiConfig['api_enable']) || !$apiConfig['api_enable']) {
-        respond(403, "API is disabled");
+        respond(403, '',"API is disabled");
     }
 
     // Check authentication method
@@ -85,7 +92,7 @@ function authenticate($apiKey)
         case 'apikey':
             $configuredKey = $apiConfig['api_key'] ?? '';
             if (trim($providedKey) !== trim($configuredKey)) {
-                respond(401, "Unauthorized: Invalid API Key. ");
+                respond(401, '',"Unauthorized: Invalid API Key. ");
             }
             break;
 
@@ -94,7 +101,7 @@ function authenticate($apiKey)
             break;
 
         default:
-            respond(400, "Invalid authentication method");
+            respond(400, '',"Invalid authentication method");
     }
 }
 
@@ -106,6 +113,7 @@ function listPeers()
         $peerList = [];
         foreach ($peers as $peer_idx => $peer) {
             $peerList[] = [
+                'id' => $peer['ID'],
                 'description' => htmlspecialchars($peer['descr']),
                 'public_key' => htmlspecialchars($peer['publickey']),
                 'private_key' => htmlspecialchars($peer['privatekey']),
@@ -119,7 +127,7 @@ function listPeers()
         }
         return $peerList;
     } else {
-        return ['message' => 'No  peers have been configured.'];
+        respond(200, '', 'No peers have been configured.');
     }
 }
 
@@ -145,7 +153,7 @@ function listTunnels()
         }
         return $tunnelList;
     } else {
-        return ['message' => 'No tunnels have been configured.'];
+         respond(200, '','No tunnels have been configured.');
     }
 }
 
@@ -164,7 +172,7 @@ function getInputData()
 {
     $input = $_POST;
     if (empty($input)) {
-        respond(400, "No POST data received");
+        respond(400,'', "No POST data received");
     }
     return $input;
 }
