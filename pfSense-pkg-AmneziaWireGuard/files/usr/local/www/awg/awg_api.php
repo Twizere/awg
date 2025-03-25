@@ -77,11 +77,12 @@ if (!empty($pconfig['ip_whitelist']) && is_array($pconfig['ip_whitelist']['row']
 
 
 
-$pglinks = array('', '@self');
+
 $active_tab = "Api";
 include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[]= [$active_tab];
 include("head.inc");
+$pglinks = array('', '@self');
 
 wg_print_service_warning();
 

@@ -13,14 +13,13 @@ require_once('amneziawireguard/includes/wg_guiconfig.inc');
 global $wgg;
 
 
-
-include('amneziawireguard/includes/awg_header.inc');
-$active_tab = "Status";
-$pgtitle[] = $active_tab;
-include("head.inc");
 $pglinks = array("", "@self");
-display_top_tabs($tab_array);
+$active_tab = "Status";
+include('amneziawireguard/includes/awg_header.inc');
+$pgtitle[]= [$active_tab];
+include("head.inc");
 
+display_top_tabs($tab_array);
 
 // Initialize $wgg state
 wg_globals();
