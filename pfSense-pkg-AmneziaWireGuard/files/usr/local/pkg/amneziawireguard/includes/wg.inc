@@ -1021,47 +1021,46 @@ function wg_make_peer_conf_file($peer, $include_endpoint = false) {
 	$wc->initialize_file("Description: {$peer['descr']}");
 
 	// Process peer entry and PublicKey
-	$wc->set_interface_attr('PublicKey', $peer['publickey']);
+	$wc->set_interface_attr('PrivateKey', $peer['privatekey']);
 
 	// Process PresharedKey
-	$wc->set_interface_attr('PresharedKey', $peer['presharedkey']);
+	//$wc->set_interface_attr('PresharedKey', $peer['presharedkey']);
 
 	// Process AllowedIPs
-	foreach ((array) $peer['allowedips']['row'] as $ip) {
-		$wc->add_interface_attr('AllowedIPs', "{$ip['address']}/{$ip['mask']}");
-	}
+	
+	$Address = implode(',', array_map(function($ip) {
+		return "{$ip['address']}/{$ip['mask']}";
+	}, (array) $peer['allowedips']['row']));
+	$Address = rtrim($Address, ',');
+	$wc->add_interface_attr('Address', $Address);
 
-	// Process PersistentKeepalive
-	$keepalive = $peer['persistentkeepalive'];
-	$keepalive = (!empty($keepalive) && is_numericint($keepalive)) ? $keepalive : '0';
-	$wc->set_interface_attr('PersistentKeepalive', $keepalive);
 
 	// Process tunnel (interface) parameters
 	if (wg_is_valid_tunnel($peer['tun'])) {
 		$tunnel = wg_tunnel_get_config_by_name($peer['tun'])[1];
 
+		// Process amnezia wireguard interface attributes
+		$wc->set_interface_attr('jc', $tunnel['jc']);
+		$wc->set_interface_attr('jmin', $tunnel['jmin']);
+		$wc->set_interface_attr('jmax', $tunnel['jmax']);
+		$wc->set_interface_attr('s1', $tunnel['s1']);
+		$wc->set_interface_attr('s2', $tunnel['s2']);
+		$wc->set_interface_attr('h1', $tunnel['h1']);
+		$wc->set_interface_attr('h2', $tunnel['h2']);
+		$wc->set_interface_attr('h3', $tunnel['h3']);
+		$wc->set_interface_attr('h4', $tunnel['h4']);
+
 		// Process interface PrivateKey
 		$key = wg_gen_publickey($tunnel['privatekey']);
 		$wc->add_peer($key['pubkey'], "Tunnel: {$tunnel['descr']}");
-
-		$wc->set_peer_attr($key['pubkey'], 'PrivateKey', $key['privkey_clamped']);
-		$wc->set_peer_attr($key['pubkey'], 'ListenPort', $tunnel['listenport']);
-
-		// Process amnezia wireguard interface attributes
-		$wc->set_peer_attr($key['pubkey'], 'jc', $tunnel['jc']);
-		$wc->set_peer_attr($key['pubkey'], 'jmin', $tunnel['jmin']);
-		$wc->set_peer_attr($key['pubkey'], 'jmax', $tunnel['jmax']);
-		$wc->set_peer_attr($key['pubkey'], 's1', $tunnel['s1']);
-		$wc->set_peer_attr($key['pubkey'], 's2', $tunnel['s2']);
-		$wc->set_peer_attr($key['pubkey'], 'h1', $tunnel['h1']);
-		$wc->set_peer_attr($key['pubkey'], 'h2', $tunnel['h2']);
-		$wc->set_peer_attr($key['pubkey'], 'h3', $tunnel['h3']);
-		$wc->set_peer_attr($key['pubkey'], 'h4', $tunnel['h4']);
-
-		// Process tunnel addresses
-		foreach ((array) $tunnel['addresses']['row'] as $address) {
-			$wc->add_peer_attr($key['pubkey'], 'Address', "{$address['address']}/{$address['mask']}");
-		}
+		// Add the server's public IP address as a peer attribute
+		$server_public_ip = config_get_path('system/publicip', '0.0.0.0');
+		$wc->set_peer_attr($key['pubkey'], 'Endpoint', "{$server_public_ip}:{$tunnel['listenport']}";);
+		// Process PersistentKeepalive
+		$keepalive = $peer['persistentkeepalive'];
+		$keepalive = (!empty($keepalive) && is_numericint($keepalive)) ? $keepalive : '0';
+		$wc->add_peer_attr($key['pubkey'], 'PersistentKeepalive', $keepalive);
+		$wc->add_peer_attr($key['pubkey'], 'AllowedIPs', "0.0.0.0/0, ::/0");
 	}
 
 	$wc->write_file();

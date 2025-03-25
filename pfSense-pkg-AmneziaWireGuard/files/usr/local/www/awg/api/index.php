@@ -105,31 +105,53 @@ function authenticate($apiKey)
     }
 }
 
+function parsePeer($peer)
+{
+    return [
+        'id' => $peer['id'],
+        'description' => htmlspecialchars($peer['descr']),
+        'public_key' => htmlspecialchars($peer['publickey']),
+        'private_key' => htmlspecialchars($peer['privatekey']),
+        'tunnel' => htmlspecialchars($peer['tun']),
+        'allowed_ips' => array_map(function ($ip) {
+            return "{$ip['address']}/{$ip['mask']}";
+        }, $peer['allowedips']['row'] ?? []),
+        'endpoint' => htmlspecialchars(wg_format_endpoint(false, $peer)),
+        'enabled' => ($peer['enabled'] == 'yes'),
+    ];
+}
+function parseTunnel($tunnel)
+{
+    $peers = wg_tunnel_get_peers_config($tunnel['name']);
+    return [
+        'name' => htmlspecialchars($tunnel['name']),
+        'description' => htmlspecialchars($tunnel['descr']),
+        'public_key' => htmlspecialchars($tunnel['publickey']),
+        'address' => array_map(function ($ip) {
+            return "{$ip['address']}/{$ip['mask']}";
+        }, $tunnel['addresses']['row'] ?? []),
+        'listen_port' => htmlspecialchars($tunnel['listenport']),
+        'peer_count' => count($peers),
+        'enabled' => ($tunnel['enabled'] == 'yes'),
+    ];
+}
+
+
 function listPeers()
 {
     $peers = config_get_path(AMNEZIAWG_BASE_PATH . '/peers/item', []);
 
     if (count($peers) > 0) {
         $peerList = [];
-        foreach ($peers as $peer_idx => $peer) {
-            $peerList[] = [
-                'id' => $peer['id'],
-                'description' => htmlspecialchars($peer['descr']),
-                'public_key' => htmlspecialchars($peer['publickey']),
-                'private_key' => htmlspecialchars($peer['privatekey']),
-                'tunnel' => htmlspecialchars($peer['tun']),
-                'allowed_ips' => array_map(function ($ip) {
-                    return "{$ip['address']}/{$ip['mask']}";
-                }, $peer['allowedips']['row'] ?? []),
-                'endpoint' => htmlspecialchars(wg_format_endpoint(false, $peer)),
-                'enabled' => ($peer['enabled'] == 'yes'),
-            ];
+        foreach ($peers as $peer) {
+            $peerList[] = parsePeer($peer);
         }
         return $peerList;
     } else {
         respond(200, '', 'No peers have been configured.');
     }
 }
+
 
 function listTunnels()
 {
@@ -138,24 +160,63 @@ function listTunnels()
     if (count($tunnels) > 0) {
         $tunnelList = [];
         foreach ($tunnels as $tunnel) {
-            $peers = wg_tunnel_get_peers_config($tunnel['name']);
-            $tunnelList[] = [
-                'name' => htmlspecialchars($tunnel['name']),
-                'description' => htmlspecialchars($tunnel['descr']),
-                'public_key' => htmlspecialchars($tunnel['publickey']),
-                'address' => array_map(function ($ip) {
-                    return "{$ip['address']}/{$ip['mask']}";
-                }, $tunnel['addresses']['row'] ?? []),
-                'listen_port' => htmlspecialchars($tunnel['listenport']),
-                'peer_count' => count($peers),
-                'enabled' => ($tunnel['enabled'] == 'yes'),
-            ];
+            $tunnelList[] = parseTunnel($tunnel);
         }
         return $tunnelList;
     } else {
-         respond(200, '','No tunnels have been configured.');
+        respond(200, '', 'No tunnels have been configured.');
     }
 }
+
+
+function addPeer($peerData)
+{
+    global $config;
+
+    $peersPath = AMNEZIAWG_BASE_PATH . '/peers/item';
+    $peers = config_get_path($peersPath, []);
+
+    // Generate a UUID for the new peer
+    $peerData['id'] = wg_generate_uuid();
+
+    // Validate required fields
+    $requiredFields = ['tun', 'publickey', 'privatekey'];
+    foreach ($requiredFields as $field) {
+        if (empty($peerData[$field])) {
+            respond(400, '', "Missing required field: $field");
+        }
+    }
+
+    // Prepare peer configuration
+    $peerConfig = [
+        'id' => $peerData['id'],
+        'enabled' => $peerData['enabled'] ?? 'no',
+        'tun' => $peerData['tun'],
+        'descr' => $peerData['descr'] ?? '',
+        'endpoint' => $peerData['endpoint'] ?? '',
+        'port' => $peerData['port'] ?? '',
+        'persistentkeepalive' => $peerData['persistentkeepalive'] ?? '',
+        'privatekey' => $peerData['privatekey'],
+        'publickey' => $peerData['publickey'],
+        'presharedkey' => $peerData['presharedkey'] ?? '',
+        'allowedips' => [
+            'row' => $peerData['allowedips'] ?? [],
+        ],
+    ];
+
+    // Add the new peer to the configuration
+    $peers[] = $peerConfig;
+    config_set_path($peersPath, $peers);
+
+    // Save the configuration
+    write_config("Added new peer with ID {$peerData['id']}");
+
+    // Resync the package
+    wg_resync();
+
+    respond(200, $peerConfig, "Peer added successfully");
+}
+
 
 // function applyFirewallRules($interface, $ipCidr) {
 //     $rules = [
