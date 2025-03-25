@@ -82,7 +82,7 @@ $active_tab = "Api";
 include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[]= [$active_tab];
 include("head.inc");
-$pglinks = array('', '@self');
+$pglinks = array('', '/awg/awg_tunnels.php', '@self');
 
 wg_print_service_warning();
 
