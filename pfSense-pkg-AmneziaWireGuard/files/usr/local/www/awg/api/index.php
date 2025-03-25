@@ -115,10 +115,26 @@ function getInputData() {
     return $input;
 }
 
+function getJsonInputData() {
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
+
+    // if (json_last_error() !== JSON_ERROR_NONE) {
+    //     respond(400, "Invalid JSON input: " . json_last_error_msg());
+    // }
+
+    // if (empty($data)) {
+    //     respond(400, "No JSON data received");
+    // }
+
+    return $data;
+}
+
 function getHttpVariables() {
     $httpVariables = [
         'GET' => $_GET,
         'POST' => $_POST,
+        'PUT' => getJsonInputData(),
         'SERVER' => $_SERVER,
         'FILES' => $_FILES,
         'COOKIE' => $_COOKIE,
