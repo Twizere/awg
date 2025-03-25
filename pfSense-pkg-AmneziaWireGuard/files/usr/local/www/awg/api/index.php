@@ -16,7 +16,7 @@ header("Content-Type: application/json");
 // Grab current configuration from the XML
 $pconfig = config_get_path('installedpackages/amneziawg/api', []);
 
-ignore_user_abort(true);
+//ignore_user_abort(true);
 
 $apiConfig = getAPIConfig();
 if (empty($apiConfig)) {
