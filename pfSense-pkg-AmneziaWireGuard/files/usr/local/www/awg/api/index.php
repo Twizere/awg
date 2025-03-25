@@ -113,7 +113,7 @@ function listPeers()
         $peerList = [];
         foreach ($peers as $peer_idx => $peer) {
             $peerList[] = [
-                'id' => $peer['ID'],
+                'id' => $peer['id'],
                 'description' => htmlspecialchars($peer['descr']),
                 'public_key' => htmlspecialchars($peer['publickey']),
                 'private_key' => htmlspecialchars($peer['privatekey']),
