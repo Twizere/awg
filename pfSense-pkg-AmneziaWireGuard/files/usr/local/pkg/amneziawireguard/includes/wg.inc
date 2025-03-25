@@ -1054,7 +1054,7 @@ function wg_make_peer_conf_file($peer, $include_endpoint = false) {
 		$key = wg_gen_publickey($tunnel['privatekey']);
 		$wc->add_peer($key['pubkey'], "Tunnel: {$tunnel['descr']}");
 		// Add the server's public IP address as a peer attribute
-		$server_public_ip = gethostbyname(php_uname('n'));
+		$server_public_ip = trim(shell_exec("curl -s ifconfig.me"));
 		$wc->set_peer_attr($key['pubkey'], 'Endpoint', "{$server_public_ip}:{$tunnel['listenport']}");
 		// Process PersistentKeepalive
 		$keepalive = $peer['persistentkeepalive'];
