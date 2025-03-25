@@ -119,13 +119,13 @@ function getJsonInputData() {
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
 
-    // if (json_last_error() !== JSON_ERROR_NONE) {
-    //     respond(400, "Invalid JSON input: " . json_last_error_msg());
-    // }
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        respond(400, "Invalid JSON input: " . json_last_error_msg());
+    }
 
-    // if (empty($data)) {
-    //     respond(400, "No JSON data received");
-    // }
+    if (empty($data)) {
+        respond(400, "No JSON data received");
+    }
 
     return $data;
 }
@@ -151,9 +151,9 @@ $uri = $_SERVER['REQUEST_URI'];
 $apiKey = $_SERVER['HTTP_X_API_KEY'];
 $iface = $_SERVER['X-INTERFACE-NAME'];
 
-getHttpVariables();
+//getHttpVariables();
 authenticate($apiKey);
-$input = getInputData();
+$input = getJsonInputData();
 
 if ($input) {
     
