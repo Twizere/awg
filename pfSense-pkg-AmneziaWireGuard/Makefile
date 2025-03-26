@@ -53,7 +53,7 @@ install:
 
 	@cp -R ${FILESDIR}${PREFIX}/share/${PACKAGE}/info.xml ${PREFIX}/share/${PACKAGE}/
 	# @cp -R ${FILESDIR}${PREFIX}/share/${PACKAGE}/menu/* ${PREFIX}/share/${PACKAGE}/menu/
-	@install  {FILESDIR}${PREFIX}/share/${PACKAGE}/info.xml ${PREFIX}/share/pfSense/menu/${PACKAGE}.xml
+	@install  ${FILESDIR}${PREFIX}/share/${PACKAGE}/info.xml ${PREFIX}/share/pfSense/menu/${PACKAGE}.xml
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
