@@ -188,6 +188,24 @@ function wg_defaults_install() {
 		$config_changed = true;
 	}
 
+	if (config_get_path('installedpackages/service') === null) {
+		config_set_path('installedpackages/service', []);
+	}
+
+	$service_config = [
+		'name' => 'amneziawg_service',
+		'rcfile' => 'amneziawg_service',
+		'executable' => 'php_wg',
+		'description' => 'Amnezia WireGuard',
+	];
+
+	$existing_services = config_get_path('installedpackages/service', []);
+	if (!in_array($service_config, $existing_services, true)) {
+		$existing_services[] = $service_config;
+		config_set_path('installedpackages/service', $existing_services);
+		$config_changed = true;
+	}
+
 	if ($config_changed) {
 		wg_write_config('Applied package default settings as necessary.', false);
 	}
