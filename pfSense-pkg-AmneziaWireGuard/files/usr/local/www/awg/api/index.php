@@ -16,7 +16,7 @@ require_once('amneziawireguard/includes/wg_guiconfig.inc');
 header("Content-Type: application/json");
 define('AMNEZIAWG_BASE_PATH', 'installedpackages/amneziawg');
 // Grab current configuration from the XML
-$pconfig = config_get_path(AMNEZIAWG_BASE_PATH.'/api', []);
+$pconfig = config_get_path(AMNEZIAWG_BASE_PATH . '/api', []);
 
 //ignore_user_abort(true);
 
@@ -54,7 +54,7 @@ function getAPIConfig()
 
     return $config['installedpackages']['amneziawg']['api'] ?? [];
 }
-function respond($status, $data = '', $message = '')     
+function respond($status, $data = '', $message = '')
 {
     http_response_code($status);
     $response = [];
@@ -75,14 +75,14 @@ function authenticate($apiKey)
     if (!empty($apiKey) && isset($apiKey)) {
         $providedKey = $_SERVER['HTTP_X_API_KEY'];
     } else {
-        respond(401, '',"Unauthorized: Key is empty ");
+        respond(401, '', "Unauthorized: Key is empty ");
     }
 
     $apiConfig = getAPIConfig();
 
     // Check if API is enabled
     if (empty($apiConfig['api_enable']) || !$apiConfig['api_enable']) {
-        respond(403, '',"API is disabled");
+        respond(403, '', "API is disabled");
     }
 
     // Check authentication method
@@ -92,7 +92,7 @@ function authenticate($apiKey)
         case 'apikey':
             $configuredKey = $apiConfig['api_key'] ?? '';
             if (trim($providedKey) !== trim($configuredKey)) {
-                respond(401, '',"Unauthorized: Invalid API Key. ");
+                respond(401, '', "Unauthorized: Invalid API Key. ");
             }
             break;
 
@@ -101,7 +101,7 @@ function authenticate($apiKey)
             break;
 
         default:
-            respond(400, '',"Invalid authentication method");
+            respond(400, '', "Invalid authentication method");
     }
 }
 
@@ -155,7 +155,7 @@ function listPeers()
 
 function listTunnels()
 {
-    $tunnels = config_get_path(AMNEZIAWG_BASE_PATH.'/tunnels/item', []);
+    $tunnels = config_get_path(AMNEZIAWG_BASE_PATH . '/tunnels/item', []);
 
     if (count($tunnels) > 0) {
         $tunnelList = [];
@@ -229,11 +229,73 @@ function addPeer($peerData)
 //     exec("pfctl -f /etc/pf.conf", $output, $status);
 //     return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
 // }
+
+function applyFirewallRules($interface, $ipCidr)
+{
+    // Enable IP forwarding
+    exec("sysctl net.inet.ip.forwarding=1", $output, $status);
+    if ($status !== 0) {
+        return 1; // Indicate failure
+    }
+
+    // Make IP forwarding permanent
+    file_put_contents('/etc/rc.conf', "gateway_enable=\"YES\"\n", FILE_APPEND);
+
+    // Enable PF and PF logging in /etc/rc.conf
+    $rcConfUpdates = [
+        "pf_enable=\"YES\"",
+        "pflog_enable=\"YES\"",
+    ];
+    foreach ($rcConfUpdates as $line) {
+        file_put_contents('/etc/rc.conf', $line . "\n", FILE_APPEND);
+    }
+
+    // Create or update the PF configuration file
+    $pfConf = <<<EOT
+        ext_if="vtnet0"
+        awg_if="{$interface}"
+        set skip on lo0
+        nat on \$ext_if from \$awg_if:network to any -> (\$ext_if)
+        pass in on \$awg_if from any to {$ipCidr} keep state
+        pass out on \$ext_if from {$ipCidr} to any keep state
+        EOT;
+
+    file_put_contents('/etc/pf.conf', $pfConf);
+
+    // Reload PF configuration
+    exec("service pf start", $output, $status);
+    if ($status !== 0) {
+        return 1; // Indicate failure
+    }
+
+    // Apply the PF rules
+    exec("pfctl -f /etc/pf.conf", $output, $status);
+    return $status; // Return 0 for success, non-zero for failure
+}
+
+function reloadAWG($interface)
+{
+    $output = [];
+    $status = 0;
+
+    // Restart the WireGuard service
+    exec("service amneziawg restart", $output, $status);
+    if ($status !== 0) {
+        return "Failed to restart WireGuard service.";
+    }
+
+    // Apply firewall rules
+    $ipCidr = "50.0.0.0/24";
+    $firewallStatus = applyFirewallRules($interface, $ipCidr);
+
+    return $firewallStatus === 0 ? "WireGuard service restarted and firewall rules applied successfully." : "Failed to apply firewall rules.";
+}
+
 function getInputData()
 {
     $input = $_POST;
     if (empty($input)) {
-        respond(400,'', "No POST data received");
+        respond(400, '', "No POST data received");
     }
     return $input;
 }
