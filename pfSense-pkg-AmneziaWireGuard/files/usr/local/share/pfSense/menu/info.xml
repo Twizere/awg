@@ -5,4 +5,15 @@
                 <section>VPN</section>
                 <url>/awg/awg_tunnels.php</url>
         </menu>
+        <menu>
+		<name>Amnezia WG</name>
+		<section>Status</section>
+		<url>/awg/status_amneziawg.php</url>
+	</menu>
+        <service>
+                <name>amneziawg_service</name>
+                <rcfile>amneziawg_service</rcfile>
+                <executable>php_wg</executable>
+                <description>Amnezia WireGuard</description>
+        </service>
 </packagegui>
