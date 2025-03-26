@@ -279,10 +279,17 @@ function reloadAWG($interface)
     $status = 0;
 
     // Restart the WireGuard service
-    exec("service amneziawg restart", $output, $status);
+    exec("service amneziawg restart 2>&1", $output, $status);
     if ($status !== 0) {
-        return "Failed to restart WireGuard service.";
+        return "Failed to restart WireGuard service. Output: " . implode("\n", $output);
     }
+
+    // Check the output for success confirmation
+    if (strpos(implode("\n", $output), "AmneziaWireGuard service is already running") !== false) {
+        return "WireGuard service is already running.";
+    }
+
+    return "WireGuard service restarted successfully.";
 
     // Apply firewall rules
     $ipCidr = "50.0.0.0/24";
