@@ -67,6 +67,10 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/api/* ${PREFIX}/www/awg/api
 	@echo " WEB & API are set ✅"
+	
+	@cp -R ${FILESDIR}${PREFIX}/www/widgets/include/*.inc ${PREFIX}/www/widgets/include/
+	@cp -R ${FILESDIR}${PREFIX}/www/widgets/widgets/*.widget.php ${PREFIX}/www/widgets/widgets/
+	@echo " Widget are set ✅"
 
 	@php -f ${PREFIX}/pkg/amneziawireguard/includes/wg_service.inc install
 		@echo "pfSense Config init is set ✅"
