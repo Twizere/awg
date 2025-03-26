@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<pfsensepkgs>
+	<package>
+		<name>Amnezia WireGuard</name>
+                <descr><![CDATA[Amnezia WireGuard is a modern VPN solution&lt;br /&gt;
+                                that combines simplicity, speed, and security. It leverages&lt;br /&gt;
+                                state-of-the-art cryptography to provide a seamless VPN&lt;br /&gt;
+                                experience. Designed for both embedded systems and&lt;br /&gt;
+                                high-performance environments, Amnezia WireGuard ensures&lt;br /&gt;
+                                optimal performance and reliability. It is cross-platform,&lt;br /&gt;
+                                easy to deploy, and tailored to meet the needs of modern&lt;br /&gt;
+                                networking.]]></descr>
+		<pkginfolink>https://www.qtglobal.rw</pkginfolink>
+		<version>%%PKGVERSION%%</version>
+		<configurationfile>amneziawg.xml</configurationfile>
+	</package>
+</pfsensepkgs>

@@ -1,5 +1,5 @@
 PACKAGE=pfSense-pkg-Amneziawireguard
-VERSION=1.0.0
+PKGVERSION=1.0.0
 CATEGORIES=net
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -12,11 +12,15 @@ PREFIX=/usr/local
 FILESDIR=./files
 PLIST=./pkg-plist
 
+#REINPLACE_CMD
+REINPLACE_CMD=/usr/bin/sed
+
 NO_BUILD=yes
 NO_MTREE=yes
 
 SUB_FILES=pkg-install pkg-deinstall
 SUB_LIST=PORTNAME=${PACKAGE}
+
 
 # .include <bsd.port.mk>
 
@@ -43,11 +47,13 @@ install:
 
 	# Copy necessary files
 	@echo " - Copying files..."
-	#@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
+	@cp -R ${FILESDIR}${PREFIX}/pkg/*.xml ${PREFIX}/pkg/
 	@cp -R ${FILESDIR}${PREFIX}/pkg/amneziawireguard/includes/* ${PREFIX}/pkg/amneziawireguard/includes/
 
-	# @cp -R ${FILESDIR}${PREFIX}/share/${PACKAGE}/*.xml ${PREFIX}/share/${PACKAGE}/
-	@install  ${FILESDIR}${PREFIX}/share/pfSense/menu/info.xml ${PREFIX}/share/pfSense/menu/info.xml
+
+	@cp -R ${FILESDIR}${PREFIX}/share/${PACKAGE}/info.xml ${PREFIX}/share/${PACKAGE}/
+	# @cp -R ${FILESDIR}${PREFIX}/share/${PACKAGE}/menu/* ${PREFIX}/share/${PACKAGE}/menu/
+	##@install  ${FILESDIR}${PREFIX}/share/pfSense/menu/info.xml ${PREFIX}/share/pfSense/menu/info.xml
 
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
@@ -67,10 +73,14 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/api/* ${PREFIX}/www/awg/api
 	@echo " WEB & API are set ✅"
-	
+
 	@cp -R ${FILESDIR}${PREFIX}/www/widgets/include/*.inc ${PREFIX}/www/widgets/include/
 	@cp -R ${FILESDIR}${PREFIX}/www/widgets/widgets/*.widget.php ${PREFIX}/www/widgets/widgets/
 	@echo " Widget are set ✅"
+
+	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
+		${PREFIX}/share/${PACKAGE}/info.xml \
+		${PREFIX}/pkg/wireguard.xml
 
 	@php -f ${PREFIX}/pkg/amneziawireguard/includes/wg_service.inc install
 		@echo "pfSense Config init is set ✅"
