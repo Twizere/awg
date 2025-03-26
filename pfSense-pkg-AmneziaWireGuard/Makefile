@@ -80,7 +80,7 @@ install:
 
 	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
 		${PREFIX}/share/${PACKAGE}/info.xml \
-		${PREFIX}/pkg/wireguard.xml
+		${PREFIX}/pkg/amneziawg.xml
 
 	@php -f ${PREFIX}/pkg/amneziawireguard/includes/wg_service.inc install
 		@echo "pfSense Config init is set ✅"
