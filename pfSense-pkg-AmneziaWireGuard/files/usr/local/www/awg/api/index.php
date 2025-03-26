@@ -235,7 +235,7 @@ function applyFirewallRules($interface, $ipCidr)
     // Enable IP forwarding
     exec("sysctl net.inet.ip.forwarding=1", $output, $status);
     if ($status !== 0) {
-        return 1; // Indicate failure
+        respond(404, '', "Failed to enable IP forwarding");
     }
 
     // Make IP forwarding permanent
@@ -265,12 +265,16 @@ function applyFirewallRules($interface, $ipCidr)
     // Reload PF configuration
     exec("service pf start", $output, $status);
     if ($status !== 0) {
-        return 1; // Indicate failure
+        respond(404, '', "Failed to start PF service");
     }
 
     // Apply the PF rules
     exec("pfctl -f /etc/pf.conf", $output, $status);
-    return $status; // Return 0 for success, non-zero for failure
+    if ($status !== 0) {
+        respond(404, '', "Failed to apply PF rules");
+    }
+
+    return $status; // Return 0 for success
 }
 
 function reloadAWG($interface)
@@ -375,5 +379,5 @@ if ($input) {
 }
 
 
-respond(404, "Invalid request");
+respond(404, '',"Invalid request");
 ?>
