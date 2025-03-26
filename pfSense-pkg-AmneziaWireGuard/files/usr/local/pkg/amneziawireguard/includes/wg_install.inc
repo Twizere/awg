@@ -187,14 +187,13 @@ function wg_defaults_install() {
 		config_set_path('installedpackages/amneziawg/config/0/hide_peers', 'yes');
 		$config_changed = true;
 	}
-	/**
 	if (config_get_path('installedpackages/service') === null) {
 		config_set_path('installedpackages/service', []);
 	}
 
 	$service_config = [
-		'name' => 'amneziawg_service',
-		'rcfile' => 'amneziawg_service',
+		'name' => '{$wgg['service_name']}',
+		'rcfile' => '{$wgg['service_name']}',
 		'executable' => 'php_wg',
 		'description' => 'Amnezia WireGuard',
 	];
@@ -206,7 +205,6 @@ function wg_defaults_install() {
 		$config_changed = true;
 	}
 
-	**/
 
 	if ($config_changed) {
 		wg_write_config('Applied package default settings as necessary.', false);
