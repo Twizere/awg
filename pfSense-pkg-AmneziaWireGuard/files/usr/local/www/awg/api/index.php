@@ -238,16 +238,23 @@ function applyFirewallRules($interface, $ipCidr)
         respond(404, '', "Failed to enable IP forwarding");
     }
 
-    // Make IP forwarding permanent
-    file_put_contents('/etc/rc.conf', "gateway_enable=\"YES\"\n", FILE_APPEND);
+    // Make IP forwarding permanent if not already set
+    $rcConfPath = '/etc/rc.conf';
+    $rcConfContent = file_exists($rcConfPath) ? file_get_contents($rcConfPath) : '';
 
-    // Enable PF and PF logging in /etc/rc.conf
+    if (strpos($rcConfContent, "gateway_enable=\"YES\"") === false) {
+        file_put_contents($rcConfPath, "gateway_enable=\"YES\"\n", FILE_APPEND);
+    }
+
+    // Enable PF and PF logging in /etc/rc.conf if not already set
     $rcConfUpdates = [
         "pf_enable=\"YES\"",
         "pflog_enable=\"YES\"",
     ];
     foreach ($rcConfUpdates as $line) {
-        file_put_contents('/etc/rc.conf', $line . "\n", FILE_APPEND);
+        if (strpos($rcConfContent, $line) === false) {
+            file_put_contents($rcConfPath, $line . "\n", FILE_APPEND);
+        }
     }
 
     // Create or update the PF configuration file
