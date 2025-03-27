@@ -152,6 +152,62 @@ function listPeers()
     }
 }
 
+function syncPeers($peers, $tunnel)
+{
+    global $config;
+
+    $peersPath = AMNEZIAWG_BASE_PATH . '/peers/item';
+    $existingPeers = config_get_path($peersPath, []);
+
+    // Create a map of existing peers by public key for quick lookup
+    $existingPeersMap = [];
+    foreach ($existingPeers as $peer) {
+        $existingPeersMap[$peer['publickey']] = $peer;
+    }
+
+    // Prepare the new list of peers
+    $newPeers = [];
+    foreach ($peers as $peer) {
+        if (empty($peer['public_key']) || empty($peer['description']) || empty($peer['update_date'])) {
+            respond(400, '', "Invalid peer data: public_key, description, and update_date are required");
+        }
+
+        $allowedIps = [];
+        if (!empty($peer['allowed_ips']) && is_array($peer['allowed_ips'])) {
+            foreach ($peer['allowed_ips'] as $ip) {
+                if (strpos($ip, '/') === false) {
+                    respond(400, '', "Invalid allowed IP format: {$ip}");
+                }
+                $allowedIps[] = ['address' => explode('/', $ip)[0], 'mask' => explode('/', $ip)[1]];
+            }
+        }
+
+        $newPeers[] = [
+            'id' => $existingPeersMap[$peer['public_key']]['id'] ?? wg_generate_uuid(),
+            'enabled' => 'yes',
+            'tun' => $tunnel,
+            'descr' => $peer['description'],
+            'publickey' => $peer['public_key'],
+            'privatekey' => $existingPeersMap[$peer['public_key']]['privatekey'] ?? '',
+            'allowedips' => ['row' => $allowedIps],
+            'endpoint' => $existingPeersMap[$peer['public_key']]['endpoint'] ?? 'dynamic',
+            'port' => $existingPeersMap[$peer['public_key']]['port'] ?? '',
+            'persistentkeepalive' => $existingPeersMap[$peer['public_key']]['persistentkeepalive'] ?? '30',
+            'presharedkey' => $existingPeersMap[$peer['public_key']]['presharedkey'] ?? '',
+        ];
+    }
+
+    // Replace the peers configuration with the new list
+    config_set_path($peersPath, $newPeers);
+
+    // Save the configuration
+    write_config("Synced peers for tunnel {$tunnel}");
+
+    // Resync the package
+    wg_resync();
+
+    respond(200, $newPeers, "Peers synced successfully");
+}
 
 function listTunnels()
 {
@@ -411,11 +467,14 @@ if ($input) {
 
     $action = $input['act'] ?? '';
     switch ($action) {
-        case "peers":
+        case "get_peers":
             respond(200, listPeers());
             break;
-        case "tunnels":
+        case "get_tunnels":
             respond(200, listTunnels());
+            break;
+        case "set_peers":
+            respond(200, listPeers());
             break;
         case "reload":
             $interface = $input['interface'] ?? '';
