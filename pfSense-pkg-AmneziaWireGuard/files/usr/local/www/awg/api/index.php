@@ -256,32 +256,52 @@ function applyFirewallRules($interface, $ipCidr)
             file_put_contents($rcConfPath, $line . "\n", FILE_APPEND);
         }
     }
-
-    // Create or update the PF configuration file
-    $pfConf = rtrim(<<<EOT
+    // Generate PF rules as a string
+    $pfRules = rtrim(<<<EOT
         set skip on lo0
         nat on vtnet0 from {$ipCidr} to any -> (vtnet0)
-        pass in on {$interface} from {$ipCidr} to any keep state
+        pass in on vtnet0 from any to any keep state
+        pass in on {$interface} from any to {$ipCidr} keep state
         pass out on vtnet0 from {$ipCidr} to any keep state
-        pass in on {$interface}  inet from {$ipCidr}  to (self) keep state
+        pass in on {$interface} inet from {$ipCidr} to (self) keep state
         EOT
     );
 
-    file_put_contents('/etc/pf.conf', $pfConf);
+    // Execute pfctl command to apply rules directly
+    $process = proc_open(
+        'pfctl -f -',
+        [
+            ['pipe', 'r'], // stdin
+            ['pipe', 'w'], // stdout
+            ['pipe', 'w'], // stderr
+        ],
+        $pipes
+    );
+
+    if (is_resource($process)) {
+        fwrite($pipes[0], $pfRules . "\n"); // Write rules to stdin
+        fclose($pipes[0]);
+
+        $output = stream_get_contents($pipes[1]);
+        $errorOutput = stream_get_contents($pipes[2]);
+
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+
+        $status = proc_close($process);
+
+        if ($status !== 0) {
+            respond(404, '', "Failed to apply PF rules: $errorOutput");
+        }
+    } else {
+        respond(500, '', "Failed to execute pfctl command");
+    }
+
 
     // Reload PF configuration
     exec("service pf start", $output, $status);
     if ($status !== 0) {
         respond(404, '', "Failed to start PF service");
-    }
-
-
-    
-
-    // Apply the PF rules
-    exec("pfctl -f /etc/pf.conf", $output, $status);
-    if ($status !== 0) {
-        respond(404, '', "Failed to apply PF rules");
     }
 
     return $status; // Return 0 for success
