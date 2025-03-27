@@ -258,6 +258,13 @@ function applyFirewallRules($interface, $ipCidr)
         }
     }
 
+    // Check if PF service is already running
+    exec("service pf status", $output, $status);
+    if (strpos(implode("\n", $output), "Status: Enabled") !== false) {
+        // PF service is already running, no need to start it
+        return 0;
+    }
+
     // Reload PF configuration
     exec("service pf start", $output, $status);
     if ($status !== 0) {
