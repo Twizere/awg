@@ -233,43 +233,6 @@ function addPeer($peerData)
 
 function applyFirewallRules($interface, $ipCidr)
 {
-    // Enable IP forwarding
-    exec("sysctl net.inet.ip.forwarding=1", $output, $status);
-    if ($status !== 0) {
-        respond(404, '', "Failed to enable IP forwarding");
-    }
-
-    // Make IP forwarding permanent if not already set
-    $rcConfPath = '/etc/rc.conf';
-    $rcConfContent = file_exists($rcConfPath) ? file_get_contents($rcConfPath) : '';
-
-    if (strpos($rcConfContent, "gateway_enable=\"YES\"") === false) {
-        file_put_contents($rcConfPath, "gateway_enable=\"YES\"\n", FILE_APPEND);
-    }
-
-    // Enable PF and PF logging in /etc/rc.conf if not already set
-    $rcConfUpdates = [
-        "pf_enable=\"YES\"",
-        "pflog_enable=\"YES\"",
-    ];
-    foreach ($rcConfUpdates as $line) {
-        if (strpos($rcConfContent, $line) === false) {
-            file_put_contents($rcConfPath, $line . "\n", FILE_APPEND);
-        }
-    }
-
-    // Check if PF service is already running
-    exec("service pf status", $output, $status);
-    if (strpos(implode("\n", $output), "Status: Enabled") !== false) {
-        // PF service is already running, no need to start it
-        //return 0;
-    }
-
-    // Reload PF configuration
-    exec("service pf start", $output, $status);
-    if ($status !== 0) {
-        respond(404, '', "Failed to start PF service");
-    }
 
     // Generate PF rules as a string
     $pfRules = rtrim(<<<EOT
@@ -321,19 +284,50 @@ function reloadAWG($interface)
 {
     $output = [];
     $status = 0;
+    $messages = [];
 
-    // Restart the WireGuard service
-    // exec("service amneziawg restart 2>&1", $output, $status);
-    // if ($status !== 0) {
-    //     return "Failed to restart WireGuard service. Output: " . implode("\n", $output);
-    // }
+    // Enable IP forwarding
+    exec("sysctl net.inet.ip.forwarding=1", $output, $status);
+    if ($status !== 0) {
+        respond(404, '', "Failed to enable IP forwarding");
+    } else {
+        $messages[] = "IP forwarding enabled successfully.";
+    }
 
-    // // Check the output for success confirmation
-    // if (strpos(implode("\n", $output), "AmneziaWireGuard service is already running") !== false) {
-    //     return "WireGuard service is already running.";
-    // }
+    // Make IP forwarding permanent if not already set
+    $rcConfPath = '/etc/rc.conf';
+    $rcConfContent = file_exists($rcConfPath) ? file_get_contents($rcConfPath) : '';
 
-    // return "WireGuard service restarted successfully.";
+    if (strpos($rcConfContent, "gateway_enable=\"YES\"") === false) {
+        file_put_contents($rcConfPath, "gateway_enable=\"YES\"\n", FILE_APPEND);
+        $messages[] = "IP forwarding made permanent in /etc/rc.conf.";
+    }
+
+    // Enable PF and PF logging in /etc/rc.conf if not already set
+    $rcConfUpdates = [
+        "pf_enable=\"YES\"",
+        "pflog_enable=\"YES\"",
+    ];
+    foreach ($rcConfUpdates as $line) {
+        if (strpos($rcConfContent, $line) === false) {
+            file_put_contents($rcConfPath, $line . "\n", FILE_APPEND);
+            $messages[] = "$line added to /etc/rc.conf.";
+        }
+    }
+
+    // Check if PF service is already running
+    exec("service pf status", $output, $status);
+    if (strpos(implode("\n", $output), "Status: Enabled") !== false) {
+        $messages[] = "PF service is already running.";
+    } else {
+        // Start PF service
+        exec("service pf start", $output, $status);
+        if ($status !== 0) {
+            respond(404, '', "Failed to start PF service");
+        } else {
+            $messages[] = "PF service started successfully.";
+        }
+    }
 
     // Apply firewall rules
     $addresses = pfSense_getall_interface_addresses($interface);
@@ -347,10 +341,12 @@ function reloadAWG($interface)
 
         if ($firewallStatus !== 0) {
             respond(500, '', "Failed to apply firewall rules for address: $ipCidr");
+        } else {
+            $messages[] = "Firewall rules applied successfully for address: $ipCidr.";
         }
     }
 
-    return $firewallStatus === 0 ? "WireGuard service restarted and firewall rules applied successfully." : "Failed to apply firewall rules.";
+    respond(200, $messages, "WireGuard service restarted and configurations applied successfully.");
 }
 
 function getInputData()
