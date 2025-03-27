@@ -252,12 +252,10 @@ function applyFirewallRules($interface, $ipCidr)
 
     // Create or update the PF configuration file
     $pfConf = <<<EOT
-        ext_if="vtnet0"
-        awg_if="{$interface}"
         set skip on lo0
-        nat on \$ext_if from \$awg_if:network to any -> (\$ext_if)
-        pass in on \$awg_if from any to {$ipCidr} keep state
-        pass out on \$ext_if from {$ipCidr} to any keep state
+        nat on vtnet0 from {$interface}:network to any -> (vtnet0)
+        pass in on {$interface} from any to {$ipCidr} keep state
+        pass out on vtnet0 from {$ipCidr} to any keep state
         EOT;
 
     file_put_contents('/etc/pf.conf', $pfConf);
@@ -267,6 +265,9 @@ function applyFirewallRules($interface, $ipCidr)
     if ($status !== 0) {
         respond(404, '', "Failed to start PF service");
     }
+
+
+    
 
     // Apply the PF rules
     exec("pfctl -f /etc/pf.conf", $output, $status);
@@ -296,7 +297,7 @@ function reloadAWG($interface)
     // return "WireGuard service restarted successfully.";
 
     // Apply firewall rules
-    $ipCidr = "50.0.0.0/24";
+    $ipCidr = "50.0.0.1/24";
     $firewallStatus = applyFirewallRules($interface, $ipCidr);
 
     return $firewallStatus === 0 ? "WireGuard service restarted and firewall rules applied successfully." : "Failed to apply firewall rules.";
