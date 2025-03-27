@@ -327,8 +327,19 @@ function reloadAWG($interface)
     // return "WireGuard service restarted successfully.";
 
     // Apply firewall rules
-    $ipCidr = "50.0.0.0/24";
-    $firewallStatus = applyFirewallRules($interface, $ipCidr);
+    $addresses = pfSense_getall_interface_addresses($interface);
+
+    if (empty($addresses)) {
+        respond(400, '', "No addresses found for the interface");
+    }
+
+    foreach ($addresses as $ipCidr) {
+        $firewallStatus = applyFirewallRules($interface, $ipCidr);
+
+        if ($firewallStatus !== 0) {
+            respond(500, '', "Failed to apply firewall rules for address: $ipCidr");
+        }
+    }
 
     return $firewallStatus === 0 ? "WireGuard service restarted and firewall rules applied successfully." : "Failed to apply firewall rules.";
 }
@@ -407,8 +418,8 @@ if ($input) {
             $interface = $input['interface'] ?? '';
             if (!$interface)
                 respond(400, "Missing interface name");
-            $current = pfSense_getall_interface_addresses($interface);
-            respond(200, $current);
+            $addresses = pfSense_getall_interface_addresses($interface);
+            respond(200, $addresses);
 
 
         default:
