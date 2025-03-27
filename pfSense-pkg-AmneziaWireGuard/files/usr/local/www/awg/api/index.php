@@ -257,6 +257,13 @@ function applyFirewallRules($interface, $ipCidr)
             file_put_contents($rcConfPath, $line . "\n", FILE_APPEND);
         }
     }
+
+    // Reload PF configuration
+    exec("service pf start", $output, $status);
+    if ($status !== 0) {
+        respond(404, '', "Failed to start PF service");
+    }
+
     // Generate PF rules as a string
     $pfRules = rtrim(<<<EOT
         set skip on lo0
@@ -299,12 +306,7 @@ function applyFirewallRules($interface, $ipCidr)
     }
 
 
-    // Reload PF configuration
-    exec("service pf start", $output, $status);
-    if ($status !== 0) {
-        respond(404, '', "Failed to start PF service");
-    }
-
+    
     return $status; // Return 0 for success
 }
 
