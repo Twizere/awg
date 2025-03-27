@@ -190,7 +190,7 @@ function syncPeers($peers, $tunnel)
             'publickey' => $peer['public_key'],
             'privatekey' => $existingPeersMap[$peer['public_key']]['privatekey'] ?? '',
             'allowedips' => ['row' => $allowedIps],
-            'endpoint' => $existingPeersMap[$peer['public_key']]['endpoint'] ?? 'dynamic',
+            'endpoint' => $existingPeersMap[$peer['public_key']]['endpoint'] ?? '',
             'port' => $existingPeersMap[$peer['public_key']]['port'] ?? '',
             'persistentkeepalive' => $existingPeersMap[$peer['public_key']]['persistentkeepalive'] ?? '30',
             'presharedkey' => $existingPeersMap[$peer['public_key']]['presharedkey'] ?? '',
