@@ -473,8 +473,19 @@ if ($input) {
         case "get_tunnels":
             respond(200, listTunnels());
             break;
-        case "set_peers":
-            respond(200, listPeers());
+        case "sync_peers":
+            $peers = $input['peers'] ?? [];
+            $tunnel = $input['tunnel'] ?? '';
+
+            if (empty($peers) || !is_array($peers)) {
+            respond(400, '', "Invalid or missing peers data");
+            }
+
+            if (empty($tunnel)) {
+            respond(400, '', "Missing tunnel name");
+            }
+
+            syncPeers($peers, $tunnel);
             break;
         case "reload":
             $interface = $input['interface'] ?? '';
