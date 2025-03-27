@@ -258,13 +258,14 @@ function applyFirewallRules($interface, $ipCidr)
     }
 
     // Create or update the PF configuration file
-    $pfConf = <<<EOT
+    $pfConf = rtrim(<<<EOT
         set skip on lo0
         nat on vtnet0 from {$ipCidr} to any -> (vtnet0)
         pass in on {$interface} from {$ipCidr} to any keep state
         pass out on vtnet0 from {$ipCidr} to any keep state
         pass in on {$interface}  inet from {$ipCidr}  to (self) keep state
-        EOT;
+        EOT
+    );
 
     file_put_contents('/etc/pf.conf', $pfConf);
 
