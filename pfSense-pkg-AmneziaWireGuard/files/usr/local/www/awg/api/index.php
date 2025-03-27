@@ -233,20 +233,7 @@ function addPeer($peerData)
 
 function applyFirewallRules($interface, $ipCidr)
 {
-    // Enable IP forwarding
-    exec("sysctl net.inet.ip.forwarding=1", $output, $status);
-    if ($status !== 0) {
-        respond(404, '', "Failed to enable IP forwarding");
-    }
-
-    // Make IP forwarding permanent if not already set
-    $rcConfPath = '/etc/rc.conf';
-    $rcConfContent = file_exists($rcConfPath) ? file_get_contents($rcConfPath) : '';
-
-    if (strpos($rcConfContent, "gateway_enable=\"YES\"") === false) {
-        file_put_contents($rcConfPath, "gateway_enable=\"YES\"\n", FILE_APPEND);
-    }
-
+   
     // Enable PF and PF logging in /etc/rc.conf if not already set
     $rcConfUpdates = [
         "pf_enable=\"YES\"",
@@ -258,19 +245,7 @@ function applyFirewallRules($interface, $ipCidr)
         }
     }
 
-    // Check if PF service is already running
-    exec("service pf status", $output, $status);
-    if (strpos(implode("\n", $output), "Status: Enabled") !== false) {
-        // PF service is already running, no need to start it
-        return 0;
-    }
-
-    // Reload PF configuration
-    exec("service pf start", $output, $status);
-    if ($status !== 0) {
-        respond(404, '', "Failed to start PF service");
-    }
-
+    
     // Generate PF rules as a string
     $pfRules = rtrim(<<<EOT
         set skip on lo0
@@ -334,6 +309,34 @@ function reloadAWG($interface)
     // }
 
     // return "WireGuard service restarted successfully.";
+
+     // Enable IP forwarding
+     exec("sysctl net.inet.ip.forwarding=1", $output, $status);
+     if ($status !== 0) {
+         respond(404, '', "Failed to enable IP forwarding");
+     }
+ 
+     // Make IP forwarding permanent if not already set
+     $rcConfPath = '/etc/rc.conf';
+     $rcConfContent = file_exists($rcConfPath) ? file_get_contents($rcConfPath) : '';
+ 
+     if (strpos($rcConfContent, "gateway_enable=\"YES\"") === false) {
+         file_put_contents($rcConfPath, "gateway_enable=\"YES\"\n", FILE_APPEND);
+     }
+ 
+     // Check if PF service is already running
+    exec("service pf status", $output, $status);
+    if (strpos(implode("\n", $output), "Status: Enabled") !== false) {
+        // PF service is already running, no need to start it
+        return 0;
+    }
+
+    // Reload PF configuration
+    exec("service pf start", $output, $status);
+    if ($status !== 0) {
+        respond(404, '', "Failed to start PF service");
+    }
+
 
     // Apply firewall rules
     $addresses = pfSense_getall_interface_addresses($interface);
