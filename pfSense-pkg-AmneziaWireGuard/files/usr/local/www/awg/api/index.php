@@ -298,7 +298,7 @@ function reloadAWG($interface)
     // return "WireGuard service restarted successfully.";
 
     // Apply firewall rules
-    $ipCidr = "50.0.0.1/24";
+    $ipCidr = "50.0.0.0/24";
     $firewallStatus = applyFirewallRules($interface, $ipCidr);
 
     return $firewallStatus === 0 ? "WireGuard service restarted and firewall rules applied successfully." : "Failed to apply firewall rules.";
