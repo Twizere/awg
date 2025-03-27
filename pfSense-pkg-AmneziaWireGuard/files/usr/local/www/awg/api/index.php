@@ -169,6 +169,7 @@ function listTunnels()
 }
 
 
+
 function addPeer($peerData)
 {
     global $config;
@@ -402,6 +403,10 @@ if ($input) {
                 respond(400, "Missing interface name");
             respond(200, reloadAWG($interface));
             break;
+        case "test":
+            $current = pfSense_getall_interface_addresses();
+            respond(200, $current);
+
 
         default:
             respond(400, "Invalid action specified");
