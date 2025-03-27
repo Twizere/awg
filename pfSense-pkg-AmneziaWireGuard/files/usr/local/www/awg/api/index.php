@@ -242,9 +242,15 @@ function applyFirewallRules($interface)
 
     // Generate PF rules as a string
     $pfRules = "set skip on lo0\n";
+
+    // NAT rules
+    foreach ($addresses as $ipCidr) {
+        $pfRules .= "nat on vtnet0 from {$ipCidr} to any -> (vtnet0)\n";
+    }
+
+    // Filtering rules
     foreach ($addresses as $ipCidr) {
         $pfRules .= <<<EOT
-            nat on vtnet0 from {$ipCidr} to any -> (vtnet0)
             pass in on vtnet0 from any to any keep state
             pass in on {$interface} from any to {$ipCidr} keep state
             pass out on vtnet0 from {$ipCidr} to any keep state
