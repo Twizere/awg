@@ -404,7 +404,10 @@ if ($input) {
             respond(200, reloadAWG($interface));
             break;
         case "test":
-            $current = pfSense_getall_interface_addresses();
+            $interface = $input['interface'] ?? '';
+            if (!$interface)
+                respond(400, "Missing interface name");
+            $current = pfSense_getall_interface_addresses($interface);
             respond(200, $current);
 
 
