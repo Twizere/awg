@@ -231,19 +231,27 @@ function addPeer($peerData)
 //     return $status === 0 ? "Firewall rules applied successfully." : "Failed to apply firewall rules.";
 // }
 
-function applyFirewallRules($interface, $ipCidr)
+function applyFirewallRules($interface)
 {
+    // Get all interface addresses
+    $addresses = pfSense_getall_interface_addresses($interface);
+
+    if (empty($addresses)) {
+        respond(400, '', "No addresses found for the interface");
+    }
 
     // Generate PF rules as a string
-    $pfRules = rtrim(<<<EOT
-        set skip on lo0
-        nat on vtnet0 from {$ipCidr} to any -> (vtnet0)
-        pass in on vtnet0 from any to any keep state
-        pass in on {$interface} from any to {$ipCidr} keep state
-        pass out on vtnet0 from {$ipCidr} to any keep state
-        pass in on {$interface} inet from {$ipCidr} to (self) keep state
-        EOT
-    );
+    $pfRules = "set skip on lo0\n";
+    foreach ($addresses as $ipCidr) {
+        $pfRules .= <<<EOT
+            nat on vtnet0 from {$ipCidr} to any -> (vtnet0)
+            pass in on vtnet0 from any to any keep state
+            pass in on {$interface} from any to {$ipCidr} keep state
+            pass out on vtnet0 from {$ipCidr} to any keep state
+            pass in on {$interface} inet from {$ipCidr} to (self) keep state
+        EOT;
+        $pfRules .= "\n";
+    }
 
     // Execute pfctl command to apply rules directly
     $process = proc_open(
@@ -257,7 +265,7 @@ function applyFirewallRules($interface, $ipCidr)
     );
 
     if (is_resource($process)) {
-        fwrite($pipes[0], $pfRules . "\n"); // Write rules to stdin
+        fwrite($pipes[0], $pfRules); // Write rules to stdin
         fclose($pipes[0]);
 
         $output = stream_get_contents($pipes[1]);
@@ -275,8 +283,6 @@ function applyFirewallRules($interface, $ipCidr)
         respond(500, '', "Failed to execute pfctl command");
     }
 
-
-    
     return $status; // Return 0 for success
 }
 
@@ -330,20 +336,12 @@ function reloadAWG($interface)
     }
 
     // Apply firewall rules
-    $addresses = pfSense_getall_interface_addresses($interface);
+    $firewallStatus = applyFirewallRules($interface);
 
-    if (empty($addresses)) {
-        respond(400, '', "No addresses found for the interface");
-    }
-
-    foreach ($addresses as $ipCidr) {
-        $firewallStatus = applyFirewallRules($interface, $ipCidr);
-
-        if ($firewallStatus !== 0) {
-            respond(500, '', "Failed to apply firewall rules for address: $ipCidr");
-        } else {
-            $messages[] = "Firewall rules applied successfully for address: $ipCidr.";
-        }
+    if ($firewallStatus !== 0) {
+        respond(500, '', "Failed to apply firewall rules");
+    } else {
+        $messages[] = "Firewall rules applied successfully.";
     }
 
     respond(200, $messages, "WireGuard service restarted and configurations applied successfully.");
