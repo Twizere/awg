@@ -58,6 +58,14 @@ install:
 	@cp -R ${FILESDIR}${PREFIX}/www/awg/js/*.js ${PREFIX}/www/awg/js/
 	#@cp -R ${FILESDIR}${PREFIX}/www/widgets ${PREFIX}/www/widgets
 
+	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
+	@cp -R ${FILESDIR}${PREFIX}/www/awg/api/* ${PREFIX}/www/awg/api
+	#@echo " WEB & API are set ✅"
+
+	@cp -R ${FILESDIR}${PREFIX}/www/widgets/include/*.inc ${PREFIX}/www/widgets/include/
+	@cp -R ${FILESDIR}${PREFIX}/www/widgets/widgets/*.widget.php ${PREFIX}/www/widgets/widgets/
+	#@echo " Widget are set ✅"
+
 	#copying the executable
 	@cp -R ${FILESDIR}${PREFIX}/bin/* ${PREFIX}/bin/
 	@chmod +x ${PREFIX}/bin/*
@@ -70,13 +78,7 @@ install:
 	@echo 'awg_quick_enable="YES"'  >> /etc/rc.conf.d/wg_quick
 	@echo "   Service is set ✅"
 
-	@cp -R ${FILESDIR}${PREFIX}/www/awg/* ${PREFIX}/www/awg/
-	@cp -R ${FILESDIR}${PREFIX}/www/awg/api/* ${PREFIX}/www/awg/api
-	@echo " WEB & API are set ✅"
 
-	@cp -R ${FILESDIR}${PREFIX}/www/widgets/include/*.inc ${PREFIX}/www/widgets/include/
-	@cp -R ${FILESDIR}${PREFIX}/www/widgets/widgets/*.widget.php ${PREFIX}/www/widgets/widgets/
-	@echo " Widget are set ✅"
 
 	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
 		${PREFIX}/share/${PACKAGE}/info.xml \
