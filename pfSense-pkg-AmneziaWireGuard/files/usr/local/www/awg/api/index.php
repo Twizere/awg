@@ -453,6 +453,61 @@ function getHttpVariables()
 
 }
 
+function addTunnel($tunnelData)
+{
+    global $config;
+
+    $tunnelsPath = AMNEZIAWG_BASE_PATH . '/tunnels/item';
+    $tunnels = config_get_path($tunnelsPath, []);
+
+    // Validate required fields
+    $requiredFields = ['name', 'publickey', 'addresses'];
+    foreach ($requiredFields as $field) {
+        if (empty($tunnelData[$field])) {
+            respond(400, '', "Missing required field: $field");
+        }
+    }
+
+    // Prepare tunnel configuration
+    $tunnelConfig = [
+        'name' => $tunnelData['name'],
+        'descr' => $tunnelData['descr'] ?? '',
+        'publickey' => $tunnelData['publickey'],
+        'privatekey' => $tunnelData['privatekey'] ?? '',
+        'addresses' => [
+            'row' => $tunnelData['addresses'],
+        ],
+        'listenport' => $tunnelData['listenport'] ?? '',
+        'enabled' => $tunnelData['enabled'] ?? 'no',
+    ];
+
+    // Generate default values for amnezia wireguard and directly add them to $tunnelConfig
+    $tunnelConfig['jc'] = rand(3, 127);
+    $tunnelConfig['jmin'] = $jmin = rand(10, 699);
+    $tunnelConfig['jmax'] = rand($jmin + 1, $jmin + 570);
+
+    $tunnelConfig['s1'] = rand(3, 127);
+    $tunnelConfig['s2'] = rand(3, 127);
+
+    $min = 0x10000011;
+    $max = 0x7FFFFF00;
+    $tunnelConfig['h1'] = rand($min, $max);
+    $tunnelConfig['h2'] = rand($min, $max);
+    $tunnelConfig['h3'] = rand($min, $max);
+    $tunnelConfig['h4'] = rand($min, $max);
+
+    // Add the new tunnel to the configuration
+    $tunnels[] = $tunnelConfig;
+    config_set_path($tunnelsPath, $tunnels);
+
+    // Save the configuration
+    write_config("Added new tunnel with name {$tunnelData['name']}");
+
+    // Resync the package
+    wg_resync();
+
+    respond(200, $tunnelConfig, "Tunnel added successfully");
+}
 
 $uri = $_SERVER['REQUEST_URI'];
 $apiKey = $_SERVER['HTTP_X_API_KEY'];
@@ -487,6 +542,14 @@ if ($input) {
 
             syncPeers($peers, $tunnel);
             break;
+        case "add_tunnel":
+            $tunnelData = $input['tunnel'] ?? [];
+            if (empty($tunnelData)) {
+                respond(400, '', "Invalid or missing tunnel data");
+            }
+            addTunnel($tunnelData);
+            break;
+
         case "reload":
             $interface = $input['interface'] ?? '';
             if (!$interface)
