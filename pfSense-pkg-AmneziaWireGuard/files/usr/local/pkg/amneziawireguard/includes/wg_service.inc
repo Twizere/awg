@@ -163,6 +163,9 @@ function wg_service_cli_stop($serialize = true) {
 		wg_service_parse_errors($ret_code, $serialize);
 	}
 
+	// Attempt to delete the PID file
+	unlink_if_exists($wgg['pid_path']);
+
     // Disable any WireGuard gateways configured on the system.
     wg_gateways_set_enable(false);
 
@@ -209,7 +212,7 @@ function wg_service_cli_start($serialize = true) {
 	$s = fn($x) => $x;
 
 	// Set the process name
-	cli_set_process_title('WireGuard service');
+	cli_set_process_title('Amnezia WireGuard service');
 
 	$ret_code = 0;
 
