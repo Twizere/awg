@@ -48,11 +48,11 @@ if ($_POST) {
 
 		if (is_subsystem_dirty($wgg['subsystems']['wg'])) {
 			wg_toggle_wireguard();
-			if (wg_is_service_running() && wg_is_service_enabled()  ) {
-				$tunnels_to_apply = wg_apply_list_get('tunnels');
-				$sync_status = wg_tunnel_sync($tunnels_to_apply, true, true);
-				$ret_code |= $sync_status['ret_code'];
-			}
+			// if (wg_is_service_running() && wg_is_service_enabled()  ) {
+			// 	$tunnels_to_apply = wg_apply_list_get('tunnels');
+			// 	$sync_status = wg_tunnel_sync($tunnels_to_apply, true, true);
+			// 	$ret_code |= $sync_status['ret_code'];
+			// }
 
 			if ($ret_code == 0) {
 				clear_subsystem_dirty($wgg['subsystems']['wg']);
