@@ -27,7 +27,7 @@
     "/usr/local/pkg/amneziawireguard/includes/wg_service.inc": "644",
     "/usr/local/pkg/amneziawireguard/includes/wg_validate.inc": "644",
     "/usr/local/pkg/amneziawireguard/includes/wg.inc": "644",
-    "/usr/local/pkg/amneziawireguard.xml": "644",
+    "/usr/local/pkg/amneziawg.xml": "644",
     "/usr/local/share/pfSense-pkg-AmneziaWireguard/info.xml": "644",
     "/usr/local/www/awg/js/AmneziaWireguardHelper.js": "644",
     "/usr/local/www/awg/api/index.php": "644",

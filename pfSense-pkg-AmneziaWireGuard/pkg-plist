@@ -11,7 +11,7 @@ pkg/amneziawireguard/includes/wg_header.inc
 pkg/amneziawireguard/includes/wg_install.inc
 pkg/amneziawireguard/includes/wg_service.inc
 pkg/amneziawireguard/includes/wg_validate.inc
-pkg/amneziawireguard.xml
+pkg/amneziawg.xml
 share/pfSense-pkg-AmneziaWireguard/info.xml
 www/awg/js/AmneziaWireguardHelper.js
 www/awg/api/index.php
