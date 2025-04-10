@@ -20,7 +20,7 @@
     "/usr/local/bin/awg-quick": "755",
     "/usr/local/bin/post_install.sh": "755",
     "/usr/local/pkg/amneziawireguard/includes/awgconfig.php": "644",
-    "/usr/local/pkg/amneziawireguard/includes/wg_header.inc": "644",
+    "/usr/local/pkg/amneziawireguard/includes/awg_header.inc": "644",
     "/usr/local/pkg/amneziawireguard/includes/wg_globals.inc": "644",
     "/usr/local/pkg/amneziawireguard/includes/wg_guiconfig.inc": "644",
     "/usr/local/pkg/amneziawireguard/includes/wg_install.inc": "644",
