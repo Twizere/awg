@@ -162,11 +162,20 @@ function syncPeers($peers, $tunnel)
     // Create a map of existing peers by public key for quick lookup
     $existingPeersMap = [];
     foreach ($existingPeers as $peer) {
-        $existingPeersMap[$peer['publickey']] = $peer;
+        if ($peer['tun'] === $tunnel) {
+            $existingPeersMap[$peer['publickey']] = $peer;
+        }
     }
 
-    // Prepare the new list of peers
+    // Prepare the new list of peers for the specified tunnel
     $newPeers = [];
+    foreach ($existingPeers as $peer) {
+        if ($peer['tun'] !== $tunnel) {
+            // Keep peers that belong to other tunnels unchanged
+            $newPeers[] = $peer;
+        }
+    }
+
     foreach ($peers as $peer) {
         if (empty($peer['public_key']) || empty($peer['description']) || empty($peer['update_date'])) {
             respond(400, '', "Invalid peer data: public_key, description, and update_date are required");
@@ -197,7 +206,7 @@ function syncPeers($peers, $tunnel)
         ];
     }
 
-    // Replace the peers configuration with the new list
+    // Replace the peers configuration with the updated list
     config_set_path($peersPath, $newPeers);
 
     // Save the configuration
@@ -206,7 +215,12 @@ function syncPeers($peers, $tunnel)
     // Resync the package
     wg_resync();
 
-    respond(200, $newPeers, "Peers synced successfully");
+    if (wg_is_service_running() && wg_is_service_enabled()  ) {
+        $tunnels_to_apply = wg_apply_list_get('tunnels');
+        $sync_status = wg_tunnel_sync($tunnels_to_apply, true, true);
+    }
+
+    respond(200, $newPeers, "Peers synced successfully {$sync_status}");
 }
 
 function listTunnels()
