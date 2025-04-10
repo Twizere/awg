@@ -51,8 +51,8 @@ www/awg/awg_tunnels.php
 www/awg/status_amneziawg.php
 www/awg/status_log.php
 www/shortcuts/pkg_amneziawireguard.inc
-www/widgets/includes/amneziawg.inc
-www/widgets/widgets/amneziawg.widgets.php
+www/widgets/include/amneziawg.inc
+www/widgets/widgets/amneziawg.widget.php
 @postexec /usr/local/bin/post_install.sh
 @postexec /usr/local/bin/php -f /usr/local/pkg/amneziawireguard/includes/wg_service.inc install
 

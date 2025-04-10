@@ -39,7 +39,7 @@
     "/usr/local/www/awg/status_amneziawg.php": "644",
     "/usr/local/www/awg/status_log.php": "644",
     "/usr/local/www/shortcuts/pkg_amneziawireguard.inc": "644",
-    "/usr/local/www/widgets/includes/amneziawg.inc": "644",
-    "/usr/local/www/widgets/widgets/amneziawg.widgets.php": "644"
+    "/usr/local/www/widgets/include/amneziawg.inc": "644",
+    "/usr/local/www/widgets/widgets/amneziawg.widget.php": "644"
   }
 }
