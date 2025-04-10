@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<packagegui>
-        <menu>
-                <name>Amnezia WG</name>
-                <section>VPN</section>
-                <url>/awg/index.php</url>
-        </menu>
-</packagegui>

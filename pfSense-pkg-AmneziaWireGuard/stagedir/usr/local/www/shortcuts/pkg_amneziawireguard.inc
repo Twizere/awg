@@ -3,9 +3,9 @@
 
 global $shortcuts;
 
-$shortcuts['ameneziawireguard'] = array();
-$shortcuts['amneziawireguard']['main'] = '/wg/vpn_awg_settings.php';
-$shortcuts['amneziawireguard']['status'] = '/wg/status_swireguard.php';
-// $shortcuts['amneziawireguard']['service'] = 'anbeziawireguard';
+$shortcuts['ameneziawg'] = array();
+$shortcuts['ameneziawg']['main'] = '/awg/awg_settings.php';
+$shortcuts['ameneziawg']['status'] = '/awg/status_amneziawg.php';
+$shortcuts['ameneziawg']['service'] = 'amneziawg';
 
 ?>
