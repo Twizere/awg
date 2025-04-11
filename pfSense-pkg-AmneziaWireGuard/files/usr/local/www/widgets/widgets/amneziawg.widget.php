@@ -66,7 +66,7 @@ $wireguard_activity_threshold	= (isset($widget_config['activity_threshold']) && 
 // Are we handling an ajax refresh?
 if (isset($_POST['ajax'])) {
 
-	print(wg_compose_widget_body($widgetkey, $wireguard_activity_threshold));
+	print(awg_compose_widget_body($widgetkey, $wireguard_activity_threshold));
 
 	// We are done here...
 	exit();
@@ -77,7 +77,7 @@ if (isset($_POST['ajax'])) {
 if (isset($_POST['save'])) {
 
 	// Process settings post
-	wg_do_widget_settings_post($_POST, $user_settings);
+	awg_do_widget_settings_post($_POST, $user_settings);
 	
 	// Redirect back to home...
 	header('Location: /');
@@ -99,7 +99,7 @@ if (isset($_POST['save'])) {
 				<th><?=gettext('TX')?></th>
 			</thead>
 			<tbody id="<?=htmlspecialchars($widgetkey)?>">
-				<?=wg_compose_widget_body($widgetkey, $wireguard_activity_threshold)?>
+				<?=awg_compose_widget_body($widgetkey, $wireguard_activity_threshold)?>
 			</tbody>
 		</table>
 	</div>

@@ -24,7 +24,7 @@
 $wireguard_title = gettext('Amenezia WireGuard');
 $wireguard_title_link = '/awg/status_amneziawg.php';
 
-function wg_do_widget_settings_post($post, $user_settings) {
+function awg_do_widget_settings_post($post, $user_settings) {
 	global $wgg;
 
 	$pconfig = array();
@@ -70,7 +70,7 @@ function wg_do_widget_settings_post($post, $user_settings) {
 
 }
 
-function wg_compose_widget_body($widgetkey, $wireguard_activity_threshold) {
+function awg_compose_widget_body($widgetkey, $wireguard_activity_threshold) {
 	/*
 	 * A simple hack to use functions inside heredoc strings
 	 * This also allows translation scripts to pick up strings normally by scraping gettext() calls
