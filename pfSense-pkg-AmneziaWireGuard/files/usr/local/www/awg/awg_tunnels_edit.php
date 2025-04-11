@@ -136,7 +136,7 @@ if (!$is_new) {
 
 
 $pglinks = array("", "/awg/wg_tunnels.php", "/awg/wg_tunnels.php", "@self");
-$active_tab = "Servers";
+$active_tab = "Tunnels";
 include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[] = [$active_tab,gettext("Edit")];
 include("head.inc");

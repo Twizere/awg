@@ -92,7 +92,7 @@ if ($_POST) {
 }
 
 
-$active_tab = "Clients";
+$active_tab = "Peers";
 include('amneziawireguard/includes/awg_header.inc');
 $pgtitle[] = $active_tab;
 include("head.inc");

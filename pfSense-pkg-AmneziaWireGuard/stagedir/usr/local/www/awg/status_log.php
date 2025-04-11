@@ -12,7 +12,7 @@ include("head.inc");
 $tab_array = array();
 $tab_array[] = array(gettext("Status"), false, "index.php");
 $tab_array[] = array(gettext("Server"), false, "server.php");
-$tab_array[] = array(gettext("Clients"), true, "clients.php");
+$tab_array[] = array(gettext("Peers"), true, "clients.php");
 $tab_array[] = array(gettext("Client Export"), false, "export.php");
 add_package_tabs("AWG", $tab_array);
 display_top_tabs($tab_array);
