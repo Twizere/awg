@@ -5,6 +5,7 @@ bin/amneziawg-go
 bin/post_install.sh
 pkg/amneziawireguard/includes/awgconfig.php
 pkg/amneziawireguard/includes/awg_header.inc
+pkg/amneziawireguard/includes/wg_api.inc
 pkg/amneziawireguard/includes/wg_globals.inc
 pkg/amneziawireguard/includes/wg_guiconfig.inc
 pkg/amneziawireguard/includes/wg_install.inc
