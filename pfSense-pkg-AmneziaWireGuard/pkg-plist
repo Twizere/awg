@@ -19,6 +19,7 @@ www/awg/api/index.php
 www/awg/awg_api.php
 www/awg/awg_peers_edit.php
 www/awg/awg_peers.php
+www/awg/awg_settings.php
 www/awg/awg_tunnels_edit.php
 www/awg/awg_tunnels.php
 www/awg/status_amneziawg.php

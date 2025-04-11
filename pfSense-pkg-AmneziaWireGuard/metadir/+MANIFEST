@@ -35,6 +35,7 @@
     "/usr/local/www/awg/awg_api.php": "644",
     "/usr/local/www/awg/awg_peers_edit.php": "644",
     "/usr/local/www/awg/awg_peers.php": "644",
+    "/usr/local/www/awg/awg_settings.php": "644",
     "/usr/local/www/awg/awg_tunnels_edit.php": "644",
     "/usr/local/www/awg/awg_tunnels.php": "644",
     "/usr/local/www/awg/status_amneziawg.php": "644",
